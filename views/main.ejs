@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+<body>
+    <div>
+        <% if (login) { %>
+            <form id="logoutForm" action="/user/logout" method="post" style="display: none;"></form>
+            <span>안녕하세요, <%= login.name %>님: </span>
+            <span> <a href="/user/books">[내 서재]  </a></span>
+            <a href="#" onclick="document.getElementById('logoutForm').submit();">[로그아웃]</a>
+        <% } else { %>
+            <a href='user/login'">[로그인]</a>
+        <% } %>
+    </div>
+  </br>
+
+<table border="1">
+    <thead>
+        <tr>
+            <th>제목</th>
+            <th>저자</th>
+            <th>출판사</th>
+        </tr>
+    </thead>
+    <tbody>
+        <% books.forEach(function(book) { %>
+            <tr>
+                <td><a href="/book?bid=<%=book.bid%>"><%= book.title %></a></td>
+                <td><%= book.writer %></td>
+                <td><%= book.publisher %></td>
+            </tr>
+        <% }); %>
+    </tbody>
+</table>
+</body>
+</html>

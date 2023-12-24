@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+<body>
+    <div>
+        <a href='/'>[목록으로]</a>
+        <form id="logoutForm" action="/user/logout" method="post" style="display: none;"></form>
+        <a href="#" onclick="document.getElementById('logoutForm').submit();">[로그아웃]</a>
+    </div>
+  </br>
+
+  <h3><%= login.name%>님의 대출 목록</h3>
+  <hr>
+<table border="1">
+    <thead>
+        <tr>
+            <th>제목</th>
+            <th>대출 일자</th>
+        </tr>
+    </thead>
+    <tbody>
+        <% books.forEach(function(book) { %>
+            <tr>
+                <td><%= book.title %></td>
+                <td><%= book.due %></td>
+            </tr>
+        <% }); %>
+    </tbody>
+</table>
+</body>
+</html>
