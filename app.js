@@ -3,6 +3,8 @@ const session = require("express-session");
 
 const app = express();
 
+const userRouter = require("./router/user");
+
 app.set("views", __dirname + "/views");
 app.set("view engine", "ejs");
 
@@ -16,6 +18,8 @@ app.use(
     saveUninitialized: false,
   })
 );
+
+app.use("/users", userRouter);
 
 app.listen(3000, async () => {
   console.log("Server started on port 3000");

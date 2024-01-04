@@ -1,6 +1,6 @@
 const express = require("express");
 const router = express.Router();
-const dao = require("../service/dao");
+const Employee = require("../service/Employee");
 
 router.get("/login", (req, res) => {
   res.render("login", { errorMessage: null });
@@ -12,7 +12,7 @@ router.post("/login", (req, res, next) => {
     else {
       const email = req.body.email;
       const password = req.body.password;
-      const customer = await dao.getCustomer(email, password);
+      const customer = await Employee.getCustomer(email, password);
       if (customer) {
         req.session.login = customer;
         req.session.save((err) => {
@@ -43,7 +43,7 @@ router.post("/logout", (req, res, next) => {
 
 router.get("/books", async (req, res) => {
   const cid = req.session.login.cid;
-  const books = await dao.getAllRentalBook(cid);
+  const books = await Employee.getAllRentalBook(cid);
   obj = {
     login: req.session.login,
     books: books,
