@@ -1,10 +1,11 @@
 const express = require("express");
 const session = require("express-session");
+const path = require("path");
 
 const app = express();
 
 const userRouter = require("./router/user");
-
+app.use(express.static(path.join(__dirname, "/public")));
 app.set("views", __dirname + "/views");
 app.set("view engine", "ejs");
 
