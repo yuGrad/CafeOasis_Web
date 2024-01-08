@@ -1,6 +1,7 @@
 const express = require("express");
 const router = express.Router();
 const Employee = require("../service/Employee");
+const e = require("express");
 
 router.get("/login", (req, res) => {
   res.render("login", { errorMessage: null });
@@ -39,6 +40,22 @@ router.post("/logout", (req, res, next) => {
       });
     }
   });
+});
+
+router.get("/signup", (req, res) => {
+  res.render("sign-up", { errorMessage: null });
+});
+
+router.post("/signup", async (req, res) => {
+  const { email, password, name, phone_no } = req.body;
+  try {
+    await Employee.insertEmployee(email, password, name, phone_no);
+    res.redirect("/");
+  } catch (err) {
+    res.render("sign-up", {
+      errorMessage: "중복된 이메일입니다.",
+    });
+  }
 });
 
 module.exports = router;

@@ -3,45 +3,38 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Cafe Search - Login</title>
+    <title>Cafe Search - Sign Up</title>
     <link
       href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css"
       rel="stylesheet"
     />
   </head>
   <body class="bg-gray-100 flex flex-col items-center justify-center h-screen">
-    <div class="flex items-center justify-center">
+    <div class="flex items-center justify-center mt-4 mb-2">
       <img src="/oasis_logo.png" alt="Cafe Image" class="h-12 mr-4" />
-      <h1 class="font-bold text-4xl mb-2 text-gray-900">Cafe Oasis</h1>
+      <h1 class="font-bold text-4xl text-gray-900">Cafe Oasis</h1>
     </div>
+
     <hr class="border-gray-300 w-full max-w-md my-2" />
 
     <section class="bg-white shadow-md rounded px-8 pt-6 pb-8 w-full max-w-md">
-      <!-- Changed max-w-xs to max-w-md -->
-      <div class="mb-4">
-        <h1 class="font-bold text-2xl text-gray-900 text-center">Login</h1>
-        <p class="text-gray-700 text-sm text-center">
-          Please sign in to search for your favorite cafe
-        </p>
-      </div>
-
-      <form action="login" method="post">
+      <form action="signup" method="post">
         <div class="mb-4">
           <label
             class="block text-grey-darker text-sm font-bold mb-2"
-            for="username"
+            for="email"
           >
             Email
           </label>
           <input
             class="shadow appearance-none border rounded w-full py-2 px-3 text-grey-darker"
-            id="username"
+            id="email"
             type="email"
-            placeholder="abc@gmail.com"
             name="email"
+            placeholder="abc@gmail.com"
           />
         </div>
-        <div class="mb-6">
+        <div class="mb-4">
           <label
             class="block text-grey-darker text-sm font-bold mb-2"
             for="password"
@@ -49,11 +42,41 @@
             Password
           </label>
           <input
-            class="shadow appearance-none border rounded w-full py-2 px-3 text-grey-darker mb-3"
+            class="shadow appearance-none border rounded w-full py-2 px-3 text-grey-darker"
             id="password"
             type="password"
-            placeholder="******************"
             name="password"
+            placeholder="Your Password"
+          />
+        </div>
+        <div class="mb-4">
+          <label
+            class="block text-grey-darker text-sm font-bold mb-2"
+            for="name"
+          >
+            Name
+          </label>
+          <input
+            class="shadow appearance-none border rounded w-full py-2 px-3 text-grey-darker"
+            id="name"
+            type="text"
+            name="name"
+            placeholder="Full Name"
+          />
+        </div>
+        <div class="mb-4">
+          <label
+            class="block text-grey-darker text-sm font-bold mb-2"
+            for="phone_no"
+          >
+            Phone Number
+          </label>
+          <input
+            class="shadow appearance-none border rounded w-full py-2 px-3 text-grey-darker"
+            id="phone_no"
+            type="text"
+            name="phone_no"
+            placeholder="Phone Number"
           />
         </div>
         <% if (errorMessage) { %>
@@ -68,20 +91,8 @@
             class="bg-blue-500 hover:bg-blue-dark text-white font-bold py-2 px-4 rounded"
             type="submit"
           >
-            Sign In
+            Sign Up
           </button>
-          <a
-            class="inline-block align-baseline font-bold text-sm text-blue hover:text-blue-darker"
-            href="#"
-          >
-            Forgot Password?
-          </a>
-          <a
-            class="inline-block align-baseline font-bold text-sm text-blue hover:text-blue-darker"
-            href="signup"
-          >
-            Signup?
-          </a>
         </div>
       </form>
     </section>
