@@ -12,9 +12,9 @@ router.post("/login", (req, res, next) => {
     else {
       const email = req.body.email;
       const password = req.body.password;
-      const customer = await Employee.getCustomer(email, password);
-      if (customer) {
-        req.session.login = customer;
+      const employee = await Employee.getEmployee(email, password);
+      if (employee.length > 0) {
+        req.session.login = employee;
         req.session.save((err) => {
           if (err) next(err);
           res.redirect("/");
@@ -39,16 +39,6 @@ router.post("/logout", (req, res, next) => {
       });
     }
   });
-});
-
-router.get("/books", async (req, res) => {
-  const cid = req.session.login.cid;
-  const books = await Employee.getAllRentalBook(cid);
-  obj = {
-    login: req.session.login,
-    books: books,
-  };
-  res.render("rental_list", obj);
 });
 
 module.exports = router;
