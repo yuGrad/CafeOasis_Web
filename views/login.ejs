@@ -3,24 +3,75 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>로그인</title>
+    <title>Cafe Search - Login</title>
+    <link
+      href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css"
+      rel="stylesheet"
+    />
   </head>
-  <body>
-    <div>
-      <h2>로그인</h2>
-      <% if (errorMessage) { %>
-      <p style="color: red"><%= errorMessage %></p>
-      <% } %>
-      <form action="login" method="post">
-        이메일:
-        <input type="text" name="email" />
-        <br />
-        패스워드:
-        <input type="password" name="password" />
-        <br />
-        <input type="submit" name="로그인" value="로그인" />
-        <button type="button" onclick="location.href='/'">취소</button>
-      </form>
+  <body class="bg-gray-100 flex flex-col items-center justify-center h-screen">
+    <div class="flex items-center justify-center">
+      <img src="/oasis_logo.png" alt="Cafe Image" class="h-12 mr-4" />
+      <h1 class="font-bold text-4xl mb-2 text-gray-900">Cafe Oasis</h1>
     </div>
+    <hr class="border-gray-300 w-full max-w-xs my-2" />
+
+    <section
+      class="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4 w-full max-w-xs"
+    >
+      <div class="mb-4">
+        <h1 class="font-bold text-2xl mb-2 text-gray-900 text-center">Login</h1>
+        <p class="text-gray-700 text-sm text-center">
+          Please sign in to search for your favorite cafe
+        </p>
+      </div>
+
+      <form action="login" method="post">
+        <div class="mb-4">
+          <label
+            class="block text-grey-darker text-sm font-bold mb-2"
+            for="username"
+          >
+            Email
+          </label>
+          <input
+            class="shadow appearance-none border rounded w-full py-2 px-3 text-grey-darker"
+            id="username"
+            type="email"
+            placeholder="abc@gmail.com"
+            name="email"
+          />
+        </div>
+        <div class="mb-6">
+          <label
+            class="block text-grey-darker text-sm font-bold mb-2"
+            for="password"
+          >
+            Password
+          </label>
+          <input
+            class="shadow appearance-none border rounded w-full py-2 px-3 text-grey-darker mb-3"
+            id="password"
+            type="password"
+            placeholder="******************"
+            name="password"
+          />
+        </div>
+        <div class="flex items-center justify-between">
+          <button
+            class="bg-blue-500 hover:bg-blue-dark text-white font-bold py-2 px-4 rounded"
+            type="submit"
+          >
+            Sign In
+          </button>
+          <a
+            class="inline-block align-baseline font-bold text-sm text-blue hover:text-blue-darker"
+            href="#"
+          >
+            Forgot Password?
+          </a>
+        </div>
+      </form>
+    </section>
   </body>
 </html>
