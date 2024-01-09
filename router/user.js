@@ -1,7 +1,6 @@
 const express = require("express");
 const router = express.Router();
 const Employee = require("../service/Employee");
-const e = require("express");
 
 router.get("/login", (req, res) => {
   res.render("login", { errorMessage: null });
@@ -15,10 +14,10 @@ router.post("/login", (req, res, next) => {
       const password = req.body.password;
       const employee = await Employee.getEmployee(email, password);
       if (employee.length > 0) {
-        req.session.login = employee;
+        req.session.login = employee[0];
         req.session.save((err) => {
           if (err) next(err);
-          res.redirect("/");
+          res.redirect("/cafes");
         });
       } else {
         res.render("login", {
@@ -50,7 +49,7 @@ router.post("/signup", async (req, res) => {
   const { email, password, name, phone_no } = req.body;
   try {
     await Employee.insertEmployee(email, password, name, phone_no);
-    res.redirect("/");
+    res.redirect("/cafes");
   } catch (err) {
     res.render("sign-up", {
       errorMessage: "중복된 이메일입니다.",
