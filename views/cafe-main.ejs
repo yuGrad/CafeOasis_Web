@@ -9,13 +9,18 @@
       rel="stylesheet"
     />
   </head>
-  <body class="flex flex-col min-h-screen bg-white">
+  <body class="flex flex-col min-h-screen bg-gray-100">
     <header class="py-4 shadow-md bg-white">
       <div class="container mx-auto px-4 flex justify-between items-center">
         <!-- Title -->
         <div class="relative w-1/3 flex items-center">
-          <img src="/oasis_logo.png" alt="Cafe Image" class="h-12 mr-4" />
-          <h1 class="text-xl font-bold">Cafe Oasis</h1>
+          <a
+            href="/cafes"
+            class="flex items-center text-gray-800 no-underline hover:no-underline"
+          >
+            <img src="/oasis_logo.png" alt="Cafe Logo" class="h-12 mr-4" />
+            <span class="text-xl font-bold">Cafe Oasis</span>
+          </a>
         </div>
 
         <!-- Search Box -->
@@ -42,6 +47,10 @@
               Logout
             </button>
           </form>
+          <% } else {%>
+          <a href="users/login" class="text-blue-500 hover:text-blue-700 mr-4"
+            >[login]</a
+          >
           <% } %>
         </div>
       </div>
