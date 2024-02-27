@@ -1,8 +1,12 @@
-const db = {
+const mysql_config = {
   host: "localhost",
   user: "dudu",
   password: "aa1541",
   database: "oasis",
-  charset: 'utf8mb4'
+  connectionLimit: 5,
+  charset: "utf8mb4",
 };
-module.exports = { db };
+
+const mongo_uri = "mongodb://dudu:aa1541@0.0.0.0:27017";
+
+module.exports = { mysql_config, mongo_uri };
