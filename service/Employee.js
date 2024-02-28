@@ -1,4 +1,4 @@
-const db = require("./db");
+const db = require("./mysql_db");
 
 const Employee = {
   async getEmployee(email, password) {
