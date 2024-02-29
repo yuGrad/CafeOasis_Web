@@ -1,6 +1,6 @@
 const express = require("express");
 const router = express.Router();
-const Employee = require("../service/Employee");
+const Employee = require("../repositorie/Employee");
 
 router.get("/login", (req, res) => {
   res.render("login", { errorMessage: null });
