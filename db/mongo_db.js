@@ -1,11 +1,11 @@
 const { MongoClient } = require("mongodb");
 const config = require("../config");
 
-const mongoClient = new MongoClient(config.mongo_config.uri, config.mongo_config.options);
+const mongoClient = new MongoClient(config.mongo_config.uri);
 
 // MongoDB에 연결
 async function connect() {
-    if (!mongoClient.isConnected()) await mongoClient.connect();
+    await mongoClient.connect(); // 연결 시도
     return mongoClient.db(config.mongo_config.database); // 데이터베이스 반환
 }
   

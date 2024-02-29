@@ -10,11 +10,11 @@ const mysql_config = {
 const mongo_config = {
   uri: "mongodb://dudu:aa1541@0.0.0.0:27017",
   database: 'oasis',
-  options: {
-    useNewUrlParser: true,
-    useUnifiedTopology: true,
-    poolSize: 10, // 커넥션 풀 사이즈 설정
-  },
+  // options: {
+  //   useNewUrlParser: true,
+  //   useUnifiedTopology: true,
+  //   poolSize: 10, // 커넥션 풀 사이즈 설정
+  // },
 }
 
 module.exports = { mysql_config, mongo_config };
