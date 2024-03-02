@@ -64,8 +64,11 @@
       <% cafes.forEach(function(cafe) { %>
       <div class="bg-white p-4 rounded-lg shadow mb-6">
         <div class="flex flex-col md:flex-row">
-          <img src="<%" ="cafe.image_link" % /> alt="Cafe Image" class="md:w-48
-          rounded-lg mb-4 md:mb-0 md:mr-4" />
+          <img
+            src="<%= cafe.image_link %>"
+            alt="Cafe Image"
+            class="md:w-48 rounded-lg mb-4 md:mb-0 md:mr-4"
+          />
           <div>
             <h2 class="text-lg font-bold"><%= cafe.cafe_name %></h2>
             <p><strong>전화번호:</strong> <%= cafe.phone_number %></p>
