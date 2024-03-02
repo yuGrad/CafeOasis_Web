@@ -8,7 +8,7 @@ async function connect() {
     await mongoClient.connect(); // 연결 시도
     return mongoClient.db(config.mongo_config.database); // 데이터베이스 반환
 }
-  
+
 async function query(collection, operation, ...params) {
     const db = await connect();
     const col = db.collection(collection);

@@ -4,14 +4,20 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Cafe Search</title>
-    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet" />
+    <link
+      href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css"
+      rel="stylesheet"
+    />
   </head>
   <body class="flex flex-col min-h-screen bg-gray-100">
     <header class="py-4 shadow-md bg-white">
       <div class="container mx-auto px-4 flex justify-between items-center">
         <!-- 로고창 -->
         <div class="flex items-center w-1/4 min-w-max">
-          <a href="/cafes" class="flex items-center text-gray-800 no-underline hover:no-underline">
+          <a
+            href="/cafes"
+            class="flex items-center text-gray-800 no-underline hover:no-underline"
+          >
             <img src="/oasis_logo.png" alt="Cafe Logo" class="h-12 mr-4" />
             <span class="text-xl font-bold">Cafe Oasis</span>
           </a>
@@ -36,12 +42,18 @@
         <div class="flex items-center w-1/4 min-w-max justify-end">
           <% if (login) { %>
           <span class="mr-4">환영합니다, <%= login.name %>!</span>
-          <a href="users/mypage" class="text-blue-500 hover:text-blue-700 mr-4">마이페이지</a>
+          <a href="users/mypage" class="text-blue-500 hover:text-blue-700 mr-4"
+            >마이페이지</a
+          >
           <form action="users/logout" method="post">
-            <button type="submit" class="text-blue-500 hover:text-blue-700">로그아웃</button>
+            <button type="submit" class="text-blue-500 hover:text-blue-700">
+              로그아웃
+            </button>
           </form>
           <% } else {%>
-          <a href="users/login" class="text-blue-500 hover:text-blue-700 mr-4">로그인</a>
+          <a href="users/login" class="text-blue-500 hover:text-blue-700 mr-4"
+            >로그인</a
+          >
           <% } %>
         </div>
       </div>
@@ -52,7 +64,8 @@
       <% cafes.forEach(function(cafe) { %>
       <div class="bg-white p-4 rounded-lg shadow mb-6">
         <div class="flex flex-col md:flex-row">
-          <img src=<%= cafe.image_link %> alt="Cafe Image" class="md:w-48 rounded-lg mb-4 md:mb-0 md:mr-4" />
+          <img src="<%" ="cafe.image_link" % /> alt="Cafe Image" class="md:w-48
+          rounded-lg mb-4 md:mb-0 md:mr-4" />
           <div>
             <h2 class="text-lg font-bold"><%= cafe.cafe_name %></h2>
             <p><strong>전화번호:</strong> <%= cafe.phone_number %></p>
@@ -64,7 +77,6 @@
       </div>
       <% }); %>
     </main>
-    
 
     <footer class="py-4 bg-white mt-auto">
       <div class="container mx-auto px-4 text-center">
