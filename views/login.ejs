@@ -9,87 +9,82 @@
       rel="stylesheet"
     />
   </head>
-  <body class="bg-gradient-to-r from-blue-200 to-blue-300 h-screen">
-    <!-- Main Content -->
-    <div class="flex flex-col items-center justify-center h-full">
-      <!-- Title Div below the Header -->
-      <div class="flex items-center mb-8">
-        <!-- Added margin-bottom for spacing -->
-        <img src="/oasis_logo.png" alt="Cafe Logo" class="h-12 mr-4" />
-        <span class="font-bold text-4xl text-gray-900">Cafe Oasis</span>
+  <body class="flex flex-col items-center justify-center bg-gradient-to-r from-blue-200 to-blue-300 h-screen">
+    <div class="flex items-center justify-center mt-4 mb-2">
+      <!-- Added margin-bottom for spacing -->
+      <img src="/oasis_logo.png" alt="Cafe Logo" class="h-12 mr-4" />
+      <span class="font-bold text-4xl text-gray-900">Cafe Oasis</span>
+    </div>
+
+    <section
+      class="bg-white shadow-md rounded px-8 pt-6 pb-8 w-full max-w-md"
+    >
+      <div class="mb-4">
+        <h1 class="font-bold text-2xl text-gray-900 text-center">Login</h1>
+        <p class="text-gray-700 text-sm text-center">
+          Please sign in to search for your favorite cafe
+        </p>
       </div>
 
-      <section
-        class="bg-white shadow-md rounded px-8 pt-6 pb-8 w-full max-w-md"
-      >
-        <!-- Changed max-w-xs to max-w-md -->
+      <form action="login" method="post">
         <div class="mb-4">
-          <h1 class="font-bold text-2xl text-gray-900 text-center">Login</h1>
-          <p class="text-gray-700 text-sm text-center">
-            Please sign in to search for your favorite cafe
-          </p>
+          <label
+            class="block text-grey-darker text-sm font-bold mb-2"
+            for="username"
+          >
+            Email
+          </label>
+          <input
+            class="shadow appearance-none border rounded w-full py-2 px-3 text-grey-darker"
+            id="username"
+            type="email"
+            placeholder="abc@gmail.com"
+            name="email"
+          />
         </div>
-
-        <form action="login" method="post">
-          <div class="mb-4">
-            <label
-              class="block text-grey-darker text-sm font-bold mb-2"
-              for="username"
-            >
-              Email
-            </label>
-            <input
-              class="shadow appearance-none border rounded w-full py-2 px-3 text-grey-darker"
-              id="username"
-              type="email"
-              placeholder="abc@gmail.com"
-              name="email"
-            />
-          </div>
-          <div class="mb-6">
-            <label
-              class="block text-grey-darker text-sm font-bold mb-2"
-              for="password"
-            >
-              Password
-            </label>
-            <input
-              class="shadow appearance-none border rounded w-full py-2 px-3 text-grey-darker mb-3"
-              id="password"
-              type="password"
-              placeholder="******************"
-              name="password"
-            />
-          </div>
-          <% if (errorMessage) { %>
-          <div class="mb-4">
-            <label class="block text-red-600 text-sm font-bold mb-2"
-              ><%= errorMessage %></label
-            >
-          </div>
-          <% } %>
-          <div class="flex items-center justify-between">
-            <button
-              class="bg-blue-500 hover:bg-blue-dark text-white font-bold py-2 px-4 rounded"
-              type="submit"
-            >
-              Sign In
-            </button>
-            <a
-              class="inline-block align-baseline font-bold text-sm text-blue hover:text-blue-darker"
-              href="#"
-            >
-              Forgot Password?
-            </a>
-            <a
-              class="inline-block align-baseline font-bold text-sm text-blue hover:text-blue-darker"
-              href="signup"
-            >
-              Signup?
-            </a>
-          </div>
-        </form>
-      </section>
-    </div>
+        <div class="mb-6">
+          <label
+            class="block text-grey-darker text-sm font-bold mb-2"
+            for="password"
+          >
+            Password
+          </label>
+          <input
+            class="shadow appearance-none border rounded w-full py-2 px-3 text-grey-darker mb-3"
+            id="password"
+            type="password"
+            placeholder="******************"
+            name="password"
+          />
+        </div>
+        <% if (errorMessage) { %>
+        <div class="mb-4">
+          <label class="block text-red-600 text-sm font-bold mb-2"
+            ><%= errorMessage %></label
+          >
+        </div>
+        <% } %>
+        <div class="flex items-center justify-between">
+          <button
+            class="bg-blue-500 hover:bg-blue-dark text-white font-bold py-2 px-4 rounded"
+            type="submit"
+          >
+            Sign In
+          </button>
+          <a
+            class="inline-block align-baseline font-bold text-sm text-blue hover:text-blue-darker"
+            href="#"
+          >
+            Forgot Password?
+          </a>
+          <a
+            class="inline-block align-baseline font-bold text-sm text-blue hover:text-blue-darker"
+            href="signup"
+          >
+            Signup?
+          </a>
+        </div>
+      </form>
+    </section>
   </body>
 </html>
