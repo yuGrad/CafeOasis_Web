@@ -1,6 +1,7 @@
 const express = require("express");
 const router = express.Router();
 const Employee = require("../repositorie/Employee");
+const Customer = require("../repositorie/Customer");
 
 router.get("/login", (req, res) => {
   res.render("login", { errorMessage: null });
@@ -46,11 +47,21 @@ router.get("/signup", (req, res) => {
 });
 
 router.post("/signup", async (req, res) => {
-  const { email, password, name, phone_no } = req.body;
+  const user_type = req.body.user_type;
+
   try {
-    await Employee.insertEmployee(email, password, name, phone_no);
+    if (user_type == "employee"){
+      const { email, password, name, phone_no } = req.body;
+      await Employee.insertEmployee(email, password, name, phone_no);
+    }
+    else{
+      const { email, password, name, phone_no_1, phone_no_2, phone_no_3, nickname, age, sex} = req.body;
+      const phone_no = phone_no_1 + phone_no_2 + phone_no_3;
+      await Customer.insertCustomer(email, password, name, phone_no, nickname, age, sex);
+    }
     res.redirect("/cafes");
   } catch (err) {
+    console.log(err);
     res.render("sign-up", {
       errorMessage: "중복된 이메일입니다.",
     });
