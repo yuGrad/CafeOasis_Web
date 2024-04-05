@@ -5,9 +5,8 @@ const Cafe = require("../repositorie/Cafe")
 router.get("/:cafe_id", async (req, res) => {
   const cafe_id = req.params.cafe_id;
   const cafe = await Cafe.getCafeById(cafe_id);
-  console.log(cafe);
-  res.render("cafe_detail", {login: req.session.login, cafe: cafe});
-})
+  res.render("cafe-detail", {login: req.session.login, cafe: cafe});
+});
 
 router.get("", async (req, res) => {
   const target = req.query.target;
@@ -22,7 +21,5 @@ router.get("", async (req, res) => {
   }
   res.render("cafe-main", { login: req.session.login, cafes: cafes });
 });
-
-
 
 module.exports = router;
