@@ -26,12 +26,9 @@
         </p>
       </div>
 
-      <form action="login" method="post">
-        <div class="mb-4">
-          <label
-            class="block text-grey-darker text-sm font-bold mb-2"
-            for="username"
-          >
+      <form action="login" method="post" class="space-y-4">
+        <div>
+          <label class="block text-grey-darker text-sm font-bold mb-2" for="username">
             Email
           </label>
           <input
@@ -42,27 +39,34 @@
             name="email"
           />
         </div>
-        <div class="mb-6">
-          <label
-            class="block text-grey-darker text-sm font-bold mb-2"
-            for="password"
-          >
+        <div>
+          <label class="block text-grey-darker text-sm font-bold mb-2" for="password">
             Password
           </label>
           <input
-            class="shadow appearance-none border rounded w-full py-2 px-3 text-grey-darker mb-3"
+            class="shadow appearance-none border rounded w-full py-2 px-3 text-grey-darker"
             id="password"
             type="password"
             placeholder="******************"
             name="password"
           />
         </div>
-        <% if (errorMessage) { %>
-        <div class="mb-4">
-          <label class="block text-red-600 text-sm font-bold mb-2"
-            ><%= errorMessage %></label
-          >
+        <div class="flex items-center justify-center">
+          <label class="inline-flex items-center mr-4">
+            <input type="radio" name="user_role" value="customer" checked>
+            <span class="ml-2">고객</span>
+          </label>
+          <label class="inline-flex items-center">
+            <input type="radio" name="user_role" value="employee">
+            <span class="ml-2">직원</span>
+          </label>              
         </div>
+        <% if (errorMessage) { %>
+          <div>
+            <label class="block text-red-600 text-sm font-bold mb-2">
+              <%= errorMessage %>
+            </label>
+          </div>
         <% } %>
         <div class="flex items-center justify-between">
           <button
@@ -71,20 +75,22 @@
           >
             Sign In
           </button>
-          <a
-            class="inline-block align-baseline font-bold text-sm text-blue hover:text-blue-darker"
-            href="#"
-          >
-            Forgot Password?
-          </a>
-          <a
-            class="inline-block align-baseline font-bold text-sm text-blue hover:text-blue-darker"
-            href="signup"
-          >
-            Signup?
-          </a>
+          <div class="flex flex-col items-end">
+            <a
+              class="inline-block align-baseline font-bold text-sm text-blue hover:text-blue-darker"
+              href="#"
+            >
+              Forgot Password?
+            </a>
+            <a
+              class="inline-block align-baseline font-bold text-sm text-blue hover:text-blue-darker"
+              href="signup"
+            >
+              Signup?
+            </a>
+          </div>
         </div>
-      </form>
+      </form>      
     </section>
   </body>
 </html>
