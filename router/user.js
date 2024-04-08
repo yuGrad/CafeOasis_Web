@@ -22,6 +22,7 @@ router.post("/login", async (req, res, next) => {
         if (err) next(err);
 
         req.session.login = user[0];
+        req.session.login.user_type = user_type;  // user table not in user type
         req.session.save((err) => {
           if (err) next(err);
 
