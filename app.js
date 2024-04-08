@@ -19,7 +19,6 @@ app.use(
     secret: "My Secret",
     resave: false,
     saveUninitialized: false,
-    rolling:false,  // 세션이 만료되기 전, 새로 고침 또는 페이지 이동이 일어나면 세션 만료를 갱신
   })
 );
 
