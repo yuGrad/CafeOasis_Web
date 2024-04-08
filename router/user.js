@@ -2,31 +2,39 @@ const express = require("express");
 const router = express.Router();
 const Employee = require("../repositorie/Employee");
 const Customer = require("../repositorie/Customer");
+const e = require("express");
 
 router.get("/login", (req, res) => {
   res.render("login", { errorMessage: null });
 });
 
-router.post("/login", (req, res, next) => {
-  req.session.regenerate(async (err) => {
-    if (err) next(err);
-    else {
-      const email = req.body.email;
-      const password = req.body.password;
-      const employee = await Employee.getEmployee(email, password);
-      if (employee.length > 0) {
-        req.session.login = employee[0];
+router.post("/login", async (req, res, next) => {
+  const {user_type, email, password} = req.body;
+  let user;
+
+  try {
+    if (user_type == "employee")
+      user = await Employee.getEmployee(email, password);
+    else
+      user = await Customer.getCustomer(email, password);
+    if (user.length > 0){
+      req.session.regenerate((err) => {
+        if (err) next(err);
+
+        req.session.login = user[0];
         req.session.save((err) => {
           if (err) next(err);
+
           res.redirect("/cafes");
-        });
-      } else {
-        res.render("login", {
-          errorMessage: "이메일 또는 비밀번호가 잘못되었습니다.",
-        });
-      }
+        })
+      })
     }
-  });
+    else 
+      res.render("login", { errorMessage: "이메일 또는 비밀번호가 잘못되었습니다.", });
+  }catch(err){
+    console.log(err);
+    res.render("error", { error: { message: "500 Error" } });
+  }
 });
 
 router.post("/logout", (req, res, next) => {
