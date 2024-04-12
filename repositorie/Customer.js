@@ -1,12 +1,12 @@
 const db = require("../db/mysql_db");
 
 const Customer = {
-  async getCustomer(email, password) {
-    const sql = "select * from Customer where email = ? and password = ?";
-    const params = [email, password];
-    const rows = await db.query(sql, params);
+  async getCustomerByEmail(email) {
+    const sql = "select * from Customer where email = ?";
+    const params = [email];
+    const [customer] = await db.query(sql, params);
 
-    return rows;
+    return customer;
   },
 
   async insertCustomer(email, password, name, phone_no, nickname, age, sex) {
