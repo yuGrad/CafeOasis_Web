@@ -2,7 +2,9 @@ const express = require("express");
 const router = express.Router();
 const Employee = require("../repositorie/Employee");
 const Customer = require("../repositorie/Customer");
-const e = require("express");
+const bcrypt = require("bcrypt");
+
+const salt = bcrypt.genSaltSync(10);
 
 router.get("/login", (req, res) => {
   res.render("login", { errorMessage: null });
@@ -14,18 +16,20 @@ router.post("/login", async (req, res, next) => {
 
   try {
     if (user_type == "employee")
-      user = await Employee.getEmployee(email, password);
+      user = await Employee.getCustomerByEmail(email);
     else
-      user = await Customer.getCustomer(email, password);
-    if (user.length > 0){
+      user = await Customer.getCustomerByEmail(email);
+
+    if (user && bcrypt.compareSync(password, user.password)){
       req.session.regenerate((err) => {
         if (err) next(err);
 
-        req.session.login = user[0];
+        req.session.login = user;
         req.session.login.user_type = user_type;  // user table not in user type
+        delete req.session.login.password;
+        delete req.session.login.user_id;
         req.session.save((err) => {
           if (err) next(err);
-
           res.redirect("/cafes");
         })
       })
@@ -61,12 +65,14 @@ router.post("/signup", async (req, res) => {
   try {
     if (user_type == "employee"){
       const { email, password, name, phone_no } = req.body;
-      await Employee.insertEmployee(email, password, name, phone_no);
+      const hashed_password = bcrypt.hashSync(password, salt);
+      await Employee.insertEmployee(email, hashed_password, name, phone_no);
     }
     else{
       const { email, password, name, phone_no_1, phone_no_2, phone_no_3, nickname, age, sex} = req.body;
       const phone_no = phone_no_1 + phone_no_2 + phone_no_3;
-      await Customer.insertCustomer(email, password, name, phone_no, nickname, age, sex);
+      const hashed_password = bcrypt.hashSync(password, salt);
+      await Customer.insertCustomer(email, hashed_password, name, phone_no, nickname, age, sex);
     }
     res.redirect("/cafes");
   } catch (err) {
