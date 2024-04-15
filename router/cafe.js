@@ -1,11 +1,11 @@
 const express = require("express");
 const router = express.Router();
-const Cafe = require("../repositorie/Cafe")
+const Cafe = require("../repositorie/Cafe");
 
 router.get("/:cafe_id", async (req, res) => {
   const cafe_id = req.params.cafe_id;
   const cafe = await Cafe.getCafeById(cafe_id);
-  res.render("cafe-detail", {login: req.session.login, cafe: cafe});
+  res.render("cafe-detail", { login: req.session.login, cafe: cafe });
 });
 
 router.get("", async (req, res) => {

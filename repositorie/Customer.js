@@ -13,7 +13,17 @@ const Customer = {
     const sql =
       "insert into Customer(email, password, name, phone_no, nickname, age, sex) \
                   values(?, ?, ?, ?, ?, ?, ?);";
-    const params = [email, password, name, phone_no, nickname, age, sex, new Date(), 1];
+    const params = [
+      email,
+      password,
+      name,
+      phone_no,
+      nickname,
+      age,
+      sex,
+      new Date(),
+      1,
+    ];
 
     await db.query(sql, params);
   },

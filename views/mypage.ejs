@@ -59,15 +59,18 @@
             login.phone_no %>
           </p>
           <% if (login.user_type == "customer") {%>
-            <p class="text-lg">
-              <strong class="font-semibold">Nickname:</strong> <%= login.nickname %>
-            </p>
-            <p class="text-lg">
-              <strong class="font-semibold">Age:</strong> <%= login.age.slice(0,2) + "대" %>
-            </p>
-            <p class="text-lg">
-              <strong class="font-semibold">Sex:</strong> <%=login.sex == 'm' ? 'Male' : 'Female' %>
-            </p>
+          <p class="text-lg">
+            <strong class="font-semibold">Nickname:</strong> <%= login.nickname
+            %>
+          </p>
+          <p class="text-lg">
+            <strong class="font-semibold">Age:</strong> <%= login.age.slice(0,2)
+            + "대" %>
+          </p>
+          <p class="text-lg">
+            <strong class="font-semibold">Sex:</strong> <%=login.sex == 'm' ?
+            'Male' : 'Female' %>
+          </p>
           <% } %>
           <p class="text-lg">
             <strong class="font-semibold">Registration Date:</strong>
@@ -82,12 +85,12 @@
         </div>
       </section>
       <% if (login.user_type == "employee") {%>
-        <section class="flex-1 p-4 bg-white rounded-lg shadow-lg">
-          <h2 class="text-3xl font-bold text-gray-800 mb-6 border-b pb-2">
-            Cafe Information
-          </h2>
-          <div class="text-gray-700 space-y-3" style="white-space: nowrap"></div>
-        </section>
+      <section class="flex-1 p-4 bg-white rounded-lg shadow-lg">
+        <h2 class="text-3xl font-bold text-gray-800 mb-6 border-b pb-2">
+          Cafe Information
+        </h2>
+        <div class="text-gray-700 space-y-3" style="white-space: nowrap"></div>
+      </section>
       <% } %>
     </main>
 
