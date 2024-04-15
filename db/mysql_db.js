@@ -9,4 +9,8 @@ async function query(sql, params) {
   return rows;
 }
 
-module.exports = { query };
+function asynQuery(sql, params, callback) {
+  pool.getConnection().query(sql, params, callback);
+}
+
+module.exports = { query, asynQuery };
