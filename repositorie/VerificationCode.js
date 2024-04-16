@@ -1,12 +1,12 @@
 const db = require("../db/mysql_db");
 
 const VerificationCode = {
-  async insertVerificationCode(email, verification_code, expiration) {
+  insertVerificationCode(email, verification_code, expiration, callback) {
     const sql =
       "insert into VerificationCode(email, verification_code, expiration) value(?, ?, ?)";
-    const params = [email, verification_code];
+    const params = [email, verification_code, expiration];
 
-    await db.query(sql, params);
+    db.asynQuery(sql, params, callback);
   },
   async getVerificationCode(email) {
     const sql =
