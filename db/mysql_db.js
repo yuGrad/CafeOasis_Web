@@ -10,7 +10,7 @@ async function query(sql, params) {
 }
 
 function asynQuery(sql, params, callback) {
-  pool.getConnection().query(sql, params, callback);
+  pool.query(sql, params, callback);
 }
 
 module.exports = { query, asynQuery };
