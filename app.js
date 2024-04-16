@@ -6,6 +6,7 @@ const app = express();
 
 const userRouter = require("./router/user");
 const cafeRouter = require("./router/cafe");
+const emailRouter = require("./router/email");
 
 app.use(express.static(path.join(__dirname, "/public")));
 app.set("views", __dirname + "/views");
@@ -25,6 +26,7 @@ app.use(
 
 app.use("/users", userRouter);
 app.use("/cafes", cafeRouter);
+app.use("/email", emailRouter);
 app.use("/", (req, res) => {
   res.render("main");
 });
