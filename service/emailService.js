@@ -1,4 +1,5 @@
 const nodemailer = require("nodemailer");
+const crypto = require("crypto");
 const config = require("../config");
 const VerificationCode = require("../repositorie/VerificationCode");
 
@@ -25,12 +26,13 @@ function generateVerificationCode() {
 async function verifyUserCode(email, userCode) {
   try {
     const row = await VerificationCode.getVerificationCode(email);
+    const now = new Date();
 
     if (
       !row ||
       row.verification_code != userCode ||
       new Date(row.expiration_time) <
-        new Date(new Date().getTime() - now.getTimezoneOffset() * 60000) // 현재 시간보다 인증 만료시간이 더 커야함, UTC -> Asia/Seoul 시간대로 변경
+        new Date(now.getTime() - now.getTimezoneOffset() * 60000) // 현재 시간보다 인증 만료시간이 더 커야함, UTC -> Asia/Seoul 시간대로 변경
     )
       return false;
 
