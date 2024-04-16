@@ -9,12 +9,31 @@
       rel="stylesheet"
     />
     <script>
+      function sendEmailVerification() {
+        const email = document.getElementById('username').value;
+        fetch('http://localhost:3000/email/signup/request', {
+          method: 'post',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({ email: email })
+        })
+        .then(response => {
+          if (response.ok)
+            alert('이메일로 인증번호가 전송되었습니다.');
+          else
+            alert('이메일 인증 오류: 500 error');
+        })
+        .catch((error) => {
+          alert(`이메일 인증 오류: ${error.message}`);
+        });
+      }
+
       document.addEventListener("DOMContentLoaded", function() {
         const userTypeRadios = document.getElementsByName("user_type");
         const customerSection = document.getElementById("customerSection");
     
         function togglecustomerSection() {
-          // "직원"이 선택된 경우에만 추가 섹션을 보여줍니다.
           const isCustomerSelected = document.getElementById("customer").checked;
           if (isCustomerSelected) {
             customerSection.classList.remove("hidden");
@@ -39,103 +58,110 @@
     </div>
     <form action="signup" method="post" class="w-full max-w-4xl flex justify-center">
       <section class="bg-white shadow-md rounded px-8 pt-6 pb-8 w-full max-w-md">
-          <div class="mb-4">
-            <label
-              class="block text-grey-darker text-sm font-bold mb-2"
-              for="email"
-            >
-              Email
-            </label>
+        <div class="mb-4">
+          <label class="block text-grey-darker text-sm font-bold mb-2" for="username">
+            Email
+          </label>
+          <div class="flex">
             <input
-              class="shadow appearance-none border rounded w-full py-2 px-3 text-grey-darker"
-              id="email"
+              class="shadow appearance-none border rounded w-full py-2 px-3 text-grey-darker mr-3"
+              id="username"
               type="email"
-              name="email"
               placeholder="abc@gmail.com"
+              name="email"
             />
-          </div>
-          <div class="mb-4">
-            <label
-              class="block text-grey-darker text-sm font-bold mb-2"
-              for="password"
+            <button
+              id="emailVerifyBtn"
+              type="button"
+              class="flex-none bg-blue-500 hover:bg-blue-dark text-white font-bold py-2 px-4 rounded"
+              onclick="sendEmailVerification()"
             >
-              Password
-            </label>
+              인증
+            </button>
+          </div>
+        </div>
+        <div class="mb-4">
+          <label
+            class="block text-grey-darker text-sm font-bold mb-2"
+            for="password"
+          >
+            Password
+          </label>
+          <input
+            class="shadow appearance-none border rounded w-full py-2 px-3 text-grey-darker"
+            id="password"
+            type="password"
+            name="password"
+            placeholder="Your Password"
+          />
+        </div>
+        <div class="mb-4">
+          <label
+            class="block text-grey-darker text-sm font-bold mb-2"
+            for="name"
+          >
+            Name
+          </label>
+          <input
+            class="shadow appearance-none border rounded w-full py-2 px-3 text-grey-darker"
+            id="name"
+            type="text"
+            name="name"
+            placeholder="Full Name"
+          />
+        </div>
+        <div class="mb-4 flex flex-col">
+          <label class="block text-grey-darker text-sm font-bold mb-2" for="phone_no_1">
+            Phone Number
+          </label>
+          <div class="flex">
             <input
-              class="shadow appearance-none border rounded w-full py-2 px-3 text-grey-darker"
-              id="password"
-              type="password"
-              name="password"
-              placeholder="Your Password"
+              class="shadow appearance-none border rounded py-2 px-3 text-grey-darker mr-1"
+              id="phone_no_1"
+              type="tel"
+              name="phone_no_1"
+              placeholder="010"
+              pattern="\d{3}"
+              title="First three digits"
+              maxlength="3"
+              size="3"
+            />
+            <span class="mx-2">-</span>
+            <input
+              class="shadow appearance-none border rounded py-2 px-3 text-grey-darker mx-1"
+              id="phone_no_2"
+              type="tel"
+              name="phone_no_2"
+              placeholder="1234"
+              pattern="\d{4}"
+              title="Next four digits"
+              maxlength="4"
+              size="4"
+            />
+            <span class="mx-2">-</span>
+            <input
+              class="shadow appearance-none border rounded py-2 px-3 text-grey-darker ml-1"
+              id="phone_no_3"
+              type="tel"
+              name="phone_no_3"
+              placeholder="5678"
+              pattern="\d{4}"
+              title="Last four digits"
+              maxlength="4"
+              size="4"
             />
           </div>
-          <div class="mb-4">
-            <label
-              class="block text-grey-darker text-sm font-bold mb-2"
-              for="name"
-            >
-              Name
-            </label>
-            <input
-              class="shadow appearance-none border rounded w-full py-2 px-3 text-grey-darker"
-              id="name"
-              type="text"
-              name="name"
-              placeholder="Full Name"
-            />
-          </div>
-          <div class="mb-4 flex flex-col">
-            <label class="block text-grey-darker text-sm font-bold mb-2" for="phone_no_1">
-              Phone Number
-            </label>
-            <div class="flex">
-              <input
-                class="shadow appearance-none border rounded py-2 px-3 text-grey-darker mr-1"
-                id="phone_no_1"
-                type="tel"
-                name="phone_no_1"
-                placeholder="010"
-                pattern="\d{3}"
-                title="First three digits"
-                maxlength="3"
-                size="3"
-              />
-              <span class="mx-2">-</span>
-              <input
-                class="shadow appearance-none border rounded py-2 px-3 text-grey-darker mx-1"
-                id="phone_no_2"
-                type="tel"
-                name="phone_no_2"
-                placeholder="1234"
-                pattern="\d{4}"
-                title="Next four digits"
-                maxlength="4"
-                size="4"
-              />
-              <span class="mx-2">-</span>
-              <input
-                class="shadow appearance-none border rounded py-2 px-3 text-grey-darker ml-1"
-                id="phone_no_3"
-                type="tel"
-                name="phone_no_3"
-                placeholder="5678"
-                pattern="\d{4}"
-                title="Last four digits"
-                maxlength="4"
-                size="4"
-              />
-            </div>
-          </div>          
-          <div>
-            <label class="inline-flex items-center">
-              <input type="radio" id="customer" name="user_type" value="customer" checked>
-              <span class="ml-2">고객</span>
-            </label>
-            <label class="inline-flex items-center">
-              <input type="radio" id="employee" name="user_type" value="employee">
-              <span class="ml-2">직원</span>
-            </label>              
-          </div>
+        </div>          
+        <div>
+          <label class="inline-flex items-center">
+            <input type="radio" id="customer" name="user_type" value="customer" checked>
+            <span class="ml-2">고객</span>
+          </label>
+          <label class="inline-flex items-center">
+            <input type="radio" id="employee" name="user_type" value="employee">
+            <span class="ml-2">직원</span>
+          </label>              
+        </div>
       </section>
       <section id="customerSection" class="flex flex-col justify-center bg-white shadow-md rounded px-8 pt-6 pb-8 w-full max-w-md h-full">
         <!-- 닉네임 -->
