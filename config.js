@@ -1,14 +1,17 @@
+const dotenv = require("dotenv");
+dotenv.config();
+
 const mysql_config = {
   host: "localhost",
-  user: "dudu",
-  password: "aa1541",
+  user: process.env.MYSQL_USER,
+  password: process.env.MYSQL_PASSWORD,
   database: "oasis",
   connectionLimit: 5,
   charset: "utf8mb4",
 };
 
 const mongo_config = {
-  uri: "mongodb://dudu:aa1541@0.0.0.0:27017",
+  uri: process.env.MONGODB_URI,
   database: "oasis",
   // options: {
   //   useNewUrlParser: true,
@@ -22,8 +25,11 @@ const smtp_config = {
   port: 587,
   secure: false, // true for 465, false for other ports
   auth: {
-    user: "tgu06167@gmail.com", // Gmail username
-    pass: "yourpassword", // Gmail password or App password
+    type: "OAuth2",
+    user: process.env.GMAIL_OAUTH_USER,
+    clientId: process.env.GMAIL_OAUTH_CLIENT_ID,
+    clientSecret: process.env.GAMIL_OAUTH_CLIENT_SECRET,
+    refreshToken: process.env.GAMIL_OAUTH_REFRESH_TOKEN,
   },
   from: "tgu06167@gmial.com",
 };
