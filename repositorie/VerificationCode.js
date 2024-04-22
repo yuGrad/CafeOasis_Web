@@ -10,7 +10,14 @@ const VerificationCode = {
   },
   async getVerificationCode(email) {
     const sql =
-      "select id, verification_code, (expiration + created_at) expiration_time from VerificationCode where email = ? and verified = FALSE;";
+      "select \
+        id, verification_code, (expiration + created_at) expiration_time \
+      from VerificationCode \
+      where \
+        email = ? \
+        and verified = FALSE \
+      ORDER BY created_at DESC \
+      LIMIT 1";
     const parmas = [email];
     const [verificationCode] = await db.query(sql, parmas);
 
