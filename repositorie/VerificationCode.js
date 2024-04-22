@@ -17,7 +17,7 @@ const VerificationCode = {
     return verificationCode;
   },
   updateCodeAsVerified(id, callback) {
-    const sql = "update VerificationCode set expiration = TRUE where id = ?";
+    const sql = "update VerificationCode set verified = TRUE where id = ?";
     const params = [id];
 
     db.asynQuery(sql, params, callback);
