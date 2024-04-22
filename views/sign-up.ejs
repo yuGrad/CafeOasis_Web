@@ -7,49 +7,7 @@
     <link
       href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css"
       rel="stylesheet"
-    />
-    <script>
-      function sendEmailVerification() {
-        const email = document.getElementById('username').value;
-        fetch('http://localhost:3000/email/signup/request', {
-          method: 'post',
-          headers: {
-            'Content-Type': 'application/json'
-          },
-          body: JSON.stringify({ email: email })
-        })
-        .then(response => {
-          if (response.ok)
-            alert('이메일로 인증번호가 전송되었습니다.');
-          else
-            alert('이메일 인증 오류: 500 error');
-        })
-        .catch((error) => {
-          alert(`이메일 인증 오류: ${error.message}`);
-        });
-      }
-
-      document.addEventListener("DOMContentLoaded", function() {
-        const userTypeRadios = document.getElementsByName("user_type");
-        const customerSection = document.getElementById("customerSection");
-    
-        function togglecustomerSection() {
-          const isCustomerSelected = document.getElementById("customer").checked;
-          if (isCustomerSelected) {
-            customerSection.classList.remove("hidden");
-          } else {
-            customerSection.classList.add("hidden");
-          }
-        }
-    
-        userTypeRadios.forEach(radio => {
-          radio.addEventListener("change", togglecustomerSection);
-        });
-    
-        togglecustomerSection(); // 초기 로드 시 섹션 상태 업데이트
-      });
-    </script>
-    
+    />    
   </head>
   <body class="bg-gray-100 flex flex-col items-center justify-center h-screen">
     <div class="flex items-center justify-center mt-4 mb-2">
@@ -59,22 +17,21 @@
     <form action="signup" method="post" class="w-full max-w-4xl flex justify-center">
       <section class="bg-white shadow-md rounded px-8 pt-6 pb-8 w-full max-w-md">
         <div class="mb-4">
-          <label class="block text-grey-darker text-sm font-bold mb-2" for="username">
+          <label class="block text-grey-darker text-sm font-bold mb-2" for="email">
             Email
           </label>
           <div class="flex">
             <input
               class="shadow appearance-none border rounded w-full py-2 px-3 text-grey-darker mr-3"
-              id="username"
+              id="email"
               type="email"
               placeholder="abc@gmail.com"
               name="email"
             />
             <button
-              id="emailVerifyBtn"
+              id="openEmailModalBtn"
               type="button"
               class="flex-none bg-blue-500 hover:bg-blue-dark text-white font-bold py-2 px-4 rounded"
-              onclick="sendEmailVerification()"
             >
               인증
             </button>
@@ -227,5 +184,25 @@
         </div>
       </div>
     </form>
+    <!-- Email Verification Modal -->
+    <div id="emailModal" class="hidden fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto overflow-x-hidden h-full w-full" onclick="closeModal(event)"> <!-- 뒤 배경 -->
+      <div class="relative top-1/3 mx-auto p-5 border w-96 shadow-lg rounded-md bg-white">
+          <div class="mt-3 text-center">
+              <h3 class="text-lg leading-6 font-medium text-gray-900">이메일 인증</h3>
+              <div class="mt-2 px-7 py-3">
+                  <p class="text-sm text-gray-500">
+                      이메일 인증코드를 입력하세요.
+                  </p>
+                  <input type="text" id="user_code" class="mt-1 p-2 border-2 border-gray-300 rounded w-full"/>
+              </div>
+              <div class="items-center px-4 py-3">
+                  <button id="submitBtn" type="button" class="bg-blue-500 hover:bg-blue-dark text-white font-bold py-2 px-4 rounded" onclick="sendEmailVerification(event)">
+                      확인
+                  </button>
+              </div>
+          </div>
+      </div>
+    </div>
+    <script src="/js/signup.js"> </script>
   </body>
 </html>
