@@ -60,7 +60,13 @@ router.get("/signup", (req, res) => {
 });
 
 router.post("/signup", async (req, res) => {
+  const isEmailVerified = req.session.isEmailVerified;
   const user_type = req.body.user_type;
+
+  if (!isEmailVerified)
+    return res.render("sign-up", {
+      errorMessage: "인증되지 않은 이메일입니다.",
+    });
 
   try {
     if (user_type == "employee") {
