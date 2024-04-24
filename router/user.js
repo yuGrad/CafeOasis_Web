@@ -16,7 +16,7 @@ router.post("/login", async (req, res, next) => {
 
   try {
     if (user_type == "employee")
-      user = await Employee.getCustomerByEmail(email);
+      user = await Employee.getEmployeeByEmail(email);
     else user = await Customer.getCustomerByEmail(email);
 
     if (user && bcrypt.compareSync(password, user.password)) {
