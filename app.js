@@ -1,8 +1,10 @@
 const express = require("express");
 const session = require("express-session");
+const morgan = require("morgan");
 const path = require("path");
 
 const app = express();
+const PORT = 3000;
 
 const userRouter = require("./router/user");
 const cafeRouter = require("./router/cafe");
@@ -24,6 +26,8 @@ app.use(
   })
 );
 
+app.use(morgan("dev"));
+
 app.use("/users", userRouter);
 app.use("/cafes", cafeRouter);
 app.use("/email", emailRouter);
@@ -31,6 +35,6 @@ app.use("/", (req, res) => {
   res.render("main");
 });
 
-app.listen(3000, async () => {
-  console.log("Server started on port 3000");
+app.listen(PORT, () => {
+  console.log(`Server started on port ${PORT}`);
 });
