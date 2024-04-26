@@ -1,5 +1,6 @@
-const VerificationCode = require("../repositorie/VerificationCode");
 const crypto = require("crypto");
+const emailService = require("./emailService");
+const VerificationCode = require("../repositorie/VerificationCode");
 
 const VerificationCodeService = {
   generateVerificationCode() {
@@ -15,7 +16,7 @@ const VerificationCodeService = {
     const verificationCode = this.generateVerificationCode();
     const to = email;
     const subject = "Welcome to Oasis! - Email Code";
-    const html = `<h2>Hello ${req.body.email}</h2>
+    const html = `<h2>Hello ${to}</h2>
                     welcome to our service!
                     </br>
                     email code: ${verificationCode}`;
