@@ -12,7 +12,7 @@ const VerificationCodeService = {
 
   sendVerificationCodeByEmail(email) {
     // Todo: email 보내는 메소드 비동기 처리
-    const verificationCode = emailService.generateVerificationCode();
+    const verificationCode = this.generateVerificationCode();
     const to = email;
     const subject = "Welcome to Oasis! - Email Code";
     const html = `<h2>Hello ${req.body.email}</h2>
