@@ -1,8 +1,10 @@
 const express = require("express");
+const bcrypt = require("bcrypt");
+
 const router = express.Router();
 const Employee = require("../repositorie/Employee");
 const Customer = require("../repositorie/Customer");
-const bcrypt = require("bcrypt");
+const randomTokenService = require("../service/randomTokenService");
 
 const salt = bcrypt.genSaltSync(10);
 
@@ -108,6 +110,23 @@ router.post("/signup", async (req, res) => {
 
 router.get("/mypage", (req, res) => {
   res.render("mypage", { login: req.session.login });
+});
+
+router.get("/reset-password", async (req, res) => {
+  const email = req.query.email;
+  const user_token = req.query.token;
+
+  if (!user_token) return res.render("reset-password", { isReset: false });
+  if (!randomTokenService.verifyUserToken(email, user_token))
+    return res.render("error", { error: { message: "잘 못 된 접근입니다." } });
+  res.render("reset-password", { isReset: true, email: email });
+});
+
+router.post("/reset-password", async (req, res) => {
+  const email = req.body.email;
+
+  if (randomTokenService.sendRandomTokenByEmail(email)) res.sendStatus(200);
+  else res.sendStatus(500);
 });
 
 module.exports = router;

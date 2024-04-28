@@ -14,11 +14,12 @@ const RandomTokenService = {
   sendRandomTokenByEmail(email) {
     const passwordToken = this.generateRandomToken();
     const to = email;
-    const subject = "Welcome to Oasis! - Email Code";
+    const subject = "Welcome to Oasis! - Password Rest Url";
     const html = `<h2>Hello ${to}</h2>
                 Password Reset Url
                 </br>
-                link: http://localhost:3000/reset_password?token=${passwordToken}`;
+                link: 
+                http://localhost:3000/users/reset-password?token=${passwordToken}&email=${to}`;
 
     try {
       emailService.sendEmail(to, subject, "test", html);
@@ -31,6 +32,29 @@ const RandomTokenService = {
           if (err) console.error(err);
         }
       );
+      return true;
+    } catch (err) {
+      console.error(err);
+      return false;
+    }
+  },
+
+  async verifyUserToken(email, userToken) {
+    try {
+      const row = await RandomToken.getRandomToken(email);
+      const now = new Date();
+
+      if (
+        !row ||
+        row.token != userToken ||
+        new Date(row.expiration_time) <
+          new Date(now.getTime() - now.getTimezoneOffset() * 60000)
+      )
+        return false;
+
+      // VerificationCode.updateCodeAsVerified(row.id, (err) => {
+      //   if (err) console.error(err);
+      // });
       return true;
     } catch (err) {
       console.error(err);
