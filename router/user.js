@@ -4,6 +4,7 @@ const bcrypt = require("bcrypt");
 const router = express.Router();
 const Employee = require("../repositorie/Employee");
 const Customer = require("../repositorie/Customer");
+const customerService = require("../service/customerService");
 const randomTokenService = require("../service/randomTokenService");
 
 const salt = bcrypt.genSaltSync(10);
@@ -125,8 +126,21 @@ router.get("/reset-password", async (req, res) => {
 router.post("/reset-password", async (req, res) => {
   const email = req.body.email;
 
-  if (randomTokenService.sendRandomTokenByEmail(email)) res.sendStatus(200);
-  else res.sendStatus(500);
+  if (randomTokenService.sendRandomTokenByEmail(email)) {
+    req.session.isEmailVerified = email;
+    res.sendStatus(200);
+  } else res.sendStatus(500);
+});
+
+router.patch("/reset-password", async (req, res) => {
+  const { email, password } = req.body;
+  const isEmailVerified = req.session.isEmailVerified;
+
+  if (isEmailVerified != email)
+    return res.status(401).json({ message: "SESSION EXPIRED" });
+  const result = await customerService.changePassword(email, password);
+  if (result) res.sendStatus(200);
+  else res.status(500).json({ message: "INTERNAL SERVER ERROR" });
 });
 
 module.exports = router;

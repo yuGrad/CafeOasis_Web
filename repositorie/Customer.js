@@ -27,6 +27,13 @@ const Customer = {
 
     await db.query(sql, params);
   },
+
+  async updatePassword(email, password) {
+    const sql = "update Customer set password = ? where email = ?";
+    const params = [password, email];
+
+    await db.query(sql, params);
+  },
 };
 
 module.exports = Customer;

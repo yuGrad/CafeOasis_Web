@@ -1,9 +1,6 @@
 const express = require("express");
 const router = express.Router();
-const emailService = require("../service/emailService");
-const randomUrlService = require("../service/randomUrlService");
 const VerificationCodeService = require("../service/verificationCodeService");
-const RandomUrl = require("../repositorie/RandomUrl");
 
 router.post("/signup/request", (req, res) => {
   const email = req.body.email;
