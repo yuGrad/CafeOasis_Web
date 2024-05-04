@@ -1,6 +1,6 @@
 const crypto = require("crypto");
 const emailService = require("./emailService");
-const VerificationCode = require("../repository/VerificationCode");
+const VerificationCode = require("../repositorie/VerificationCode");
 
 const VerificationCodeService = {
   generateVerificationCode() {

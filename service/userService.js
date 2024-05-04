@@ -1,7 +1,7 @@
 const bcrypt = require("bcrypt");
 
-const Customer = require("../repository/Customer");
-const Employee = require("../repository/Employee");
+const Customer = require("../repositorie/Customer");
+const Employee = require("../repositorie/Employee");
 
 const userService = {
   salt: bcrypt.genSaltSync(10),

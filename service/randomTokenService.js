@@ -1,6 +1,6 @@
 const crypto = require("crypto");
 const emailService = require("./emailService");
-const RandomToken = require("../repository/RandomToken");
+const RandomToken = require("../repositorie/RandomToken");
 
 const RandomTokenService = {
   generateRandomToken() {
