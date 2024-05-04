@@ -23,6 +23,7 @@ router.post("/login", async (req, res, next) => {
       req.session.login.user_type = user_type; // user table not in user type
       req.session.save((err) => {
         if (err) throw err;
+
         res.redirect("/cafes");
       });
     });
@@ -35,15 +36,10 @@ router.post("/login", async (req, res, next) => {
 });
 
 router.post("/logout", (req, res, next) => {
-  req.session.regenerate((err) => {
-    if (err) next(err);
-    else {
-      delete req.session.login;
-      req.session.save((err) => {
-        if (err) next(err);
-        res.redirect("/");
-      });
-    }
+  req.session.destroy((err) => {
+    if (err) return next(err);
+
+    res.redirect("/");
   });
 });
 
