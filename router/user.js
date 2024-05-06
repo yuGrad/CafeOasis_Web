@@ -68,6 +68,8 @@ router.post("/signup", async (req, res) => {
 });
 
 router.get("/mypage", (req, res) => {
+  if (!req.session.login)
+    return res.render("error", { error: { message: "잘 못 된 접근입니다." } });
   res.render("mypage", { login: req.session.login });
 });
 
