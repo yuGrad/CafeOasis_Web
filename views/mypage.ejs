@@ -10,7 +10,7 @@
     />
   </head>
   <body class="bg-gray-100 flex flex-col min-h-screen">
-    <header class="py-4 shadow-md bg-white">
+    <!-- <header class="py-4 shadow-md bg-white">
       <div class="container mx-auto px-4 flex justify-between items-center">
         <div class="flex items-center w-1/4 min-w-max">
           <a
@@ -30,7 +30,8 @@
           </form>
         </div>
       </div>
-    </header>
+    </header> -->
+    <%-include ('cafe-header.ejs') %>
 
     <style>
       /* 추가적인 커스텀 스타일 */
@@ -94,10 +95,6 @@
       <% } %>
     </main>
 
-    <footer class="py-4 bg-white mt-auto">
-      <div class="container mx-auto px-4 text-center">
-        © 2024 Cafe Oasis. All rights reserved.
-      </div>
-    </footer>
+    <%-include ('cafe-footer.ejs') %>
   </body>
 </html>
