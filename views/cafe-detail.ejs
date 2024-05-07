@@ -24,6 +24,8 @@
         <div class="text-center">
           <h1 class="text-3xl font-bold mb-4"><%= cafe.cafe_name %></h1>
         </div>
+        <!-- 숨겨진 input 필드에 cafe_id 저장 -->
+        <input type="hidden" id="cafe_id" value="<%= cafe._id %>" />
         <p><strong>주소:</strong> <%= cafe.address %></p>
         <p><strong>전화번호:</strong> <%= cafe.phone_number %></p>
         <p><strong>영업 시간:</strong> <%= cafe.business_hours %></p>
@@ -34,21 +36,62 @@
         </div>
 
         <!-- 카페 리뷰들 -->
-        <!-- <h2 class="text-2xl font-semibold mt-6 mb-4">Reviews</h2>
-      <% if (cafe.reviews && cafe.reviews.length > 0) { %>
-        <% cafe.reviews.forEach(function(review) { %>
-          <div class="border-t pt-4 mt-4">
-            <p class="font-semibold"><%= review.author %>:</p>
-            <p><%= review.content %></p>
-            <p>Rating: <%= review.rating %>/5</p>
-          </div>
-        <% }); %>
-      <% } else { %>
-        <p>No reviews yet.</p>
-      <% } %> -->
+        <h2 class="text-2xl font-semibold mt-6 mb-4 text-center">카페 리뷰</h2>
+        <div id="reviewsContainer" class="reviews">
+          <!-- 리뷰가 동적으로 삽입될 위치 -->
+        </div>
+
+        <!-- 리뷰 작성 섹션 -->
+        <div class="mt-8 p-6 bg-white rounded-lg shadow-lg">
+          <h3 class="text-xl font-semibold mb-4">리뷰 작성하기</h3>
+          <form
+            action="/submit-review"
+            method="post"
+            enctype="multipart/form-data"
+          >
+            <div class="mb-4">
+              <label
+                for="content"
+                class="block text-gray-700 text-sm font-bold mb-2"
+                >리뷰 내용:</label
+              >
+              <textarea
+                id="content"
+                name="content"
+                rows="4"
+                class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                placeholder="리뷰를 입력하세요..."
+              ></textarea>
+            </div>
+
+            <div class="mb-4">
+              <label class="block text-gray-700 text-sm font-bold mb-2"
+                >평점:</label
+              >
+              <select
+                id="rating"
+                name="rating"
+                class="shadow border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+              >
+                <option value="1">1</option>
+                <option value="2">2</option>
+                <option value="3">3</option>
+                <option value="4">4</option>
+                <option value="5" selected>5</option>
+              </select>
+            </div>
+            <button
+              type="submit"
+              class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
+            >
+              리뷰 제출
+            </button>
+          </form>
+        </div>
       </div>
     </main>
 
     <%-include ('cafe-footer.ejs')%>
+    <script src="/js/cafe-detail.js"></script>
   </body>
 </html>

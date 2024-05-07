@@ -1,6 +1,7 @@
 const express = require("express");
 const router = express.Router();
 const Cafe = require("../repository/Cafe");
+const CafeReview = require("../repository/CafeReview");
 
 router.get("/:cafe_id", async (req, res) => {
   const cafe_id = req.params.cafe_id;
@@ -20,6 +21,13 @@ router.get("", async (req, res) => {
     }
   }
   res.render("cafe-main", { login: req.session.login, cafes: cafes });
+});
+
+router.get("/reviews/:cafe_id", async (req, res) => {
+  const cafe_id = req.params.cafe_id;
+  const reviews = await CafeReview.getCafeReviewsById(cafe_id);
+
+  res.status(200).json(reviews);
 });
 
 module.exports = router;
