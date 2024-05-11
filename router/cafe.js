@@ -30,4 +30,8 @@ router.get("/reviews/:cafe_id", async (req, res) => {
   res.status(200).json(reviews);
 });
 
+router.post("/reviews/:cafe_id", async (req, res) => {
+  const cafe_id = req.params.cafe_id;
+});
+
 module.exports = router;
