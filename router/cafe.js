@@ -35,6 +35,7 @@ router.patch("/reviews/:review_id/likes", async (req, res) => {
   const review_id = req.params.review_id;
   const email = req.session.login.email;
 
+  if (!email) res.status(403).json({ message: "NOT LOGIN" });
   try {
     const result = await cafeReviewService.increaseLikeCnt(review_id, email);
 
