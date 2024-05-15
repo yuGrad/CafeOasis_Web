@@ -5,7 +5,7 @@ const cafeReviewService = {
     const review = await CafeReview.getCafeReviewByLikeUserId(reviewId, email);
 
     try {
-      if (review) {
+      if (!review) {
         CafeReview.increaseLikeCnt(reviewId, email, 1);
         return true;
       } else return false;
