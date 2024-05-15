@@ -1,6 +1,5 @@
 const { ObjectId } = require("mongodb");
 const db = require("../db/mongo_db");
-const { collection } = require("./Cafe");
 
 const CafeReview = {
   collection: "cafe_reviews",
@@ -22,10 +21,25 @@ const CafeReview = {
 
     await db.query(this.collection, "insert", queryJson);
   },
-  updateLikeCnt(review_id) {
+  async getCafeReviewByLikeUserId(review_id, email) {
+    const queryJson = {
+      cafe_id: new ObjectId(review_id),
+      like_users: email,
+    };
+    const review = await db.query(this.collection, "findOne", queryJson);
+
+    return review;
+  },
+  increaseLikeCnt(review_id, email, added_cnt) {
     const queryJson = {
       _id: new ObjectId(review_id),
     };
+    const updateJson = {
+      $inc: { like: +added_cnt },
+      $push: { like_users: email },
+    };
+
+    db.query(this.collection, "updateOne", queryJson, updateJson);
   },
 };
 

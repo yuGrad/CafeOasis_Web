@@ -1,5 +1,6 @@
 const express = require("express");
 const router = express.Router();
+const cafeReviewService = require("../service/cafeReviewService");
 const Cafe = require("../repository/Cafe");
 const CafeReview = require("../repository/CafeReview");
 
@@ -30,8 +31,22 @@ router.get("/reviews/:cafe_id", async (req, res) => {
   res.status(200).json(reviews);
 });
 
-router.post("/reviews/:cafe_id", async (req, res) => {
-  const cafe_id = req.params.cafe_id;
+router.patch("/reviews/:review_id/likes", async (req, res) => {
+  const review_id = req.params.review_id;
+  const email = req.session.login.email;
+
+  try {
+    const result = await cafeReviewService.increaseLikeCnt(review_id, email);
+
+    if (result) res.sendStatus(200);
+    else res.status(409).json({ message: "EMAIL ALREADY INCLUDED" });
+  } catch (err) {
+    res.status(400).json({ message: "EMAIL OR REVIEW NOT EXISTS" });
+  }
 });
+
+// router.post("/reviews/:cafe_id", async (req, res) => {
+//   const cafe_id = req.params.cafe_id;
+// });
 
 module.exports = router;
