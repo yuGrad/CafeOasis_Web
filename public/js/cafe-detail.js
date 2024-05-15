@@ -17,12 +17,13 @@ document.addEventListener("DOMContentLoaded", () => {
     container.innerHTML = ""; // 기존 내용을 지웁니다.
 
     if (reviews.length > 0) {
-      reviews.forEach((review) => {
+      reviews.forEach((review, idx) => {
         const reviewElement = document.createElement("div");
-        reviewElement.className = "bg-white p-4 rounded-lg shadow";
 
+        reviewElement.className = "bg-white p-4 rounded-lg shadow";
         reviewElement.innerHTML = `
           <div class="flex items-center space-x-4 mb-4">
+            <input type="hidden" id="review_${idx}" value="${review._id}" />
             <div class="text-sm font-semibold">${review.reviewer}</div>
             <div class="text-gray-500 text-xs">${new Date(
               review.date
@@ -39,10 +40,12 @@ document.addEventListener("DOMContentLoaded", () => {
               review.starring
             }/5)</span>
           </div>
-          <div class="text-right">
-            <button class="text-blue-500 hover:text-blue-600 text-xs">좋아요 (${
-              review.likes
-            })</button>
+          <div class="flex items-center justify-end text-blue-500 hover:text-blue-600 text-xs">
+            <button class="focus:outline-none"
+              onclick="increaseLikeCnt(${idx})">
+                좋아요
+            </button>
+            <p id=like_${idx} class="ml-2">(${review.likes})</p>
           </div>
         `;
 
@@ -54,3 +57,26 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   }
 });
+
+function increaseLikeCnt(idx) {
+  const reviewId = document.getElementById(`review_${idx}`).value;
+  const likeTag = document.getElementById(`like_${idx}`);
+
+  fetch(`/cafes/reviews/${reviewId}/likes`, {
+    method: "PATCH",
+    headers: {
+      "Content-Type": "application/json",
+    },
+  })
+    .then((response) => {
+      if (!response.ok) throw new Error(`Servier error(${response.status})`);
+
+      const likeTagLength = likeTag.innerText.length;
+      const likeTagValue = Number(
+        likeTag.innerText.slice(1, likeTagLength - 1)
+      );
+
+      likeTag.innerText = `(${likeTagValue + 1})`;
+    })
+    .catch((error) => console.error("Fetching error:", error));
+}
