@@ -23,7 +23,7 @@ const CafeReview = {
   },
   async getCafeReviewByLikeUserId(review_id, email) {
     const queryJson = {
-      cafe_id: new ObjectId(review_id),
+      _id: new ObjectId(review_id),
       like_users: email,
     };
     const review = await db.query(this.collection, "findOne", queryJson);
@@ -35,7 +35,7 @@ const CafeReview = {
       _id: new ObjectId(review_id),
     };
     const updateJson = {
-      $inc: { like: +added_cnt },
+      $inc: { likes: +added_cnt },
       $push: { like_users: email },
     };
 
