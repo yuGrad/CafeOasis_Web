@@ -33,11 +33,13 @@ router.get("/reviews/:cafe_id", async (req, res) => {
 
 router.patch("/reviews/:review_id/likes", async (req, res) => {
   const review_id = req.params.review_id;
-  const email = req.session.login.email;
 
-  if (!email) res.status(403).json({ message: "NOT LOGIN" });
+  if (!req.session.login) return res.status(403).json({ message: "NOT LOGIN" });
   try {
-    const result = await cafeReviewService.increaseLikeCnt(review_id, email);
+    const result = await cafeReviewService.increaseLikeCnt(
+      review_id,
+      req.session.login
+    );
 
     if (result) res.sendStatus(200);
     else res.status(409).json({ message: "EMAIL ALREADY INCLUDED" });
@@ -48,13 +50,13 @@ router.patch("/reviews/:review_id/likes", async (req, res) => {
 
 router.post("/reviews/:cafe_id", async (req, res) => {
   const { cafe_id, content, starring } = req.body;
-  const email = req.session.login.email;
+  // const email = req.session.login.email;
 
-  if (!email) res.status(403).json({ message: "NOT LOGIN" });
+  if (!req.session.login) return res.status(403).json({ message: "NOT LOGIN" });
   try {
     await cafeReviewService.registerCafeReview(
       cafe_id,
-      email,
+      req.session.login.email,
       content,
       starring
     );
