@@ -50,7 +50,6 @@ router.patch("/reviews/:review_id/likes", async (req, res) => {
 
 router.post("/reviews/:cafe_id", async (req, res) => {
   const { cafe_id, content, starring } = req.body;
-  // const email = req.session.login.email;
 
   if (!req.session.login) return res.status(403).json({ message: "NOT LOGIN" });
   try {
@@ -62,7 +61,7 @@ router.post("/reviews/:cafe_id", async (req, res) => {
     );
     res.sendStatus(200);
   } catch (err) {
-    console.log(err);
+    console.log(err.message);
     res.status(400).json({ message: err.message });
   }
 });

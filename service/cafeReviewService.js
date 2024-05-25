@@ -15,10 +15,11 @@ const cafeReviewService = {
     }
   },
   async registerCafeReview(cafeId, reviewer, content, starring) {
+    console.log("conent:", content);
     if (!starring || starring < 0 || starring > 5 || !content)
-      return new Error("Invalid input value");
+      throw new Error("Invalid input value");
     const cafe = await Cafe.getCafeById(cafeId); // cafeId가 존재하는 cafe인지 검증
-    if (!cafe) return new Error("No exist cafe");
+    if (!cafe) throw new Error("No exist cafe");
 
     await CafeReview.insertCafeReview(cafeId, reviewer, content, starring);
   },
