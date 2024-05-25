@@ -29,7 +29,7 @@ document.addEventListener("DOMContentLoaded", () => {
               review.date
             ).toLocaleDateString()}</div>
           </div>
-          <p class="text-gray-700">${review.context}</p>
+          <p class="text-gray-700">${review.content}</p>
           <div class="flex items-center mt-2">
             ${Array(review.starring).fill("&#9733;").join("")}${Array(
           5 - review.starring
@@ -79,4 +79,31 @@ function increaseLikeCnt(idx) {
       likeTag.innerText = `(${likeTagValue + 1})`;
     })
     .catch((error) => console.error("Fetching error:", error));
+}
+
+async function submitCafeReview() {
+  const cafeId = document.getElementById("cafe_id").value;
+  // const reviewer = document.getElementById("reviewer").value; // reviewr 데이터는 session에 존재
+  const content = document.getElementById("content").value;
+  const starring = document.getElementById("starring").value;
+
+  try {
+    const response = await fetch(`/cafes/reviews/${cafeId}`, {
+      method: "post",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        cafe_id: cafeId,
+        content: content,
+        starring: starring,
+      }),
+    });
+
+    if (!response.ok) throw new Error("리뷰 등록 실패, 서버측 error");
+    // 새로고침
+    location.reload(true);
+  } catch (err) {
+    console.log(err);
+  }
 }

@@ -41,6 +41,20 @@ const CafeReview = {
 
     db.query(this.collection, "updateOne", queryJson, updateJson);
   },
+  async insertCafeReview(cafeId, reviewer, content, starring) {
+    const queryJson = {
+      cafe_id: new ObjectId(cafeId),
+      reviewer: reviewer,
+      content: content,
+      starring: starring,
+      date: new Date(),
+      likes: 0,
+      like_users: [],
+    };
+    const result = await db.query(this.collection, "insertOne", queryJson);
+
+    return result;
+  },
 };
 
 module.exports = CafeReview;

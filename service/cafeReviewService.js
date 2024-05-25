@@ -1,4 +1,5 @@
 const CafeReview = require("../repository/CafeReview");
+const Cafe = require("../repository/Cafe");
 
 const cafeReviewService = {
   async increaseLikeCnt(reviewId, email) {
@@ -12,6 +13,14 @@ const cafeReviewService = {
     } catch (err) {
       throw new Error("email or review_id that does not exist");
     }
+  },
+  async registerCafeReview(cafeId, reviewer, content, starring) {
+    if (!starring || starring < 0 || starring > 5 || !content)
+      return new Error("Invalid input value");
+    const cafe = await Cafe.getCafeById(cafeId); // cafeId가 존재하는 cafe인지 검증
+    if (!cafe) return new Error("No exist cafe");
+
+    await CafeReview.insertCafeReview(cafeId, reviewer, content, starring);
   },
 };
 

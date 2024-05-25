@@ -46,8 +46,23 @@ router.patch("/reviews/:review_id/likes", async (req, res) => {
   }
 });
 
-// router.post("/reviews/:cafe_id", async (req, res) => {
-//   const cafe_id = req.params.cafe_id;
-// });
+router.post("/reviews/:cafe_id", async (req, res) => {
+  const { cafe_id, content, starring } = req.body;
+  const email = req.session.login.email;
+
+  if (!email) res.status(403).json({ message: "NOT LOGIN" });
+  try {
+    await cafeReviewService.registerCafeReview(
+      cafe_id,
+      email,
+      content,
+      starring
+    );
+    res.sendStatus(200);
+  } catch (err) {
+    console.log(err);
+    res.status(400).json({ message: err.message });
+  }
+});
 
 module.exports = router;

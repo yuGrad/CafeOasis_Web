@@ -44,49 +44,42 @@
         <!-- 리뷰 작성 섹션 -->
         <div class="mt-8 p-6 bg-white rounded-lg shadow-lg">
           <h3 class="text-xl font-semibold mb-4">리뷰 작성하기</h3>
-          <form
-            action="/submit-review"
-            method="post"
-            enctype="multipart/form-data"
-          >
-            <div class="mb-4">
-              <label
-                for="content"
-                class="block text-gray-700 text-sm font-bold mb-2"
-                >리뷰 내용:</label
-              >
-              <textarea
-                id="content"
-                name="content"
-                rows="4"
-                class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                placeholder="리뷰를 입력하세요..."
-              ></textarea>
-            </div>
-
-            <div class="mb-4">
-              <label class="block text-gray-700 text-sm font-bold mb-2"
-                >평점:</label
-              >
-              <select
-                id="rating"
-                name="rating"
-                class="shadow border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-              >
-                <option value="1">1</option>
-                <option value="2">2</option>
-                <option value="3">3</option>
-                <option value="4">4</option>
-                <option value="5" selected>5</option>
-              </select>
-            </div>
-            <button
-              type="submit"
-              class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
+          <div class="mb-4">
+            <label
+              for="content"
+              class="block text-gray-700 text-sm font-bold mb-2"
+              >리뷰 내용:</label
             >
-              리뷰 제출
-            </button>
-          </form>
+            <textarea
+              id="content"
+              rows="4"
+              class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+              placeholder="리뷰를 입력하세요..."
+            ></textarea>
+          </div>
+
+          <div class="mb-4">
+            <label class="block text-gray-700 text-sm font-bold mb-2"
+              >평점:</label
+            >
+            <select
+              id="starring"
+              class="shadow border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+            >
+              <option value="1">1</option>
+              <option value="2">2</option>
+              <option value="3">3</option>
+              <option value="4">4</option>
+              <option value="5" selected>5</option>
+            </select>
+          </div>
+          <button
+            type="submit"
+            class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
+            onclick="submitCafeReview()"
+          >
+            리뷰 제출
+          </button>
         </div>
       </div>
     </main>
