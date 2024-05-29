@@ -25,11 +25,14 @@ const smtp_config = {
   port: 587,
   secure: false, // true for 465, false for other ports
   auth: {
-    type: "OAuth2",
-    user: process.env.GMAIL_OAUTH_USER,
-    clientId: process.env.GMAIL_OAUTH_CLIENT_ID,
-    clientSecret: process.env.GAMIL_OAUTH_CLIENT_SECRET,
-    refreshToken: process.env.GAMIL_OAUTH_REFRESH_TOKEN,
+    // type: "OAuth2",
+    // user: process.env.GMAIL_OAUTH_USER,
+    // clientId: process.env.GMAIL_OAUTH_CLIENT_ID,
+    // clientSecret: process.env.GAMIL_OAUTH_CLIENT_SECRET,
+    // accessToken: process.env.GAMIL_OAUTH_ACCESS_TOKEN,
+    // refreshToken: process.env.GAMIL_OAUTH_REFRESH_TOKEN,
+    user: process.env.GMAIL_EMAIL,
+    pass: process.env.GAMIL_APP_PASSWORD,
   },
   from: "tgu06167@gmial.com",
 };
