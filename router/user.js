@@ -58,7 +58,7 @@ router.post("/signup", async (req, res) => {
 
   try {
     await userService.signup(user_type, req.body);
-    res.session.res.redirect("/cafes");
+    res.redirect("/cafes");
   } catch (err) {
     console.error(err);
     res.render("sign-up", {
@@ -98,9 +98,14 @@ router.patch("/reset-password", async (req, res) => {
 
   if (isEmailVerified != email)
     return res.status(401).json({ message: "SESSION EXPIRED" });
-  const result = await userService.changePassword(email, password);
-  if (result) res.sendStatus(200);
-  else res.status(500).json({ message: "INTERNAL SERVER ERROR" });
+
+  try {
+    await userService.changePassword("customer", email, password);
+    res.sendStatus(200);
+  } catch (err) {
+    console.err(err);
+    res.status(500).json({ message: "INTERNAL SERVER ERROR" });
+  }
 });
 
 module.exports = router;
