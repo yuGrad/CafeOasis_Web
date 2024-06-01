@@ -15,7 +15,6 @@ const cafeReviewService = {
     }
   },
   async registerCafeReview(cafeId, reviewer, content, starring) {
-    console.log("conent:", content);
     if (!starring || starring < 0 || starring > 5 || !content)
       throw new Error("Invalid input value");
     const cafe = await Cafe.getCafeById(cafeId); // cafeId가 존재하는 cafe인지 검증
