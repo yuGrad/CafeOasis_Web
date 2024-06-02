@@ -56,13 +56,16 @@ async function sendEmailVerification(event) {
 document.addEventListener("DOMContentLoaded", function () {
   const userTypeRadios = document.getElementsByName("user_type");
   const customerSection = document.getElementById("customerSection");
+  const additionalField = document.getElementById("additional_field");
 
   function togglecustomerSection() {
     const isCustomerSelected = document.getElementById("customer").checked;
     if (isCustomerSelected) {
       customerSection.classList.remove("hidden");
+      additionalField.classList.add("hidden");
     } else {
       customerSection.classList.add("hidden");
+      additionalField.classList.remove("hidden");
     }
   }
 

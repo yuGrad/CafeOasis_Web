@@ -44,7 +44,7 @@ router.post("/logout", (req, res, next) => {
 });
 
 router.get("/signup", (req, res) => {
-  res.render("sign-up", { errorMessage: null });
+  res.render("signup/sign-up", { errorMessage: null });
 });
 
 router.post("/signup", async (req, res) => {
@@ -52,7 +52,7 @@ router.post("/signup", async (req, res) => {
   const user_type = req.body.user_type;
 
   if (!isEmailVerified)
-    return res.render("sign-up", {
+    return res.render("signup/sign-up", {
       errorMessage: "인증되지 않은 이메일입니다.",
     });
 
@@ -61,7 +61,7 @@ router.post("/signup", async (req, res) => {
     res.redirect("/cafes");
   } catch (err) {
     console.error(err);
-    res.render("sign-up", {
+    res.render("signup/sign-up", {
       errorMessage: "중복된 이메일입니다.",
     });
   }
