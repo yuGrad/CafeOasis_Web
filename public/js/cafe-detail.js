@@ -31,7 +31,7 @@ document.addEventListener("DOMContentLoaded", () => {
           </div>
           <p class="text-gray-700">${review.content}</p>
           <div class="flex items-center mt-2">
-            ${Array(review.starring).fill("&#9733;").join("")}${Array(
+            ${Array(Number(review.starring)).fill("&#9733;").join("")}${Array(
           5 - review.starring
         )
           .fill("&#9734;")
@@ -85,7 +85,9 @@ async function submitCafeReview() {
   const cafeId = document.getElementById("cafe_id").value;
   // const reviewer = document.getElementById("reviewer").value; // reviewr 데이터는 session에 존재
   const content = document.getElementById("content").value;
-  const starring = document.getElementById("starring").value;
+  const starring = document.querySelector(
+    'input[name="starring"]:checked'
+  ).value;
 
   try {
     const response = await fetch(`/cafes/reviews/${cafeId}`, {
