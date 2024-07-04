@@ -22,6 +22,13 @@ const cafeReviewService = {
 
     await CafeReview.insertCafeReview(cafeId, reviewer, content, starring);
   },
+  async removeCafeReview(cafeId, reviewId, email) {
+    const result = await CafeReview.deleteCafeReview(cafeId, reviewId, email);
+
+    if (result.deletedCount == 0) {
+      throw new Error("You don't have permissions on that review");
+    }
+  },
 };
 
 module.exports = cafeReviewService;

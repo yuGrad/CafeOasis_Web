@@ -55,6 +55,16 @@ const CafeReview = {
 
     return result;
   },
+  async deleteCafeReview(cafeId, reviewId, email) {
+    const queryJson = {
+      _id: new ObjectId(reviewId),
+      cafe_id: new ObjectId(cafeId),
+      reviewer: email, // 요청한 사용자 검증
+    };
+    const result = await db.query(this.collection, "deleteOne", queryJson);
+
+    return result;
+  },
 };
 
 module.exports = CafeReview;

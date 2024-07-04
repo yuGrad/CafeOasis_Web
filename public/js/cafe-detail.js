@@ -1,3 +1,5 @@
+const container = document.getElementById("reviewsContainer");
+
 document.addEventListener("DOMContentLoaded", () => {
   const cafeId = document.getElementById("cafe_id").value;
 
@@ -13,41 +15,42 @@ document.addEventListener("DOMContentLoaded", () => {
     .catch((error) => console.error("Fetching error:", error));
 
   function updateReviewsHTML(reviews) {
-    const container = document.getElementById("reviewsContainer");
     container.innerHTML = ""; // 기존 내용을 지웁니다.
 
     if (reviews.length > 0) {
       reviews.forEach((review, idx) => {
         const reviewElement = document.createElement("div");
 
-        reviewElement.className = "bg-white p-4 rounded-lg shadow";
+        reviewElement.id = `reviewdiv_${idx}`;
+        reviewElement.className =
+          "relative bg-white p-4 rounded-lg shadow-md mb-4";
         reviewElement.innerHTML = `
-          <div class="flex items-center space-x-4 mb-4">
-            <input type="hidden" id="review_${idx}" value="${review._id}" />
-            <div class="text-sm font-semibold">${review.reviewer}</div>
-            <div class="text-gray-500 text-xs">${new Date(
-              review.date
-            ).toLocaleDateString()}</div>
-          </div>
-          <p class="text-gray-700">${review.content}</p>
-          <div class="flex items-center mt-2">
-            ${Array(Number(review.starring)).fill("&#9733;").join("")}${Array(
+							<div class="flex items-center space-x-4">
+									<input type="hidden" id="review_${idx}" value="${review._id}" />
+									<div class="text-sm font-semibold">${review.reviewer}</div>
+									<div class="text-gray-500 text-xs">${new Date(
+                    review.date
+                  ).toLocaleDateString()}</div>
+									<button class="absolute top-2 right-2 focus:outline-none" onclick="removeReview(${idx})">
+											❌
+									</button>
+							</div>
+							<p class="text-gray-700 mt-2">${review.content}</p>
+							<div class="flex items-center mt-2">
+									${Array(Number(review.starring)).fill("&#9733;").join("")}${Array(
           5 - review.starring
         )
           .fill("&#9734;")
           .join("")}
-            <span class="text-gray-500 text-xs">(평점: ${
-              review.starring
-            }/5)</span>
-          </div>
-          <div class="flex items-center justify-end text-blue-500 hover:text-blue-600 text-xs">
-            <button class="focus:outline-none"
-              onclick="increaseLikeCnt(${idx})">
-                좋아요
-            </button>
-            <p id=like_${idx} class="ml-2">(${review.likes})</p>
-          </div>
-        `;
+									<span class="text-gray-500 text-xs">(평점: ${review.starring}/5)</span>
+									<div class="absolute bottom-2 right-2 flex items-center justify-end text-blue-500 hover:text-blue-600 text-xs mt-2">
+									<button class="focus:outline-none" onclick="increaseLikeCnt(${idx})">
+											좋아요
+									</button>
+									<p id="like_${idx}" class="ml-2">(${review.likes})</p>
+							</div>
+							</div>
+				`;
 
         container.appendChild(reviewElement);
       });
@@ -108,4 +111,28 @@ async function submitCafeReview() {
   } catch (err) {
     console.log(err);
   }
+}
+
+function removeReview(idx) {
+  const reviewDiv = document.getElementById(`reviewdiv_${idx}`);
+  const cafeId = document.getElementById("cafe_id").value;
+  const reviewId = document.getElementById(`review_${idx}`).value;
+
+  fetch(`/cafes/${cafeId}/reviews/${reviewId}`, {
+    method: "DELETE",
+    headers: {
+      "Content-Type": "application/json",
+    },
+  })
+    .then((response) => {
+      if (!response.ok) {
+        response.json().then((data) => alert(data.message));
+        throw new Error(`Servier error(${response.status})`);
+      }
+
+      container.removeChild(reviewDiv);
+    })
+    .catch((error) => {
+      console.error("Fetching error:", error);
+    });
 }
