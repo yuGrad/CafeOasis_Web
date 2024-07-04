@@ -10,70 +10,81 @@
     />
   </head>
   <body class="bg-gray-100 flex flex-col min-h-screen">
-    <%-include ('cafe-header.ejs') %>
+    <%- include('cafe-header.ejs') %>
 
-    <style>
-      /* 추가적인 커스텀 스타일 */
-      .section-title h2 {
-        line-height: 1.2; /* 더 타이트한 라인 높이 */
-        white-space: nowrap; /* 텍스트가 한 줄에 표시되도록 */
-        overflow: hidden; /* 내용이 넘칠 경우 숨김 */
-        text-overflow: ellipsis; /* 넘치는 텍스트를 생략 부호로 처리 */
-      }
-    </style>
+    <main class="flex-grow">
+      <!-- Personal Information Section -->
+      <div class="flex justify-center space-x-4 p-4">
+        <section class="max-w-md w-full">
+          <div class="bg-white shadow-lg rounded-lg p-6">
+            <h2 class="text-3xl font-semibold mb-6 text-blue-700">My Page</h2>
 
-    <main class="flex-grow mx-auto p-4 max-w-7xl flex space-x-4">
-      <section class="flex-1 p-4 bg-white rounded-lg shadow-lg">
-        <h2 class="text-3xl font-bold text-gray-800 mb-6 border-b pb-2">
-          Personal Information
-        </h2>
-        <div class="text-gray-700 space-y-3" style="white-space: nowrap">
-          <p class="text-lg">
-            <strong class="font-semibold">Email:</strong> <%= login.email %>
-          </p>
-          <p class="text-lg">
-            <strong class="font-semibold">Name:</strong> <%= login.name %>
-          </p>
-          <p class="text-lg">
-            <strong class="font-semibold">Phone Number:</strong> <%=
-            login.phone_no %>
-          </p>
-          <% if (login.user_type == "customer") {%>
-          <p class="text-lg">
-            <strong class="font-semibold">Nickname:</strong> <%= login.nickname
-            %>
-          </p>
-          <p class="text-lg">
-            <strong class="font-semibold">Age:</strong> <%= login.age.slice(0,2)
-            + "대" %>
-          </p>
-          <p class="text-lg">
-            <strong class="font-semibold">Sex:</strong> <%=login.sex == 'm' ?
-            'Male' : 'Female' %>
-          </p>
-          <% } %>
-          <p class="text-lg">
-            <strong class="font-semibold">Registration Date:</strong>
-            <% if (login.registration_date) { %> <%= new
-            Date(login.registration_date).toISOString().slice(0,
-            19).replace('T', ' ') %> <% } else { %> Not available <% } %>
-          </p>
-          <p class="text-lg">
-            <strong class="font-semibold">Account Status:</strong> <%=
-            login.is_active ? "Active" : "Inactive" %>
-          </p>
-        </div>
-      </section>
-      <% if (login.user_type == "employee") {%>
-      <section class="flex-1 p-4 bg-white rounded-lg shadow-lg">
-        <h2 class="text-3xl font-bold text-gray-800 mb-6 border-b pb-2">
-          Cafe Information
-        </h2>
-        <div class="text-gray-700 space-y-3" style="white-space: nowrap"></div>
-      </section>
-      <% } %>
+            <div class="space-y-6">
+              <div>
+                <label
+                  class="block text-gray-700 text-sm font-bold mb-1"
+                  for="email"
+                  >Email</label
+                >
+                <p id="email" class="text-gray-900 bg-blue-50 p-2 rounded">
+                  <%= login.email %>
+                </p>
+              </div>
+              <div>
+                <label
+                  class="block text-gray-700 text-sm font-bold mb-1"
+                  for="nickname"
+                  >Nickname</label
+                >
+                <p id="nickname" class="text-gray-900 bg-blue-50 p-2 rounded">
+                  <%= login.nickname %>
+                </p>
+              </div>
+              <div>
+                <label
+                  class="block text-gray-700 text-sm font-bold mb-1"
+                  for="name"
+                  >Name</label
+                >
+                <p id="name" class="text-gray-900 bg-blue-50 p-2 rounded">
+                  <%= login.name %>
+                </p>
+              </div>
+              <div>
+                <label
+                  class="block text-gray-700 text-sm font-bold mb-1"
+                  for="mobile"
+                  >Mobile Phone Number</label
+                >
+                <p id="mobile" class="text-gray-900 bg-blue-50 p-2 rounded">
+                  <%= login.phone_no %>
+                </p>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <% if (login.user_type == "employee") { %>
+        <section class="max-w-md w-full">
+          <div class="bg-white shadow-lg rounded-lg p-6">
+            <h2 class="text-3xl font-semibold mb-6 text-blue-700">Cafe Info</h2>
+
+            <% if (!login.cafe) { %>
+            <p class="font-semibold mb-6">등록된 카페가 없습니다.</p>
+            <div class="flex justify-center">
+              <button
+                class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+              >
+                카페 등록
+              </button>
+            </div>
+            <% } %>
+          </div>
+        </section>
+        <% } %>
+      </div>
     </main>
 
-    <%-include ('cafe-footer.ejs') %>
+    <%- include('cafe-footer.ejs') %>
   </body>
 </html>
