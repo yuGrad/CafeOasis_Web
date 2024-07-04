@@ -1,90 +1,90 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>My Page - Cafe Oasis</title>
-    <link
-      href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css"
-      rel="stylesheet"
-    />
-  </head>
-  <body class="bg-gray-100 flex flex-col min-h-screen">
-    <%- include('cafe-header.ejs') %>
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>My Page - Cafe Oasis</title>
+		<link
+			href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css"
+			rel="stylesheet"
+		/>
+	</head>
+	<body class="bg-gray-100 flex flex-col min-h-screen">
+		<%- include('cafe-header.ejs') %>
 
-    <main class="flex-grow">
-      <!-- Personal Information Section -->
-      <div class="flex justify-center space-x-4 p-4">
-        <section class="max-w-md w-full">
-          <div class="bg-white shadow-lg rounded-lg p-6">
-            <h2 class="text-3xl font-semibold mb-6 text-blue-700">My Page</h2>
+		<main class="flex-grow">
+			<!-- Personal Information Section -->
+			<div class="flex justify-center space-x-4 p-4">
+				<section class="max-w-md w-full">
+					<div class="bg-white shadow-lg rounded-lg p-6">
+						<h2 class="text-3xl font-semibold mb-6 text-blue-700">My Page</h2>
 
-            <div class="space-y-6">
-              <div>
-                <label
-                  class="block text-gray-700 text-sm font-bold mb-1"
-                  for="email"
-                  >Email</label
-                >
-                <p id="email" class="text-gray-900 bg-blue-50 p-2 rounded">
-                  <%= login.email %>
-                </p>
-              </div>
-              <div>
-                <label
-                  class="block text-gray-700 text-sm font-bold mb-1"
-                  for="nickname"
-                  >Nickname</label
-                >
-                <p id="nickname" class="text-gray-900 bg-blue-50 p-2 rounded">
-                  <%= login.nickname %>
-                </p>
-              </div>
-              <div>
-                <label
-                  class="block text-gray-700 text-sm font-bold mb-1"
-                  for="name"
-                  >Name</label
-                >
-                <p id="name" class="text-gray-900 bg-blue-50 p-2 rounded">
-                  <%= login.name %>
-                </p>
-              </div>
-              <div>
-                <label
-                  class="block text-gray-700 text-sm font-bold mb-1"
-                  for="mobile"
-                  >Mobile Phone Number</label
-                >
-                <p id="mobile" class="text-gray-900 bg-blue-50 p-2 rounded">
-                  <%= login.phone_no %>
-                </p>
-              </div>
-            </div>
-          </div>
-        </section>
+						<div class="space-y-6">
+							<div>
+								<label
+									class="block text-gray-700 text-sm font-bold mb-1"
+									for="email"
+									>Email</label
+								>
+								<p id="email" class="text-gray-900 bg-blue-50 p-2 rounded">
+									<%= login.email %>
+								</p>
+							</div>
+							<div>
+								<label
+									class="block text-gray-700 text-sm font-bold mb-1"
+									for="nickname"
+									>Nickname</label
+								>
+								<p id="nickname" class="text-gray-900 bg-blue-50 p-2 rounded">
+									<%= login.nickname %>
+								</p>
+							</div>
+							<div>
+								<label
+									class="block text-gray-700 text-sm font-bold mb-1"
+									for="name"
+									>Name</label
+								>
+								<p id="name" class="text-gray-900 bg-blue-50 p-2 rounded">
+									<%= login.name %>
+								</p>
+							</div>
+							<div>
+								<label
+									class="block text-gray-700 text-sm font-bold mb-1"
+									for="mobile"
+									>Mobile Phone Number</label
+								>
+								<p id="mobile" class="text-gray-900 bg-blue-50 p-2 rounded">
+									<%= login.phone_no %>
+								</p>
+							</div>
+						</div>
+					</div>
+				</section>
 
-        <% if (login.user_type == "employee") { %>
-        <section class="max-w-md w-full">
-          <div class="bg-white shadow-lg rounded-lg p-6">
-            <h2 class="text-3xl font-semibold mb-6 text-blue-700">Cafe Info</h2>
+				<% if (login.user_type == "employee") { %>
+				<section class="max-w-md w-full">
+					<div class="bg-white shadow-lg rounded-lg p-6">
+						<h2 class="text-3xl font-semibold mb-6 text-blue-700">Cafe Info</h2>
 
-            <% if (!login.cafe) { %>
-            <p class="font-semibold mb-6">등록된 카페가 없습니다.</p>
-            <div class="flex justify-center">
-              <button
-                class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
-              >
-                카페 등록
-              </button>
-            </div>
-            <% } %>
-          </div>
-        </section>
-        <% } %>
-      </div>
-    </main>
+						<% if (!login.cafe) { %>
+						<p class="font-semibold mb-6">등록된 카페가 없습니다.</p>
+						<div class="flex justify-center">
+							<button
+								class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+							>
+								카페 등록
+							</button>
+						</div>
+						<% } %>
+					</div>
+				</section>
+				<% } %>
+			</div>
+		</main>
 
-    <%- include('cafe-footer.ejs') %>
-  </body>
+		<%- include('cafe-footer.ejs') %>
+	</body>
 </html>
