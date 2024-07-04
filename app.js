@@ -6,9 +6,9 @@ const path = require("path");
 const app = express();
 const PORT = 3000;
 
-const userRouter = require("./router/user");
-const cafeRouter = require("./router/cafe");
-const emailRouter = require("./router/email");
+const userRouter = require("./src/router/user");
+const cafeRouter = require("./src/router/cafe");
+const emailRouter = require("./src/router/email");
 
 app.use(express.static(path.join(__dirname, "/public")));
 app.set("views", __dirname + "/views");
