@@ -90,8 +90,12 @@ async function submitCafeReview() {
 	const content = document.getElementById("content").value;
 	const starring = document.querySelector(
 		'input[name="starring"]:checked'
-	).value;
+	)?.value;
 
+	if (!content || !starring) {
+		alert("리뷰 내용이나 별점이 비었습니다.");
+		return;
+	}
 	try {
 		const response = await fetch(`/cafes/reviews/${cafeId}`, {
 			method: "post",
