@@ -17,7 +17,7 @@ const cafeController = {
 		try {
 			const result = await cafeReviewService.increaseLikeCnt(
 				review_id,
-				req.session.login
+				req.session.login.email
 			);
 
 			if (result) res.sendStatus(200);
