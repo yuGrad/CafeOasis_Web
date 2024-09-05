@@ -3,9 +3,15 @@ const db = require("../db/mongo_db");
 
 const CafeReview = {
 	collection: "cafe_reviews",
-	async getCafeReviewsById(cafe_id) {
-		const queryJson = { cafe_id: new ObjectId(cafe_id) };
-		const reviews = await db.query(this.collection, "find", queryJson);
+	async getCafeReviewsById(cafe_id, pageNum, pageSize = 20) {
+		const skip = (pageNum - 1) * pageSize;
+		const pipeline = [
+			{ $match: { cafe_id: new ObjectId(cafe_id) } },
+			{ $skip: skip },
+			{ $limit: pageSize },
+			{ $project: { cafe_id: 0, like_users: 0 } },
+		];
+		const reviews = await db.query(this.collection, "aggregate", pipeline);
 
 		return reviews;
 	},

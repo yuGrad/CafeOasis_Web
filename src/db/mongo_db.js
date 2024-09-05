@@ -15,7 +15,9 @@ async function query(collection, operation, ...params) {
 
 	// operation 예: find, insertOne, updateOne 등
 	const result = await col[operation](...params);
-	if (operation === "find") return result.toArray(); // find 연산의 경우 결과를 배열로 변환
+	// find or aggregate 연산의 경우 결과를 배열로 변환
+	if (operation === "find" || operation === "aggregate")
+		return result.toArray();
 	return result;
 }
 
