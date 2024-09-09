@@ -15,18 +15,6 @@ const CafeReview = {
 
 		return reviews;
 	},
-	async insertCafeReview(cafe_id, reviewer, content, starring) {
-		const queryJson = {
-			cafe_id: new ObjectId(cafe_id),
-			reviewer: reviewer,
-			content: content,
-			starring: starring,
-			date: new Date(),
-			likes: 0,
-		};
-
-		await db.query(this.collection, "insert", queryJson);
-	},
 	async getCafeReviewByLikeUserId(review_id, email) {
 		const queryJson = {
 			_id: new ObjectId(review_id),
