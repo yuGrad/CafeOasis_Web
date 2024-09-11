@@ -12,6 +12,10 @@ const userController = {
 		try {
 			const user = await userService.authenticate(user_type, email, password);
 
+			if (!user)
+				return res.render("login", {
+					errorMessage: "이메일 또는 비밀번호가 잘못되었습니다.",
+				});
 			req.session.regenerate((err) => {
 				if (err) throw err;
 
@@ -21,15 +25,12 @@ const userController = {
 				req.session.login.user_type = user_type; // user table not in user type
 				req.session.save((err) => {
 					if (err) throw err;
-
 					res.redirect("/cafes");
 				});
 			});
 		} catch (err) {
 			console.error(err);
-			res.render("login", {
-				errorMessage: "이메일 또는 비밀번호가 잘못되었습니다.",
-			});
+			res.sendStatus(500);
 		}
 	},
 

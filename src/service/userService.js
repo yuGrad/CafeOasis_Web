@@ -14,12 +14,9 @@ const userService = {
 		} else {
 			user = await Customer.getCustomerByEmail(email);
 		}
-
-		if (user && bcrypt.compareSync(password, user.password)) {
-			return user; // 인증 성공
-		} else {
-			throw new Error("Invalid email or password"); // 인증 실패
-		}
+		// user 존재 여부 && 비밀번호 체크 -> 인증
+		if (user && bcrypt.compareSync(password, user.password)) return user;
+		else return false;
 	},
 
 	async signup(userType, userData) {
