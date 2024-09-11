@@ -24,16 +24,23 @@ const CafeReview = {
 
 		return review;
 	},
-	increaseLikeCnt(review_id, email, added_cnt) {
+	async increaseLikeCnt(review_id, email, added_cnt) {
 		const queryJson = {
 			_id: new ObjectId(review_id),
+			like_users: { $ne: email },
 		};
 		const updateJson = {
 			$inc: { likes: +added_cnt },
 			$push: { like_users: email },
 		};
+		const result = await db.query(
+			this.collection,
+			"updateOne",
+			queryJson,
+			updateJson
+		);
 
-		db.query(this.collection, "updateOne", queryJson, updateJson);
+		return result;
 	},
 	async insertCafeReview(cafeId, reviewer, content, starring) {
 		const queryJson = {

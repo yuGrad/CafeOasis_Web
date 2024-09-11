@@ -3,13 +3,10 @@ const Cafe = require("../repository/Cafe");
 
 const cafeReviewService = {
 	async increaseLikeCnt(reviewId, email) {
-		const review = await CafeReview.getCafeReviewByLikeUserId(reviewId, email);
-
 		try {
-			if (!review) {
-				CafeReview.increaseLikeCnt(reviewId, email, 1);
-				return true;
-			} else return false;
+			const result = await CafeReview.increaseLikeCnt(reviewId, email, 1);
+			if (result.modifiedCount > 0) return true;
+			else return false;
 		} catch (err) {
 			throw new Error("email or review_id that does not exist");
 		}

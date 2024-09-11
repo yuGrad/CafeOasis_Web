@@ -42,7 +42,7 @@ const cafeController = {
 				content,
 				starring
 			);
-			res.sendStatus(200);
+			res.status(201).json({ message: "", data: {} });
 		} catch (err) {
 			console.log(err.message);
 			res.status(400).json({ message: err.message });
