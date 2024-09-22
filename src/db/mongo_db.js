@@ -1,12 +1,29 @@
 const { MongoClient } = require("mongodb");
 const config = require("../../config");
 
-const mongoClient = new MongoClient(config.mongo_config.uri);
+let dbConnection = null;
 
 // MongoDB에 연결
 async function connect() {
-	await mongoClient.connect(); // 연결 시도
-	return mongoClient.db(config.mongo_config.database); // 데이터베이스 반환
+	const mongoClient = new MongoClient(config.mongo_config.uri, {
+		maxPoolSize: 10,
+		minPoolSize: 5,
+		maxIdleTimeMS: 30000,
+		connectTimeoutMS: 5000,
+	});
+
+	if (!dbConnection) {
+		await mongoClient.connect();
+		dbConnection = mongoClient.db(config.mongo_config.database);
+	} else {
+		try {
+			await dbConnection.command({ ping: 1 });
+		} catch (error) {
+			await mongoClient.connect();
+			dbConnection = mongoClient.db(config.mongo_config.database);
+		}
+	}
+	return dbConnection;
 }
 
 async function query(collection, operation, ...params) {
