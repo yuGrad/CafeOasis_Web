@@ -4,7 +4,7 @@ const morgan = require("morgan");
 const path = require("path");
 
 const app = express();
-const PORT = 3000;
+const PORT = process.env.PORT;
 
 const userRouter = require("./src/router/user");
 const cafeRouter = require("./src/router/cafe");
