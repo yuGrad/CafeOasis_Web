@@ -37,4 +37,8 @@ const smtp_config = {
 	from: "tgu06167@gmial.com",
 };
 
-module.exports = { mysql_config, mongo_config, smtp_config };
+const redis_config = {
+	url: process.env.REDIS_URL,
+};
+
+module.exports = { mysql_config, mongo_config, smtp_config, redis_config };
