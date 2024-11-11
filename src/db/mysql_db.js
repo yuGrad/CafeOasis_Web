@@ -5,8 +5,12 @@ const pool = mysql.createPool(config.mysql_config);
 
 async function query(sql, params) {
 	const conn = await pool.getConnection();
-	const [rows] = await conn.query(sql, params);
-	return rows;
+	try {
+		const [rows] = await conn.query(sql, params);
+		return rows;
+	} finally {
+		conn.release();
+	}
 }
 
 function asynQuery(sql, params, callback) {

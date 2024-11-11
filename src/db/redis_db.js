@@ -12,6 +12,7 @@ RedisClient.connect().catch(console.error);
 const redisStore = new RedisStore({
 	client: RedisClient,
 	prefix: "sess:",
+	ttl: 3600, // session 만료: 1시간
 });
 
 module.exports = { RedisClient, RedisStore: redisStore };
