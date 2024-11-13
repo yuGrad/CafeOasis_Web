@@ -4,9 +4,10 @@ const morgan = require("morgan");
 const path = require("path");
 
 const app = express();
-const PORT = process.env.PORT;
+const PORT = process.env.PORT | 3000;
 
 const { RedisClient, RedisStore } = require("./src/db/redis_db");
+const { swaggerUi, specs } = require("./swagger/swagger");
 
 const userRouter = require("./src/router/user");
 const cafeRouter = require("./src/router/cafe");
@@ -30,6 +31,7 @@ app.use(
 );
 
 app.use(morgan("dev"));
+app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(specs));
 
 app.use("/users", userRouter);
 app.use("/cafes", cafeRouter);

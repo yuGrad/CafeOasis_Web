@@ -22,5 +22,9 @@
 		"mysql2": "^3.9.8",
 		"nodemailer": "^6.9.13",
 		"redis": "^4.7.0"
+	},
+	"devDependencies": {
+		"swagger-jsdoc": "^6.2.8",
+		"swagger-ui-express": "^5.0.1"
 	}
 }
