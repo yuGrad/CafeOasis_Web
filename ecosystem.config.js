@@ -24,5 +24,45 @@ module.exports = {
 			},
 			watch: true,
 		},
+		{
+			name: "oasis_server4",
+			script: "./app.js",
+			env: {
+				PORT: 3003,
+			},
+			watch: true,
+		},
+		{
+			name: "oasis_server5",
+			script: "./app.js",
+			env: {
+				PORT: 3004,
+			},
+			watch: true,
+		},
+		{
+			name: "oasis_server6",
+			script: "./app.js",
+			env: {
+				PORT: 3005,
+			},
+			watch: true,
+		},
+		{
+			name: "oasis_server7",
+			script: "./app.js",
+			env: {
+				PORT: 3006,
+			},
+			watch: true,
+		},
+		{
+			name: "oasis_server8",
+			script: "./app.js",
+			env: {
+				PORT: 3007,
+			},
+			watch: true,
+		},
 	],
 };
