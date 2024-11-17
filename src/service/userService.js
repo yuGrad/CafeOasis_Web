@@ -1,7 +1,32 @@
 const bcrypt = require("bcrypt");
+const { DynamicPool } = require("node-worker-threads-pool");
 
 const Customer = require("../repository/Customer");
 const Employee = require("../repository/Employee");
+
+const dynamicPool = new DynamicPool(8);
+
+async function hashPasswordInWorker(password, salt) {
+	return dynamicPool.exec({
+		task: (params) => {
+			const bcrypt = require("bcrypt");
+			const [password, salt] = params;
+			return bcrypt.hashSync(password, salt);
+		},
+		param: [password, salt],
+	});
+}
+
+async function comparePasswordInWorker(password, user_password) {
+	return dynamicPool.exec({
+		task: (params) => {
+			const bcrypt = require("bcrypt");
+			const [password, user_password] = params;
+			return bcrypt.compareSync(password, user_password);
+		},
+		param: [password, user_password],
+	});
+}
 
 const userService = {
 	salt: bcrypt.genSaltSync(10),
@@ -15,8 +40,12 @@ const userService = {
 			user = await Customer.getCustomerByEmail(email);
 		}
 		// user 존재 여부 && 비밀번호 체크 -> 인증
-		if (user && bcrypt.compareSync(password, user.password)) return user;
-		else return false;
+		if (user) {
+			// hash task -> worker thread로 실행
+			const isMatch = await comparePasswordInWorker(password, user.password);
+			return isMatch ? user : false;
+		}
+		return false;
 	},
 
 	async signup(userType, userData) {
@@ -32,8 +61,7 @@ const userService = {
 			sex,
 		} = userData;
 		const phone_no = phone_no_1 + phone_no_2 + phone_no_3;
-		const hashed_password = bcrypt.hashSync(password, this.salt);
-
+		const hashed_password = await hashPasswordInWorker(password, this.salt);
 		try {
 			if (userType === "employee")
 				await Employee.insertEmployee(email, hashed_password, name, phone_no);
@@ -53,7 +81,7 @@ const userService = {
 	},
 
 	async changePassword(userType, email, password) {
-		const hashed_password = bcrypt.hashSync(password, this.salt);
+		const hashed_password = await hashPasswordInWorker(password, this.salt);
 
 		// Todo: password 정책 설정
 		if (userType == "employee")
