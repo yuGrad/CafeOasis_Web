@@ -1,4 +1,7 @@
 const crypto = require("crypto");
+
+const HOST_ADDR = "34.64.149.19:3000";
+
 const emailService = require("./emailService");
 const RandomToken = require("../repository/RandomToken");
 
@@ -19,7 +22,7 @@ const RandomTokenService = {
                 Password Reset Url
                 </br>
                 link: 
-                http://localhost:3000/users/reset-password?token=${passwordToken}&email=${to}`;
+                http://${HOST_ADDR}/users/reset-password?token=${passwordToken}&email=${to}`;
 
 		try {
 			emailService.sendEmail(to, subject, "test", html);

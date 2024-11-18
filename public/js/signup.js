@@ -1,3 +1,5 @@
+const HOST_ADDR = "34.64.149.19:3000";
+
 function openModal() {
 	document.getElementById("emailModal").classList.remove("hidden");
 }
@@ -10,7 +12,7 @@ function closeModal(event) {
 
 function sendEmailRequest() {
 	const email = document.getElementById("email").value;
-	fetch("http://localhost:3000/email/signup/request", {
+	fetch(`http://${HOST_ADDR}/email/signup/request`, {
 		method: "post",
 		headers: {
 			"Content-Type": "application/json",
@@ -32,7 +34,7 @@ async function sendEmailVerification(event) {
 
 	try {
 		const response = await fetch(
-			"http://localhost:3000/email/signup/verification",
+			`http://${HOST_ADDR}/email/signup/verification`,
 			{
 				method: "post",
 				headers: {

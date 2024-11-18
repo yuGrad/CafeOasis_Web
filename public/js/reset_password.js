@@ -1,8 +1,10 @@
+const HOST_ADDR = "34.64.149.19:3000";
+
 function sendEmailRandomUrl() {
 	const email = document.getElementById("email").value;
 	const name = document.getElementById("name").value;
 
-	fetch("http://localhost:3000/users/reset-password", {
+	fetch(`http://${HOST_ADDR}/users/reset-password`, {
 		method: "post",
 		headers: {
 			"Content-Type": "application/json",
@@ -23,7 +25,7 @@ async function sendResetPassword() {
 	const password = document.getElementById("password").value;
 
 	try {
-		const response = await fetch("http://localhost:3000/users/reset-password", {
+		const response = await fetch(`http://${HOST_ADDR}/users/reset-password`, {
 			method: "PATCH",
 			headers: {
 				"Content-Type": "application/json",
@@ -33,7 +35,7 @@ async function sendResetPassword() {
 
 		if (response.ok) {
 			alert("패스워드가 성공적으로 변경됐습니다.");
-			window.location.replace("http://localhost:3000/users/login");
+			window.location.replace(`http://${HOST_ADDR}/users/login`);
 		} else {
 			const data = await response.json();
 			alert(data.message);

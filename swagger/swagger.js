@@ -1,3 +1,5 @@
+const HOST_ADDR = "34.64.149.19:3000";
+
 // swagger/swagger.js
 const swaggerJsdoc = require("swagger-jsdoc");
 const swaggerUi = require("swagger-ui-express");
@@ -14,7 +16,7 @@ const options = {
 		},
 		servers: [
 			{
-				url: "http://localhost:8080", // 서버 URL
+				url: `http://${HOST_ADDR}`, // 서버 URL
 			},
 		],
 	},
