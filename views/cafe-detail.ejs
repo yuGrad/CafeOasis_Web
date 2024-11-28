@@ -37,6 +37,18 @@
 			.circle-rating label:hover ~ label {
 				background-color: #3490dc;
 			}
+
+			/* 즐겨찾기 버튼 활성화 */
+			#bookmarkButton {
+				color: #a8a8a8; /* 기본 상태: 어두운 회색 */
+			}
+			#bookmarkButton.bookmarked {
+				color: #fbbf24; /* 활성화 상태: 밝은 노란색 */
+			}
+			#bookmarkButton:hover {
+				transform: scale(1.1); /* 호버 시 확대 */
+				color: #ffd60a; /* 호버 시 더 밝은 노란색 */
+			}
 		</style>
 		<script
 			type="text/javascript"
@@ -130,13 +142,32 @@
 				<!-- Second Section -->
 				<section class="w-full md:w-2/5 px-2">
 					<div class="bg-white p-6 rounded-lg shadow-lg">
-						<div class="flex justify-center">
+						<div class="relative flex justify-center">
 							<img
 								src="<%= cafe.image_link %>"
 								alt="<%= cafe.cafe_name %> Image"
 								class="rounded-lg mb-4 w-full md:w-1/2"
 							/>
+							<!-- 즐겨찾기 버튼 -->
+							<button
+								id="bookmarkButton"
+								class="absolute top-2 right-2 text-yellow-400 hover:text-yellow-500 focus:outline-none transition duration-150"
+								onclick="toggleBookmarkCafe('<%= cafe._id %>')"
+								aria-label="즐겨찾기"
+							>
+								<svg
+									xmlns="http://www.w3.org/2000/svg"
+									fill="currentColor"
+									viewBox="0 0 24 24"
+									class="w-8 h-8"
+								>
+									<path
+										d="M12 2c-.37 0-.72.18-.92.48l-2.94 5.5-6.06.88c-.39.06-.7.34-.82.72-.12.37-.03.77.23 1.04l4.39 4.28-1.04 6.05c-.07.39.1.79.43 1.02.33.23.76.26 1.12.08L12 18.84l5.43 2.86c.36.18.79.15 1.12-.08.33-.23.5-.63.43-1.02l-1.04-6.05 4.39-4.28c.26-.27.35-.67.23-1.04-.12-.37-.43-.66-.82-.72l-6.06-.88-2.94-5.5A1.11 1.11 0 0012 2z"
+									/>
+								</svg>
+							</button>
 						</div>
+
 						<%- include('cafe-map.ejs') %>
 						<div class="text-center">
 							<h1 class="text-3xl font-bold mb-4"><%= cafe.cafe_name %></h1>
