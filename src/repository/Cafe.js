@@ -33,6 +33,48 @@ const Cafe = {
 		const cafe = await db.query(this.collection, "findOne", queryJson);
 		return cafe;
 	},
+
+	getCafeBookmarkByEmail(cafeId, email) {
+		const query = {
+			_id: new ObjectId(cafeId),
+			bookmark_users: email,
+		};
+
+		return new Promise((resolve, reject) => {
+			db.query(this.collection, "findOne", query).then(resolve).catch(reject);
+		});
+	},
+
+	pushCafeBookmark(cafeId, email) {
+		const query = {
+			_id: new ObjectId(cafeId),
+			bookmark_users: { $ne: email },
+		};
+		const updateJson = {
+			$push: { bookmark_users: email },
+		};
+
+		return new Promise((resolve, reject) => {
+			db.query(this.collection, "updateOne", query, updateJson)
+				.then(resolve)
+				.catch(reject);
+		});
+	},
+
+	removeCafeBookmark(cafeId, email) {
+		const query = {
+			_id: new ObjectId(cafeId),
+		};
+		const updateJson = {
+			$pull: { bookmark_users: email }, // bookmark_users 배열에서 email 제거
+		};
+
+		return new Promise((resolve, reject) => {
+			db.query(this.collection, "updateOne", query, updateJson)
+				.then(resolve)
+				.catch(reject);
+		});
+	},
 };
 
 module.exports = Cafe;

@@ -22,7 +22,10 @@ document.addEventListener("DOMContentLoaded", () => {
 		},
 	})
 		.then((response) => {
-			if (!response.ok) favoriteButton.classList.toggle("bookmarked", false);
+			if (response.status == 404) {
+				favoriteButton.classList.toggle("bookmarked", false);
+				return;
+			}
 
 			favoriteButton.classList.toggle("bookmarked", true);
 		})
@@ -99,7 +102,6 @@ function increaseLikeCnt(idx) {
 }
 
 async function submitCafeReview() {
-	// const reviewer = document.getElementById("reviewer").value; // reviewr 데이터는 session에 존재
 	const content = document.getElementById("content").value;
 	const starring = document.querySelector(
 		'input[name="starring"]:checked'
@@ -172,22 +174,27 @@ function updatePagination(direction) {
 	}
 }
 
-function toggleBookmarkCafe(cafeId) {
+function toggleBookmark(cafeId) {
+	const isBookmarked = favoriteButton.classList.contains("bookmarked");
+
 	// 즐겨찾기 상태 변경 요청
 	fetch(`/cafes/${cafeId}/bookmark`, {
-		method: "POST",
+		method: "PUT",
 		headers: {
 			"Content-Type": "application/json",
 		},
+		body: JSON.stringify({
+			isBookmarked: isBookmarked,
+		}),
 	})
 		.then((response) => {
 			if (!response.ok) throw new Error(`Server error(${response.status})`);
 
-			return response.json();
+			return null;
 		})
 		.then((data) => {
-			// 상태 업데이트 및 클래스 토글
-			favoriteButton.classList.toggle("bookmarked", true);
+			if (isBookmarked) favoriteButton.classList.toggle("bookmarked", false);
+			else favoriteButton.classList.toggle("bookmarked", true);
 		})
 		.catch((error) => console.error("Fetching error:", error));
 }
