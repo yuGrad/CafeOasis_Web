@@ -7,6 +7,10 @@ const cafeService = {
 		}
 		return Cafe.removeCafeBookmark(cafeId, email);
 	},
+
+	async findCustomerBookmarks(email) {
+		return await Cafe.findBookmarksByEmail(email);
+	},
 };
 
 module.exports = cafeService;

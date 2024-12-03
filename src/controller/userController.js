@@ -1,5 +1,6 @@
 const userService = require("../service/userService");
 const randomTokenService = require("../service/randomTokenService");
+const cafeService = require("../service/cafeService");
 
 const userController = {
 	getUserLogin: (req, res) => {
@@ -66,14 +67,6 @@ const userController = {
 		}
 	},
 
-	getUserMypage: (req, res) => {
-		if (!req.session.login)
-			return res.render("error", {
-				error: { message: "잘 못 된 접근입니다." },
-			});
-		res.render("mypage", { login: req.session.login });
-	},
-
 	getUserResetPassword: async (req, res) => {
 		const email = req.query.email;
 		const user_token = req.query.token;
@@ -109,6 +102,26 @@ const userController = {
 			console.err(err);
 			res.status(500).json({ message: "INTERNAL SERVER ERROR" });
 		}
+	},
+
+	getMyPage: (req, res) => {
+		if (!req.session.login)
+			return res.render("error", {
+				error: { message: "잘 못 된 접근입니다." },
+			});
+		res.render("mypage", { login: req.session.login });
+	},
+
+	getMyCafeBookmarks: async (req, res) => {
+		const email = req.session.login.email;
+		const bookmarks = await cafeService.findCustomerBookmarks(email);
+
+		if (!bookmarks) res.sendStatus(404);
+		else
+			res.status(200).json({
+				message: "good",
+				data: { bookmarks: bookmarks },
+			});
 	},
 };
 

@@ -19,18 +19,17 @@ const Cafe = {
 			business_hours: true,
 			image_link: true,
 		};
-		const cafes = await db.query(
-			this.collection,
-			"find",
-			queryJson,
-			projection
-		);
+		const cafes = await db.query(this.collection, "find", queryJson, {
+			projection: projection,
+		});
+
 		return cafes;
 	},
 
 	async getCafeById(cafe_id) {
 		const queryJson = { _id: new ObjectId(cafe_id) };
 		const cafe = await db.query(this.collection, "findOne", queryJson);
+
 		return cafe;
 	},
 
@@ -73,6 +72,21 @@ const Cafe = {
 			db.query(this.collection, "updateOne", query, updateJson)
 				.then(resolve)
 				.catch(reject);
+		});
+	},
+
+	async findBookmarksByEmail(email) {
+		const query = {
+			bookmark_users: email,
+		};
+		const projection = {
+			cafe_name: true,
+			starring: true,
+			address: true,
+		};
+
+		return await db.query(this.collection, "find", query, {
+			projection: projection,
 		});
 	},
 };
