@@ -1,4 +1,6 @@
-const HOST_ADDR = "34.64.149.19:3000";
+const dotenv = require("dotenv");
+dotenv.config();
+const HOST_ADDR = process.env.HOST_ADDR;
 
 function sendEmailRandomUrl() {
 	const email = document.getElementById("email").value;

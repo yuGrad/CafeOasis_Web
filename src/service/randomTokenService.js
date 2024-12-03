@@ -1,6 +1,7 @@
 const crypto = require("crypto");
-
-const HOST_ADDR = "34.64.149.19:3000";
+const dotenv = require("dotenv");
+dotenv.config();
+const HOST_ADDR = process.env.HOST_ADDR;
 
 const emailService = require("./emailService");
 const RandomToken = require("../repository/RandomToken");
