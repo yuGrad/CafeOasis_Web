@@ -12,12 +12,14 @@ router.get("/signup", userController.getUserSignup);
 
 router.post("/signup", userController.postUserSignup);
 
-router.get("/mypage", userController.getUserMypage);
-
 router.get("/reset-password", userController.getUserResetPassword);
 
 router.post("/reset-password", userController.postUserResetPassword);
 
 router.patch("/reset-password", userController.patchUserResetPassword);
+
+router.get("/mypage", userController.getMyPage);
+
+router.get("/me/cafe-bookmarks", userController.getMyCafeBookmarks);
 
 module.exports = router;

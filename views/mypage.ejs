@@ -12,79 +12,73 @@
 	<body class="bg-gray-100 flex flex-col min-h-screen">
 		<%- include('cafe-header.ejs') %>
 
-		<main class="flex-grow">
-			<!-- Personal Information Section -->
+		<main class="flex-grow max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
 			<div class="flex justify-center space-x-4 p-4">
-				<section class="max-w-md w-full">
-					<div class="bg-white shadow-lg rounded-lg p-6">
-						<h2 class="text-3xl font-semibold mb-6 text-blue-700">My Page</h2>
+				<!-- Sidebar Section -->
+				<section class="bg-white shadow-lg rounded-lg p-6">
+					<h2 class="text-2xl font-semibold text-blue-700 mb-4">
+						My Information
+					</h2>
+					<ul class="space-y-4">
+						<li>
+							<span class="text-gray-600 text-sm">Email</span>
+							<p class="text-gray-900 bg-blue-50 p-2 rounded">
+								<%= login.email %>
+							</p>
+						</li>
+						<li>
+							<span class="text-gray-600 text-sm">Nickname</span>
+							<p class="text-gray-900 bg-blue-50 p-2 rounded">
+								<%= login.nickname %>
+							</p>
+						</li>
+						<li>
+							<span class="text-gray-600 text-sm">Name</span>
+							<p class="text-gray-900 bg-blue-50 p-2 rounded">
+								<%= login.name %>
+							</p>
+						</li>
+						<li>
+							<span class="text-gray-600 text-sm">Mobile Phone Number</span>
+							<p class="text-gray-900 bg-blue-50 p-2 rounded">
+								<%= login.phone_no %>
+							</p>
+						</li>
+					</ul>
 
-						<div class="space-y-6">
-							<div>
-								<label
-									class="block text-gray-700 text-sm font-bold mb-1"
-									for="email"
-									>Email</label
-								>
-								<p id="email" class="text-gray-900 bg-blue-50 p-2 rounded">
-									<%= login.email %>
-								</p>
-							</div>
-							<div>
-								<label
-									class="block text-gray-700 text-sm font-bold mb-1"
-									for="nickname"
-									>Nickname</label
-								>
-								<p id="nickname" class="text-gray-900 bg-blue-50 p-2 rounded">
-									<%= login.nickname %>
-								</p>
-							</div>
-							<div>
-								<label
-									class="block text-gray-700 text-sm font-bold mb-1"
-									for="name"
-									>Name</label
-								>
-								<p id="name" class="text-gray-900 bg-blue-50 p-2 rounded">
-									<%= login.name %>
-								</p>
-							</div>
-							<div>
-								<label
-									class="block text-gray-700 text-sm font-bold mb-1"
-									for="mobile"
-									>Mobile Phone Number</label
-								>
-								<p id="mobile" class="text-gray-900 bg-blue-50 p-2 rounded">
-									<%= login.phone_no %>
-								</p>
-							</div>
-						</div>
+					<!-- Navigation Buttons -->
+					<div class="mt-8">
+						<button
+							class="w-full bg-blue-500 text-white font-semibold py-2 px-4 rounded hover:bg-blue-700 mb-4"
+							onclick="loadSection('bookmarks')"
+						>
+							북마크한 카페
+						</button>
+						<button
+							class="w-full bg-blue-500 text-white font-semibold py-2 px-4 rounded hover:bg-blue-700"
+							onclick="loadSection('reviews')"
+						>
+							내가 작성한 리뷰
+						</button>
 					</div>
 				</section>
 
-				<% if (login.user_type == "employee") { %>
-				<section class="max-w-md w-full">
-					<div class="bg-white shadow-lg rounded-lg p-6">
-						<h2 class="text-3xl font-semibold mb-6 text-blue-700">Cafe Info</h2>
-
-						<% if (!login.cafe) { %>
-						<p class="font-semibold mb-6">등록된 카페가 없습니다.</p>
-						<div class="flex justify-center">
-							<button
-								class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
-							>
-								카페 등록
-							</button>
-						</div>
-						<% } %>
-					</div>
+				<!-- Main Content Section -->
+				<section
+					id="mainContent"
+					class="col-span-2 bg-white shadow-lg rounded-lg p-6"
+					style="display: none"
+				>
+					<h2
+						class="text-2xl font-semibold text-yellow-500 mb-4"
+						id="sectionTitle"
+					></h2>
+					<div id="sectionContent"></div>
 				</section>
-				<% } %>
 			</div>
 		</main>
 
 		<%- include('cafe-footer.ejs') %>
+		<script src="/js/mypage.js"></script>
 	</body>
 </html>

@@ -1,8 +1,8 @@
 const container = document.getElementById("reviewsContainer");
+const cafeId = document.getElementById("cafe_id").value;
+const favoriteButton = document.getElementById("bookmarkButton");
 
 document.addEventListener("DOMContentLoaded", () => {
-	const cafeId = document.getElementById("cafe_id").value;
-
 	fetch(`/cafes/reviews/${cafeId}?pageNum=1`)
 		.then((response) => {
 			if (!response.ok) throw new Error(`Servier error(${response.status})`);
@@ -11,6 +11,23 @@ document.addEventListener("DOMContentLoaded", () => {
 		})
 		.then((reviews) => {
 			updateReviewsHTML(reviews);
+		})
+		.catch((error) => console.error("Fetching error:", error));
+
+	// 즐겨찾기 상태 요청
+	fetch(`/cafes/${cafeId}/bookmark`, {
+		method: "GET",
+		headers: {
+			"Content-Type": "application/json",
+		},
+	})
+		.then((response) => {
+			if (!response.ok) {
+				favoriteButton.classList.toggle("bookmarked", false);
+				return;
+			}
+
+			favoriteButton.classList.toggle("bookmarked", true);
 		})
 		.catch((error) => console.error("Fetching error:", error));
 });
@@ -85,8 +102,6 @@ function increaseLikeCnt(idx) {
 }
 
 async function submitCafeReview() {
-	const cafeId = document.getElementById("cafe_id").value;
-	// const reviewer = document.getElementById("reviewer").value; // reviewr 데이터는 session에 존재
 	const content = document.getElementById("content").value;
 	const starring = document.querySelector(
 		'input[name="starring"]:checked'
@@ -119,7 +134,6 @@ async function submitCafeReview() {
 
 function removeReview(idx) {
 	const reviewDiv = document.getElementById(`reviewdiv_${idx}`);
-	const cafeId = document.getElementById("cafe_id").value;
 	const reviewId = document.getElementById(`review_${idx}`).value;
 
 	fetch(`/cafes/${cafeId}/reviews/${reviewId}`, {
@@ -142,7 +156,6 @@ function removeReview(idx) {
 }
 
 function updatePagination(direction) {
-	const cafeId = document.getElementById("cafe_id").value;
 	const currentPageNum = document.getElementById("currentPage");
 	const nextPageNum = Number(currentPageNum.textContent) + Number(direction);
 
@@ -159,4 +172,26 @@ function updatePagination(direction) {
 			})
 			.catch((error) => console.error("Fetching error:", error));
 	}
+}
+
+function toggleBookmark(cafeId) {
+	const isBookmarked = favoriteButton.classList.contains("bookmarked");
+
+	// 즐겨찾기 상태 변경 요청
+	fetch(`/cafes/${cafeId}/bookmark`, {
+		method: "PUT",
+		headers: {
+			"Content-Type": "application/json",
+		},
+		body: JSON.stringify({
+			isBookmarked: isBookmarked,
+		}),
+	})
+		.then((response) => {
+			if (!response.ok) throw new Error(`Server error(${response.status})`);
+
+			if (isBookmarked) favoriteButton.classList.toggle("bookmarked", false);
+			else favoriteButton.classList.toggle("bookmarked", true);
+		})
+		.catch((error) => console.error("Fetching error:", error));
 }

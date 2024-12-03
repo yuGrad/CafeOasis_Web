@@ -1,3 +1,4 @@
+const CafeService = require("../service/cafeService");
 const Cafe = require("../repository/Cafe");
 
 const cafeController = {
@@ -19,6 +20,46 @@ const cafeController = {
 			}
 		}
 		res.render("cafe-main", { login: req.session.login, cafes: cafes });
+	},
+
+	getCafeBookmarkStatus: (req, res) => {
+		if (!req.session.login)
+			return res.status(403).json({ message: "NOT LOGIN" });
+
+		const cafeId = req.params.cafe_id;
+		const email = req.session?.login.email;
+
+		Cafe.getCafeBookmarkByEmail(cafeId, email)
+			.then((result) => {
+				if (!result) return res.sendStatus(404);
+				res.sendStatus(200);
+			})
+			.catch((error) => {
+				console.error(error);
+				res.status(400).json({
+					message: "INTERNAL SERVER ERROR",
+				});
+			});
+	},
+
+	toggleCafeBookmark: (req, res) => {
+		if (!req.session.login)
+			return res.status(403).json({ message: "NOT LOGIN" });
+
+		const cafeId = req.params.cafe_id;
+		const email = req.session?.login.email;
+		const isBookmarked = req.body.isBookmarked;
+
+		CafeService.toggleCafeBookmark(cafeId, email, isBookmarked)
+			.then((result) => {
+				res.sendStatus(200);
+			})
+			.catch((error) => {
+				console.error(error);
+				res.status(500).json({
+					message: "INTERNAL SERVER ERROR",
+				});
+			});
 	},
 };
 
