@@ -23,8 +23,11 @@ const cafeController = {
 	},
 
 	getCafeBookmarkStatus: (req, res) => {
+		if (!req.session.login)
+			return res.status(403).json({ message: "NOT LOGIN" });
+
 		const cafeId = req.params.cafe_id;
-		const email = req.session?.login?.email || null; // 안전하게 email 읽기, 없으면 null
+		const email = req.session?.login.email;
 
 		Cafe.getCafeBookmarkByEmail(cafeId, email)
 			.then((result) => {
@@ -34,25 +37,27 @@ const cafeController = {
 			.catch((error) => {
 				console.error(error);
 				res.status(400).json({
-					message: "Bookmark 조회에 실패했습니다.",
+					message: "INTERNAL SERVER ERROR",
 				});
 			});
 	},
 
 	toggleCafeBookmark: (req, res) => {
+		if (!req.session.login)
+			return res.status(403).json({ message: "NOT LOGIN" });
+
 		const cafeId = req.params.cafe_id;
-		const email = req.session?.login?.email || null;
+		const email = req.session?.login.email;
 		const isBookmarked = req.body.isBookmarked;
 
 		CafeService.toggleCafeBookmark(cafeId, email, isBookmarked)
 			.then((result) => {
-				// if (!result) return res.sendStatus(409);
 				res.sendStatus(200);
 			})
 			.catch((error) => {
 				console.error(error);
 				res.status(500).json({
-					message: "Bookmark 상태 업데이트에 실패했습니다.",
+					message: "INTERNAL SERVER ERROR",
 				});
 			});
 	},

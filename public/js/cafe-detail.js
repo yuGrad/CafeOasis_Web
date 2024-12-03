@@ -22,7 +22,7 @@ document.addEventListener("DOMContentLoaded", () => {
 		},
 	})
 		.then((response) => {
-			if (response.status == 404) {
+			if (!response.ok) {
 				favoriteButton.classList.toggle("bookmarked", false);
 				return;
 			}
@@ -190,9 +190,6 @@ function toggleBookmark(cafeId) {
 		.then((response) => {
 			if (!response.ok) throw new Error(`Server error(${response.status})`);
 
-			return null;
-		})
-		.then((data) => {
 			if (isBookmarked) favoriteButton.classList.toggle("bookmarked", false);
 			else favoriteButton.classList.toggle("bookmarked", true);
 		})
