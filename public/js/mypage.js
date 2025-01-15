@@ -83,7 +83,7 @@ function loadReviews() {
                                 <a href="/cafes/${
 																	review.cafe_id
 																}" class="text-blue-500 hover:underline">
-                                    ${review.cafe_name || "카페 이름 없음"}
+                                    ${review.cafe_info.cafe_name}
                                 </a>
                                 <p class="text-sm text-gray-500 mt-1">${
 																	review.content

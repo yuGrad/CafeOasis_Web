@@ -69,10 +69,32 @@ const CafeReview = {
 	},
 
 	async findReviewsByReviewerEmail(email) {
-		const queryJson = {
-			reviewer: email,
-		};
-		const result = await db.query(this.collection, "find", queryJson);
+		const pipeline = [
+			{
+				$match: { reviewer: email },
+			},
+			{
+				$lookup: {
+					from: "cafes",
+					localField: "cafe_id",
+					foreignField: "_id",
+					as: "cafe_info",
+				},
+			},
+			{
+				$unwind: "$cafe_info",
+			},
+			{
+				$project: {
+					cafe_id: 1,
+					reviewer: 1,
+					content: 1,
+					date: 1,
+					"cafe_info.cafe_name": 1,
+				},
+			},
+		];
+		const result = await db.query(this.collection, "aggregate", pipeline);
 
 		return result;
 	},
