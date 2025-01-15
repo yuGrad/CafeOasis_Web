@@ -1,12 +1,15 @@
 const cafeReviewService = require("../service/cafeReviewService");
-const CafeReview = require("../repository/CafeReview");
 
-const cafeController = {
+const cafeReviewController = {
 	getCafeReviewsByCafeId: async (req, res) => {
 		const cafe_id = req.params.cafe_id;
 		const pageNum = req.query.pageNum;
+
 		if (pageNum <= 0) return res.sendStatus(400);
-		const reviews = await CafeReview.getCafeReviewsById(cafe_id, pageNum);
+		const reviews = await cafeReviewService.findReviewsByCafeId(
+			cafe_id,
+			pageNum
+		);
 		if (reviews.length == 0) return res.sendStatus(404);
 
 		res.status(200).json(reviews);
@@ -66,4 +69,4 @@ const cafeController = {
 	},
 };
 
-module.exports = cafeController;
+module.exports = cafeReviewController;

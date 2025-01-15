@@ -3,7 +3,7 @@ const db = require("../db/mongo_db");
 
 const CafeReview = {
 	collection: "cafe_reviews",
-	async getCafeReviewsById(cafe_id, pageNum, pageSize = 20) {
+	async getCafeReviewsByCafeId(cafe_id, pageNum, pageSize = 20) {
 		const skip = (pageNum - 1) * pageSize;
 		const pipeline = [
 			{ $match: { cafe_id: new ObjectId(cafe_id) } },
@@ -15,6 +15,31 @@ const CafeReview = {
 
 		return reviews;
 	},
+	async insertCafeReview(cafeId, reviewer, content, starring) {
+		const queryJson = {
+			cafe_id: new ObjectId(cafeId),
+			reviewer: reviewer,
+			content: content,
+			starring: starring,
+			date: new Date(),
+			likes: 0,
+			like_users: [],
+		};
+		const result = await db.query(this.collection, "insertOne", queryJson);
+
+		return result;
+	},
+	async deleteCafeReview(cafeId, reviewId, email) {
+		const queryJson = {
+			_id: new ObjectId(reviewId),
+			cafe_id: new ObjectId(cafeId),
+			reviewer: email, // 요청한 사용자 검증
+		};
+		const result = await db.query(this.collection, "deleteOne", queryJson);
+
+		return result;
+	},
+
 	async getCafeReviewByLikeUserId(review_id, email) {
 		const queryJson = {
 			_id: new ObjectId(review_id),
@@ -39,30 +64,6 @@ const CafeReview = {
 			queryJson,
 			updateJson
 		);
-
-		return result;
-	},
-	async insertCafeReview(cafeId, reviewer, content, starring) {
-		const queryJson = {
-			cafe_id: new ObjectId(cafeId),
-			reviewer: reviewer,
-			content: content,
-			starring: starring,
-			date: new Date(),
-			likes: 0,
-			like_users: [],
-		};
-		const result = await db.query(this.collection, "insertOne", queryJson);
-
-		return result;
-	},
-	async deleteCafeReview(cafeId, reviewId, email) {
-		const queryJson = {
-			_id: new ObjectId(reviewId),
-			cafe_id: new ObjectId(cafeId),
-			reviewer: email, // 요청한 사용자 검증
-		};
-		const result = await db.query(this.collection, "deleteOne", queryJson);
 
 		return result;
 	},

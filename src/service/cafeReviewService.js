@@ -2,13 +2,12 @@ const CafeReview = require("../repository/CafeReview");
 const Cafe = require("../repository/Cafe");
 
 const cafeReviewService = {
-	async increaseLikeCnt(reviewId, email) {
+	async findReviewsByCafeId(cafe_id, pageNum) {
 		try {
-			const result = await CafeReview.increaseLikeCnt(reviewId, email, 1);
-			if (result.modifiedCount > 0) return true;
-			else return false;
-		} catch (err) {
-			throw new Error("email or review_id that does not exist");
+			const reviews = await CafeReview.getCafeReviewsByCafeId(cafe_id, pageNum);
+			return reviews;
+		} catch {
+			throw new Error("Invalid Error");
 		}
 	},
 	async registerCafeReview(cafeId, reviewer, content, starring) {
@@ -24,6 +23,15 @@ const cafeReviewService = {
 
 		if (result.deletedCount == 0) {
 			throw new Error("You don't have permissions on that review");
+		}
+	},
+	async increaseLikeCnt(reviewId, email) {
+		try {
+			const result = await CafeReview.increaseLikeCnt(reviewId, email, 1);
+			if (result.modifiedCount > 0) return true;
+			else return false;
+		} catch (err) {
+			throw new Error("email or review_id that does not exist");
 		}
 	},
 };
