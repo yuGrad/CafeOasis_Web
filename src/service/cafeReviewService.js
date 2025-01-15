@@ -34,6 +34,13 @@ const cafeReviewService = {
 			throw new Error("email or review_id that does not exist");
 		}
 	},
+	async findCustomerMyReviews(email) {
+		try {
+			return await CafeReview.findReviewsByReviewerEmail(email);
+		} catch {
+			throw new Error("Invalid Error");
+		}
+	},
 };
 
 module.exports = cafeReviewService;

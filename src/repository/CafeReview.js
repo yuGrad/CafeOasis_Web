@@ -40,15 +40,15 @@ const CafeReview = {
 		return result;
 	},
 
-	async getCafeReviewByLikeUserId(review_id, email) {
-		const queryJson = {
-			_id: new ObjectId(review_id),
-			like_users: email,
-		};
-		const review = await db.query(this.collection, "findOne", queryJson);
+	// async getCafeReviewByLikeUserId(review_id, email) {
+	// 	const queryJson = {
+	// 		_id: new ObjectId(review_id),
+	// 		like_users: email,
+	// 	};
+	// 	const review = await db.query(this.collection, "findOne", queryJson);
 
-		return review;
-	},
+	// 	return review;
+	// },
 	async increaseLikeCnt(review_id, email, added_cnt) {
 		const queryJson = {
 			_id: new ObjectId(review_id),
@@ -64,6 +64,15 @@ const CafeReview = {
 			queryJson,
 			updateJson
 		);
+
+		return result;
+	},
+
+	async findReviewsByReviewerEmail(email) {
+		const queryJson = {
+			reviewer: email,
+		};
+		const result = await db.query(this.collection, "findMany", queryJson);
 
 		return result;
 	},

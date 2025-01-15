@@ -1,6 +1,7 @@
 const userService = require("../service/userService");
 const randomTokenService = require("../service/randomTokenService");
 const cafeService = require("../service/cafeService");
+const cafeReviewService = require("../service/cafeReviewService");
 
 const userController = {
 	getUserLogin: (req, res) => {
@@ -121,6 +122,18 @@ const userController = {
 			res.status(200).json({
 				message: "good",
 				data: { bookmarks: bookmarks },
+			});
+	},
+
+	getMyCafeReviews: async (req, res) => {
+		const email = req.session.login.email;
+		const reviews = await cafeReviewService.findCustomerMyReviews(email);
+
+		if (!reviews) res.sendStatus(404);
+		else
+			res.status(200).json({
+				message: "good",
+				data: { reviews: reviews },
 			});
 	},
 };

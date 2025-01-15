@@ -22,4 +22,6 @@ router.get("/mypage", userController.getMyPage);
 
 router.get("/me/cafe-bookmarks", userController.getMyCafeBookmarks);
 
+router.get("/me/cafe-reviews", userController.getMyCafeReviews);
+
 module.exports = router;
