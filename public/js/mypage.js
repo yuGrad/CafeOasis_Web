@@ -28,7 +28,8 @@ function loadBookmarks() {
 		.then(({ data }) => {
 			// 데이터가 비어 있는 경우
 			if (data.bookmarks.length === 0) {
-				sectionContent.classList.remove("hidden");
+				sectionContent.innerHTML =
+					"<p class='text-gray-600'>카페 북마크가 없습니다.</p>";
 				return;
 			}
 			// 데이터가 있는 경우 렌더링
