@@ -72,7 +72,7 @@ const CafeReview = {
 		const queryJson = {
 			reviewer: email,
 		};
-		const result = await db.query(this.collection, "findMany", queryJson);
+		const result = await db.query(this.collection, "find", queryJson);
 
 		return result;
 	},
