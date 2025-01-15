@@ -11,8 +11,10 @@ const cafeController = {
 	getCafesBySearch: async (req, res) => {
 		const target = req.query.target;
 
-		if (target == undefined || target == null || target == "")
+		if (target == undefined || target == null || target == "") {
 			res.render("cafe-main", { login: req.session.login, cafes: [] });
+			return;
+		}
 
 		try {
 			const cafes = await Cafe.getCafesByNameOrAddr(target);
