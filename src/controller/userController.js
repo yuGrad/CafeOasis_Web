@@ -136,6 +136,18 @@ const userController = {
 				data: { reviews: reviews },
 			});
 	},
+
+	getMyLikedReviews: async (req, res) => {
+		const email = req.session.login.email;
+		const reviews = await cafeReviewService.findCustomerMyLikedReviews(email);
+
+		if (!reviews) res.sendStatus(404);
+		else
+			res.status(200).json({
+				message: "good",
+				data: { reviews: reviews },
+			});
+	},
 };
 
 module.exports = userController;

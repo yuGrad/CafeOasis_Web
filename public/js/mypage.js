@@ -9,8 +9,10 @@ function loadSection(section) {
 
 	if (section === "bookmarks") {
 		loadBookmarks();
-	} else {
+	} else if (section === "reviews") {
 		loadReviews();
+	} else if (section === "liked-reviews") {
+		loadLikedReviews();
 	}
 }
 
@@ -72,7 +74,7 @@ function loadReviews() {
 		.then(({ data }) => {
 			if (data.reviews.length === 0) {
 				sectionContent.innerHTML =
-					"<p class='text-gray-600'>카페 북마크가 없습니다.</p>";
+					"<p class='text-gray-600'>내가 작성한 리뷰뷰가 없습니다.</p>";
 				return;
 			}
 			sectionContent.innerHTML = data.reviews
@@ -88,6 +90,53 @@ function loadReviews() {
                                 <p class="text-sm text-gray-500 mt-1">${
 																	review.content
 																}</p>
+                            </div>
+                            <p class="text-sm text-gray-600">
+                                ${new Date(review.date).toLocaleDateString(
+																	"ko-KR"
+																)}
+                            </p>
+                        </div>
+											`
+				)
+				.join("");
+		})
+		.catch((error) => {
+			console.error(error);
+			sectionContent.innerHTML =
+				"<p class='text-red-500'>데이터를 불러오는 중 오류가 발생했습니다.</p>";
+		});
+}
+
+function loadLikedReviews() {
+	sectionTitle.textContent = "내가 좋아요한 리뷰";
+	sectionContent.innerHTML =
+		"<p class='text-gray-600'>내가 좋아요한 리뷰 데이터를 불러오는 중...</p>";
+	fetch("/users/me/liked-reviews")
+		.then((response) => {
+			if (!response.ok) {
+				throw new Error("Failed to fetch favorite cafes");
+			}
+			return response.json();
+		})
+		.then(({ data }) => {
+			if (data.reviews.length === 0) {
+				sectionContent.innerHTML =
+					"<p class='text-gray-600'>내가 좋아요한 리뷰가 없습니다.</p>";
+				return;
+			}
+			sectionContent.innerHTML = data.reviews
+				.map(
+					(review) => `
+												<div class="flex justify-between border-b py-2">
+                            <div>
+                                <a href="/cafes/${
+																	review.cafe_id
+																}" class="text-blue-500 hover:underline">
+                                    ${review.cafe_info.cafe_name}
+                                </a>
+                                <p class="text-sm text-gray-500 mt-1">
+																좋아요: ${review.likes}</p>
                             </div>
                             <p class="text-sm text-gray-600">
                                 ${new Date(review.date).toLocaleDateString(

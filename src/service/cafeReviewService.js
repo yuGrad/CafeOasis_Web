@@ -41,6 +41,13 @@ const cafeReviewService = {
 			throw new Error("Invalid Error");
 		}
 	},
+	async findCustomerMyLikedReviews(email) {
+		try {
+			return await CafeReview.findReviewsByLikedEmail(email);
+		} catch {
+			throw new Error("Invalid Error");
+		}
+	},
 };
 
 module.exports = cafeReviewService;
