@@ -64,7 +64,7 @@ const cafeReviewService = {
 				if (cafeInfo) {
 					result.push({
 						...review,
-						cafe_info: cafeInfo,
+						cafe_info: { cafe_name: cafeInfo.cafe_name },
 					});
 				}
 				return result;
