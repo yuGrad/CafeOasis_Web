@@ -4,7 +4,7 @@ const Cafe = require("../repository/Cafe");
 const cafeController = {
 	getCafeById: async (req, res) => {
 		const cafe_id = req.params.cafe_id;
-		const cafe = await Cafe.getCafeById(cafe_id);
+		const cafe = await CafeService.fineCafeById(cafe_id);
 		res.render("cafe-detail", { login: req.session.login, cafe: cafe });
 	},
 

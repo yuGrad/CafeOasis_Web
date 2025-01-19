@@ -89,6 +89,15 @@ const Cafe = {
 			projection: projection,
 		});
 	},
+
+	async findCafesByIds(cafeIds) {
+		return await db.query(
+			this.collection,
+			"find",
+			{ _id: { $in: cafeIds } },
+			{ projection: { cafe_name: true } }
+		);
+	},
 };
 
 module.exports = Cafe;

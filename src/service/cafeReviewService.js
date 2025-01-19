@@ -1,5 +1,6 @@
 const CafeReview = require("../repository/CafeReview");
 const Cafe = require("../repository/Cafe");
+const CafeCache = require("../repository/CafeCache");
 
 const cafeReviewService = {
 	async findReviewsByCafeId(cafe_id, pageNum) {
@@ -36,8 +37,25 @@ const cafeReviewService = {
 	},
 	async findCustomerMyReviews(email) {
 		try {
-			return await CafeReview.findReviewsByReviewerEmail(email);
-		} catch {
+			const reviews = await CafeReview.findReviewsByReviewerEmail(email);
+			const cafeIds = [...new Set(reviews.map((r) => r.cafe_id))];
+			const cafes = await Cafe.findCafesByIds(cafeIds);
+			const cafeMap = cafes.reduce((map, cafe) => {
+				map[cafe._id.toString()] = cafe;
+				return map;
+			}, {});
+			const reviewsWitnCafeInfo = reviews.reduce((result, review) => {
+				if (cafeMap[review.cafe_id.toString()])
+					result.push({
+						...review,
+						cafe_info: cafeMap[review.cafe_id.toString()],
+					});
+				return result;
+			}, []);
+
+			return reviewsWitnCafeInfo;
+		} catch (err) {
+			console.error(err);
 			throw new Error("Invalid Error");
 		}
 	},
