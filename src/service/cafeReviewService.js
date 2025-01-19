@@ -1,5 +1,6 @@
 const CafeReview = require("../repository/CafeReview");
 const Cafe = require("../repository/Cafe");
+const CafeCache = require("../repository/CafeCache");
 
 const cafeReviewService = {
 	async findReviewsByCafeId(cafe_id, pageNum) {
@@ -36,8 +37,40 @@ const cafeReviewService = {
 	},
 	async findCustomerMyReviews(email) {
 		try {
-			return await CafeReview.findReviewsByReviewerEmail(email);
-		} catch {
+			const reviews = await CafeReview.findReviewsByReviewerEmail(email);
+			const cafeIds = [...new Set(reviews.map((r) => r.cafe_id.toString()))];
+			const cachedCafes = await CafeCache.getCafesByIds(cafeIds);
+
+			const { found: cachedMap, missing: missingIds } = cafeIds.reduce(
+				(result, cafeId, idx) => {
+					const cachedCafe = cachedCafes[idx];
+					if (cachedCafe) {
+						result.found[cafeId] = cachedCafe;
+					} else {
+						result.missing.push(cafeId);
+					}
+					return result;
+				},
+				{ found: {}, missing: [] }
+			);
+			const cafes = await Cafe.findCafesByIds(missingIds);
+			const cafeMap = cafes.reduce((map, cafe) => {
+				map[cafe._id.toString()] = cafe;
+				return map;
+			}, cachedMap);
+
+			return reviews.reduce((result, review) => {
+				const cafeInfo = cafeMap[review.cafe_id.toString()];
+				if (cafeInfo) {
+					result.push({
+						...review,
+						cafe_info: cafeInfo,
+					});
+				}
+				return result;
+			}, []);
+		} catch (err) {
+			console.error(err);
 			throw new Error("Invalid Error");
 		}
 	},
