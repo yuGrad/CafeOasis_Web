@@ -94,7 +94,7 @@ const Cafe = {
 		return await db.query(
 			this.collection,
 			"find",
-			{ _id: { $in: cafeIds } },
+			{ _id: { $in: cafeIds.map((cafeId) => new ObjectId(cafeId)) } },
 			{ projection: { cafe_name: true } }
 		);
 	},
