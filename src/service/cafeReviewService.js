@@ -1,7 +1,6 @@
 const CafeReview = require("../repository/CafeReview");
 const Cafe = require("../repository/Cafe");
 const CafeCache = require("../repository/CafeCache");
-const CafeCache = require("../repository/CafeCache");
 
 const cafeReviewService = {
 	async findReviewsByCafeId(cafe_id, pageNum) {
