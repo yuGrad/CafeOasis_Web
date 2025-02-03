@@ -47,7 +47,7 @@ const CafeReview = {
 		};
 		const updateJson = {
 			$inc: { likes: +addedCnt },
-			$push: { like_users: email },
+			$push: { like_users: { liked_email: email, date: new Date() } },
 		};
 		const result = await db.query(
 			this.collection,
@@ -92,7 +92,7 @@ const CafeReview = {
 
 	async findReviewsByLikedEmail(email) {
 		const queryJson = {
-			like_users: email,
+			"like_users.liked_email": email,
 		};
 		const result = await db.query(this.collection, "find", queryJson, {
 			projection: { cafe_id: 1, reviewer: 1, content: 1, likes: 1, date: 1 },
