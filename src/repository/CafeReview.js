@@ -40,15 +40,6 @@ const CafeReview = {
 		return result;
 	},
 
-	// async getCafeReviewByLikeUserId(review_id, email) {
-	// 	const queryJson = {
-	// 		_id: new ObjectId(review_id),
-	// 		like_users: email,
-	// 	};
-	// 	const review = await db.query(this.collection, "findOne", queryJson);
-
-	// 	return review;
-	// },
 	async increaseLikeCnt(review_id, email, added_cnt) {
 		const queryJson = {
 			_id: new ObjectId(review_id),
@@ -69,44 +60,9 @@ const CafeReview = {
 	},
 
 	async findReviewsByReviewerEmail(email) {
-		// const pipeline = [
-		// 	{
-		// 		$match: { reviewer: email },
-		// 	},
-		// 	{
-		// 		$lookup: {
-		// 			from: "cafes",
-		// 			localField: "cafe_id",
-		// 			foreignField: "_id",
-		// 			as: "cafe_info",
-		// 		},
-		// 	},
-		// 	{
-		// 		$unwind: "$cafe_info",
-		// 	},
-		// 	{
-		// 		$project: {
-		// 			cafe_id: 1,
-		// 			reviewer: 1,
-		// 			content: 1,
-		// 			date: 1,
-		// 			"cafe_info.cafe_name": 1,
-		// 		},
-		// 	},
-		// ];
-		// const result = await db.query(this.collection, "aggregate", pipeline);
-		const queryJson = {
-			reviewer: email,
-		};
-		const result = await db.query(this.collection, "find", queryJson);
-
-		return result;
-	},
-
-	async findReviewsByLikedEmail(email) {
 		const pipeline = [
 			{
-				$match: { like_users: email },
+				$match: { reviewer: email },
 			},
 			{
 				$lookup: {
@@ -123,13 +79,24 @@ const CafeReview = {
 				$project: {
 					cafe_id: 1,
 					reviewer: 1,
-					likes: 1,
+					content: 1,
 					date: 1,
 					"cafe_info.cafe_name": 1,
 				},
 			},
 		];
 		const result = await db.query(this.collection, "aggregate", pipeline);
+
+		return result;
+	},
+
+	async findReviewsByLikedEmail(email) {
+		const queryJson = {
+			like_users: email,
+		};
+		const result = await db.query(this.collection, "find", queryJson, {
+			projection: { cafe_id: 1, reviewer: 1, content: 1, likes: 1, date: 1 },
+		});
 
 		return result;
 	},

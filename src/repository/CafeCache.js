@@ -14,7 +14,17 @@ const CafeCache = {
 	},
 
 	async setCafeById(id, cafe, ttl = 3600) {
+		delete cafe.bookmark_users;
 		await RedisClient.set(id, JSON.stringify(cafe), { EX: ttl });
+	},
+	async setCafesByIds(ids, cafes, ttl = 3600) {
+		const keyValues = {};
+		cafes.forEach((cafe, idx) => {
+			delete cafe.bookmark_users;
+			keyValues[ids[idx]] = JSON.stringify(cafe);
+		});
+
+		await RedisClient.mSet(keyValues);
 	},
 };
 
