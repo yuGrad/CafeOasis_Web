@@ -3,7 +3,7 @@ const db = require("../db/mongo_db");
 
 const CafeReview = {
 	collection: "cafe_reviews",
-	async getCafeReviewsByCafeId(cafe_id, pageNum, pageSize = 20) {
+	async findCafeReviewsByCafeId(cafe_id, pageNum, pageSize = 20) {
 		const skip = (pageNum - 1) * pageSize;
 		const pipeline = [
 			{ $match: { cafe_id: new ObjectId(cafe_id) } },
@@ -29,7 +29,7 @@ const CafeReview = {
 
 		return result;
 	},
-	async deleteCafeReview(cafeId, reviewId, email) {
+	async removeCafeReview(cafeId, reviewId, email) {
 		const queryJson = {
 			_id: new ObjectId(reviewId),
 			cafe_id: new ObjectId(cafeId),
@@ -40,13 +40,13 @@ const CafeReview = {
 		return result;
 	},
 
-	async increaseLikeCnt(review_id, email, added_cnt) {
+	async updateReviewLike(reviewId, email, addedCnt) {
 		const queryJson = {
-			_id: new ObjectId(review_id),
+			_id: new ObjectId(reviewId),
 			like_users: { $ne: email },
 		};
 		const updateJson = {
-			$inc: { likes: +added_cnt },
+			$inc: { likes: +addedCnt },
 			$push: { like_users: email },
 		};
 		const result = await db.query(

@@ -21,7 +21,7 @@ const cafeReviewController = {
 		if (!req.session.login)
 			return res.status(403).json({ message: "NOT LOGIN" });
 		try {
-			const result = await cafeReviewService.increaseLikeCnt(
+			const result = await cafeReviewService.addLikeToReview(
 				review_id,
 				req.session.login.email
 			);

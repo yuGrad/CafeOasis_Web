@@ -5,7 +5,10 @@ const CafeCache = require("../repository/CafeCache");
 const cafeReviewService = {
 	async findReviewsByCafeId(cafe_id, pageNum) {
 		try {
-			const reviews = await CafeReview.getCafeReviewsByCafeId(cafe_id, pageNum);
+			const reviews = await CafeReview.findCafeReviewsByCafeId(
+				cafe_id,
+				pageNum
+			);
 			return reviews;
 		} catch {
 			throw new Error("Invalid Error");
@@ -14,21 +17,21 @@ const cafeReviewService = {
 	async registerCafeReview(cafeId, reviewer, content, starring) {
 		if (!starring || starring < 0 || starring > 5 || !content)
 			throw new Error("Invalid input value");
-		const cafe = await Cafe.getCafeById(cafeId); // cafeId가 존재하는 cafe인지 검증
+		const cafe = await Cafe.findCafeById(cafeId);
 		if (!cafe) throw new Error("No exist cafe");
 
 		await CafeReview.insertCafeReview(cafeId, reviewer, content, starring);
 	},
 	async removeCafeReview(cafeId, reviewId, email) {
-		const result = await CafeReview.deleteCafeReview(cafeId, reviewId, email);
+		const result = await CafeReview.removeCafeReview(cafeId, reviewId, email);
 
 		if (result.deletedCount == 0) {
 			throw new Error("You don't have permissions on that review");
 		}
 	},
-	async increaseLikeCnt(reviewId, email) {
+	async addLikeToReview(reviewId, email) {
 		try {
-			const result = await CafeReview.increaseLikeCnt(reviewId, email, 1);
+			const result = await CafeReview.updateReviewLike(reviewId, email, 1);
 			if (result.modifiedCount > 0) return true;
 			else return false;
 		} catch (err) {

@@ -1,10 +1,9 @@
 const CafeService = require("../service/cafeService");
-const Cafe = require("../repository/Cafe");
 
 const cafeController = {
 	getCafeById: async (req, res) => {
 		const cafe_id = req.params.cafe_id;
-		const cafe = await CafeService.fineCafeById(cafe_id);
+		const cafe = await CafeService.findCafeDetail(cafe_id);
 		res.render("cafe-detail", { login: req.session.login, cafe: cafe });
 	},
 
@@ -17,7 +16,7 @@ const cafeController = {
 		}
 
 		try {
-			const cafes = await Cafe.getCafesByNameOrAddr(target);
+			const cafes = await CafeService.searchCafes(target);
 			res.render("cafe-main", { login: req.session.login, cafes: cafes });
 		} catch (err) {
 			res.render("error", { error: { message: "잘 못 된 접근입니다." } });
@@ -31,7 +30,7 @@ const cafeController = {
 		const cafeId = req.params.cafe_id;
 		const email = req.session?.login.email;
 
-		Cafe.getCafeBookmarkByEmail(cafeId, email)
+		CafeService.findCafeBookmark(cafeId, email)
 			.then((result) => {
 				if (!result) return res.sendStatus(404);
 				res.sendStatus(200);

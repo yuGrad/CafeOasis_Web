@@ -4,7 +4,7 @@ const db = require("../db/mongo_db");
 const Cafe = {
 	collection: "cafes",
 
-	async getCafesByNameOrAddr(target) {
+	async findCafesByNameOrAddr(target) {
 		const queryJson = {
 			$or: [
 				{ cafe_name: { $regex: target, $options: "i" } },
@@ -26,14 +26,14 @@ const Cafe = {
 		return cafes;
 	},
 
-	async getCafeById(cafe_id) {
+	async findCafeById(cafe_id) {
 		const queryJson = { _id: new ObjectId(cafe_id) };
 		const cafe = await db.query(this.collection, "findOne", queryJson);
 
 		return cafe;
 	},
 
-	getCafeBookmarkByEmail(cafeId, email) {
+	findCafeBookmarkByCafeIdAndEmail(cafeId, email) {
 		const query = {
 			_id: new ObjectId(cafeId),
 			bookmark_users: email,
