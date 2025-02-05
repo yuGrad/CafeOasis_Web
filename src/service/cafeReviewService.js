@@ -48,7 +48,7 @@ const cafeReviewService = {
 	async findCustomerMyLikedReviews(email) {
 		try {
 			const reviews = await CafeReview.findReviewsByLikedEmail(email);
-			const cafeIds = [...new Set(reviews.map((r) => r.cafe_id.toString()))];
+			const cafeIds = reviews.map((r) => r.cafe_id.toString());
 			const cachedCafes = await CafeCache.getCafesByIds(cafeIds);
 
 			const { found: cachedMap, missing: missingIds } = cafeIds.reduce(
@@ -73,16 +73,17 @@ const cafeReviewService = {
 				await CafeCache.setCafesByIds(missingIds, cafes);
 			} else cafeMap = cachedMap;
 
-			return reviews.reduce((result, review) => {
-				const cafeInfo = cafeMap[review.cafe_id.toString()];
-				if (cafeInfo) {
-					result.push({
-						...review,
-						cafe_info: { cafe_name: cafeInfo.cafe_name },
-					});
-				}
-				return result;
-			}, []);
+			return reviews.map((review) => {
+				const cafeId = review.cafe_id.toString();
+				const cafeInfo = cafeMap[cafeId];
+				return {
+					cafe_info: {
+						cafe_id: cafeId,
+						cafe_name: cafeInfo.cafe_name,
+					},
+					reviews: review.reviews,
+				};
+			});
 		} catch (err) {
 			console.error(err);
 			throw new Error("Invalid Error");

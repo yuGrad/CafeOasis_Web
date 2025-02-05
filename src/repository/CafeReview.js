@@ -91,12 +91,32 @@ const CafeReview = {
 	},
 
 	async findReviewsByLikedEmail(email) {
-		const queryJson = {
-			"like_users.liked_email": email,
-		};
-		const result = await db.query(this.collection, "find", queryJson, {
-			projection: { cafe_id: 1, reviewer: 1, content: 1, likes: 1, date: 1 },
-		});
+		const pipeline = [
+			{
+				$match: { "like_users.liked_email": email },
+			},
+			{
+				$group: {
+					_id: "$cafe_id",
+					reviews: {
+						$push: {
+							reviewer: "$reviewer",
+							content: "$content",
+							likes: "$likes",
+							date: "$date",
+						},
+					},
+				},
+			},
+			{
+				$project: {
+					cafe_id: "$_id",
+					reviews: 1,
+					_id: 0,
+				},
+			},
+		];
+		const result = await db.query(this.collection, "aggregate", pipeline);
 
 		return result;
 	},
