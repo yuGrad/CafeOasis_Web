@@ -3,6 +3,10 @@ const { DynamicPool } = require("node-worker-threads-pool");
 
 const Customer = require("../repository/Customer");
 const Employee = require("../repository/Employee");
+const VerificationCode = require("../repository/VerificationCode");
+
+const { sendEmail } = require("../utils/emailUtil");
+const { generateRandomToken } = require("../utils/tokenUtil");
 
 const dynamicPool = new DynamicPool(8);
 
@@ -78,6 +82,52 @@ const authService = {
 				);
 		} catch (err) {
 			throw new Error("Email already exists");
+		}
+	},
+
+	sendVerificationCodeByEmail(email) {
+		const verificationCode = generateRandomToken(8);
+		const to = email;
+		const subject = "Welcome to Oasis! - Email Code";
+		const html = `<h2>Hello ${to}</h2>
+                    welcome to our service!
+                    </br>
+                    email code: ${verificationCode}`;
+
+		return sendEmail(to, subject, "test", html).then((res) => {
+			VerificationCode.insertVerificationCode(
+				to,
+				verificationCode,
+				"00:30:00",
+				(err) => {
+					if (err) console.error(err);
+				}
+			);
+			return res;
+		});
+	},
+
+	async verifyUserCode(email, userCode) {
+		if (userCode.length != 8) return false;
+		try {
+			const row = await VerificationCode.getLatestByEmail(email);
+			const now = new Date();
+
+			if (
+				!row ||
+				row.verification_code != userCode ||
+				new Date(row.expiration_time) <
+					new Date(now.getTime() - now.getTimezoneOffset() * 60000) // 현재 시간보다 인증 만료시간이 더 커야함, UTC -> Asia/Seoul 시간대로 변경
+			)
+				return false;
+
+			VerificationCode.updateAsVerified(row.id, (err) => {
+				if (err) console.error(err);
+			});
+			return true;
+		} catch (err) {
+			console.error(err);
+			return false;
 		}
 	},
 

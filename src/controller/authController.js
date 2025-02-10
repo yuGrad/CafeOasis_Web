@@ -66,6 +66,36 @@ const authController = {
 		}
 	},
 
+	postSendSignupVerificationEmail: (req, res) => {
+		const email = req.body.email;
+
+		if (!email) return res.sendStatus(400);
+		authService
+			.sendVerificationCodeByEmail(email)
+			.then(() => res.sendStatus(200))
+			.catch((err) => {
+				console.error(err);
+				return res.sendStatus(500);
+			});
+	},
+
+	postVerifySignupVerificationCode: async (req, res) => {
+		const { email, user_code } = req.body;
+
+		if (!email || !user_code)
+			try {
+				const result = await authService.verifyUserCode(email, user_code);
+
+				if (result) {
+					req.session.isEmailVerified = true;
+					res.sendStatus(200);
+				} else res.sendStatus(401);
+			} catch (err) {
+				console.error(err);
+				res.sendStatus(500);
+			}
+	},
+
 	getResetPassword: async (req, res) => {
 		const email = req.query.email;
 		const user_token = req.query.token;

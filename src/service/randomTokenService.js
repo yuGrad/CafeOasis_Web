@@ -3,7 +3,7 @@ const dotenv = require("dotenv");
 dotenv.config();
 const HOST_ADDR = process.env.HOST_ADDR;
 
-const emailService = require("./emailService");
+const { sendEmail } = require("../utils/emailUtil");
 const RandomToken = require("../repository/RandomToken");
 
 const RandomTokenService = {
@@ -26,7 +26,7 @@ const RandomTokenService = {
                 http://${HOST_ADDR}/auth/reset-password?token=${passwordToken}&email=${to}`;
 
 		try {
-			emailService.sendEmail(to, subject, "test", html);
+			sendEmail(to, subject, "test", html);
 			RandomToken.insertRandomToken(
 				to,
 				"password",
@@ -55,10 +55,6 @@ const RandomTokenService = {
 					new Date(now.getTime() - now.getTimezoneOffset() * 60000)
 			)
 				return false;
-
-			// VerificationCode.updateCodeAsVerified(row.id, (err) => {
-			//   if (err) console.error(err);
-			// });
 			return true;
 		} catch (err) {
 			console.error(err);

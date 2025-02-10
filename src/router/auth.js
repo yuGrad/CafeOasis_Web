@@ -12,6 +12,16 @@ router.get("/signup", authController.getSignup);
 
 router.post("/signup", authController.postSignup);
 
+router.post(
+	"/signup/verification-email",
+	authController.postSendSignupVerificationEmail
+);
+
+router.post(
+	"/signup/verify-email",
+	authController.postVerifySignupVerificationCode
+);
+
 router.get("/reset-password", authController.getResetPassword);
 
 router.post("/reset-password", authController.postResetPassword);

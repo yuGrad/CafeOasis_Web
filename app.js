@@ -12,7 +12,6 @@ const { swaggerUi, specs } = require("./swagger/swagger");
 const authRouter = require("./src/router/auth");
 const userRouter = require("./src/router/user");
 const cafeRouter = require("./src/router/cafe");
-const emailRouter = require("./src/router/email");
 
 app.use(express.static(path.join(__dirname, "/public")));
 app.set("views", __dirname + "/views");
@@ -37,7 +36,6 @@ app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(specs));
 app.use("/auth", authRouter);
 app.use("/users", userRouter);
 app.use("/cafes", cafeRouter);
-app.use("/email", emailRouter);
 app.use("/", (req, res) => {
 	res.render("main");
 });

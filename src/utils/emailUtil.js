@@ -11,9 +11,7 @@ function sendEmail(to, subject, text, html) {
 		html: html,
 	};
 
-	transporter.sendMail(mailOptions, (err) => {
-		if (err) console.error(err);
-	});
+	return transporter.sendMail(mailOptions);
 }
 
 module.exports = {

@@ -12,7 +12,7 @@ function closeModal(event) {
 
 function sendEmailRequest() {
 	const email = document.getElementById("email").value;
-	fetch(`http://${HOST_ADDR}/email/signup/request`, {
+	fetch(`http://${HOST_ADDR}/auth/signup/verification-email`, {
 		method: "post",
 		headers: {
 			"Content-Type": "application/json",
@@ -34,7 +34,7 @@ async function sendEmailVerification(event) {
 
 	try {
 		const response = await fetch(
-			`http://${HOST_ADDR}/email/signup/verification`,
+			`http://${HOST_ADDR}/auth/signup/verify-email`,
 			{
 				method: "post",
 				headers: {

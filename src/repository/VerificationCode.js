@@ -8,7 +8,7 @@ const VerificationCode = {
 
 		db.asynQuery(sql, params, callback);
 	},
-	async getVerificationCode(email) {
+	async getLatestByEmail(email) {
 		const sql =
 			"select \
         id, verification_code, (expiration + created_at) expiration_time \
@@ -23,7 +23,7 @@ const VerificationCode = {
 
 		return verificationCode;
 	},
-	updateCodeAsVerified(id, callback) {
+	updateAsVerified(id, callback) {
 		const sql = "update VerificationCode set verified = TRUE where id = ?";
 		const params = [id];
 
