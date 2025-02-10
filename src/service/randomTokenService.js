@@ -23,7 +23,7 @@ const RandomTokenService = {
                 Password Reset Url
                 </br>
                 link: 
-                http://${HOST_ADDR}/users/reset-password?token=${passwordToken}&email=${to}`;
+                http://${HOST_ADDR}/auth/reset-password?token=${passwordToken}&email=${to}`;
 
 		try {
 			emailService.sendEmail(to, subject, "test", html);

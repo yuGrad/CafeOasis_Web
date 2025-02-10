@@ -1,12 +1,10 @@
-const dotenv = require("dotenv");
-dotenv.config();
-const HOST_ADDR = process.env.HOST_ADDR;
+const HOST_ADDR = "localhost:8080";
 
 function sendEmailRandomUrl() {
 	const email = document.getElementById("email").value;
 	const name = document.getElementById("name").value;
 
-	fetch(`http://${HOST_ADDR}/users/reset-password`, {
+	fetch(`http://${HOST_ADDR}/auth/reset-password`, {
 		method: "post",
 		headers: {
 			"Content-Type": "application/json",
@@ -27,7 +25,7 @@ async function sendResetPassword() {
 	const password = document.getElementById("password").value;
 
 	try {
-		const response = await fetch(`http://${HOST_ADDR}/users/reset-password`, {
+		const response = await fetch(`http://${HOST_ADDR}/auth/reset-password`, {
 			method: "PATCH",
 			headers: {
 				"Content-Type": "application/json",
@@ -37,7 +35,7 @@ async function sendResetPassword() {
 
 		if (response.ok) {
 			alert("패스워드가 성공적으로 변경됐습니다.");
-			window.location.replace(`http://${HOST_ADDR}/users/login`);
+			window.location.replace(`http://${HOST_ADDR}/auth/login`);
 		} else {
 			const data = await response.json();
 			alert(data.message);

@@ -1,6 +1,4 @@
-const dotenv = require("dotenv");
-dotenv.config();
-const HOST_ADDR = process.env.HOST_ADDR;
+const HOST_ADDR = "localhost:8080";
 
 function openModal() {
 	document.getElementById("emailModal").classList.remove("hidden");
