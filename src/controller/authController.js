@@ -1,5 +1,4 @@
 const authService = require("../service/authService");
-const randomTokenService = require("../service/randomTokenService");
 
 const authController = {
 	getLogin: (req, res) => {
@@ -98,26 +97,32 @@ const authController = {
 
 	getResetPassword: async (req, res) => {
 		const email = req.query.email;
-		const user_token = req.query.token;
+		const token = req.query.token;
 
-		if (!user_token) return res.render("reset-password", { isReset: false });
-		if (!randomTokenService.verifyUserToken(email, user_token))
+		if (!email || !token)
+			return res.render("reset-password", { isReset: false });
+		if (!(await authService.verifyPasswordResetToken(email, token)))
 			return res.render("error", {
 				error: { message: "잘 못 된 접근입니다." },
 			});
+		req.session.isEmailVerified = email; // email로 session 값을 저장하면 토큰이 달라져도 상관 X ?
 		res.render("reset-password", { isReset: true, email: email });
 	},
 
-	postResetPassword: async (req, res) => {
-		const email = req.body.email;
+	postSendPasswordResetLink: async (req, res) => {
+		const { email, name } = req.body;
 
-		if (randomTokenService.sendRandomTokenByEmail(email)) {
-			req.session.isEmailVerified = email; // email로 session 값을 저장하면 토큰이 달라져도 상관 X ?
-			res.sendStatus(200);
-		} else res.sendStatus(500);
+		authService
+			.sendPasswordResetLinkByEmail(email, name)
+			.then(() => res.sendStatus(200))
+			.catch((err) => {
+				if (err.message === "The names don't match") return res.sendStatus(401);
+				console.error(err);
+				return res.sendStatus(500);
+			});
 	},
 
-	patchResetPassword: async (req, res) => {
+	postResetNewPassowrd: async (req, res) => {
 		const { email, password } = req.body;
 		const isEmailVerified = req.session.isEmailVerified;
 

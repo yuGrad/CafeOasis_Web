@@ -1,9 +1,14 @@
 const bcrypt = require("bcrypt");
 const { DynamicPool } = require("node-worker-threads-pool");
 
+const dotenv = require("dotenv");
+dotenv.config();
+const HOST_ADDR = process.env.HOST_ADDR;
+
 const Customer = require("../repository/Customer");
 const Employee = require("../repository/Employee");
 const VerificationCode = require("../repository/VerificationCode");
+const RandomToken = require("../repository/RandomToken");
 
 const { sendEmail } = require("../utils/emailUtil");
 const { generateRandomToken } = require("../utils/tokenUtil");
@@ -131,14 +136,65 @@ const authService = {
 		}
 	},
 
+	sendPasswordResetLinkByEmail(email, name) {
+		return Customer.getCustomerByEmail(email).then((user) => {
+			if (user.name === name) {
+				const randomToken = generateRandomToken(20);
+				const to = email;
+				const subject = "Welcome to Oasis! - Password Rest Url";
+				const html = `<h2>Hello ${to}</h2>
+                Password Reset Url
+                </br>
+                link: 
+                http://${HOST_ADDR}/auth/password?token=${randomToken}&email=${to}`;
+
+				return sendEmail(to, subject, "test", html).then((res) => {
+					RandomToken.insertRandomToken(
+						to,
+						"password",
+						randomToken,
+						"03:00:00",
+						(err) => {
+							if (err) console.error(err);
+						}
+					);
+					return res;
+				});
+			}
+			throw new Error("The names don't match");
+		});
+	},
+
+	async verifyPasswordResetToken(email, passwordToken) {
+		if (passwordToken.length != 20) return false;
+		try {
+			const row = await RandomToken.getLatestByEmail(email);
+			const now = new Date();
+
+			if (
+				!row ||
+				row.token != passwordToken ||
+				new Date(row.expiration_time) <
+					new Date(now.getTime() - now.getTimezoneOffset() * 60000)
+			)
+				return false;
+			RandomToken.updateAsVerified(row.id, (err) => {
+				if (err) console.error(err);
+			});
+			return true;
+		} catch (err) {
+			console.error(err);
+			return false;
+		}
+	},
+
 	async changePassword(userType, email, password) {
 		const hashed_password = await hashPasswordInWorker(password, this.salt);
 
 		// Todo: password 정책 설정
-		if (userType == "employee")
-			// employee 비밀번호 변경 로직 필요
-			await Customer.updatePassword(email, hashed_password);
-		else await Customer.updatePassword(email, hashed_password);
+		// if (userType == "employee")	// employee 비밀번호 변경 로직 필요
+		// 	await Employee.updatePassword(email, hashed_password);
+		await Customer.updatePassword(email, hashed_password);
 	},
 };
 

@@ -9,10 +9,10 @@ const RandomToken = {
 		db.asynQuery(sql, params, callback);
 	},
 
-	async getRandomToken(email) {
+	async getLatestByEmail(email) {
 		const sql =
 			"SELECT \
-        token, (expiration + created_at) expiration_time \
+        id, token, (expiration + created_at) expiration_time \
       FROM RandomToken \
       WHERE \
         email = ? and verified = FALSE\
@@ -22,6 +22,13 @@ const RandomToken = {
 		const [token] = await db.query(sql, params);
 
 		return token;
+	},
+
+	updateAsVerified(id, callback) {
+		const sql = "update RandomToken set verified = TRUE where id = ?";
+		const params = [id];
+
+		db.asynQuery(sql, params, callback);
 	},
 };
 

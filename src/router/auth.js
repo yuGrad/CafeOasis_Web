@@ -22,10 +22,10 @@ router.post(
 	authController.postVerifySignupVerificationCode
 );
 
-router.get("/reset-password", authController.getResetPassword);
+router.get("/password", authController.getResetPassword);
 
-router.post("/reset-password", authController.postResetPassword);
+router.post("/password/reset-link", authController.postSendPasswordResetLink);
 
-router.patch("/reset-password", authController.patchResetPassword);
+router.post("/password/new-password", authController.postResetNewPassowrd);
 
 module.exports = router;
