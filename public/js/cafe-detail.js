@@ -15,7 +15,7 @@ document.addEventListener("DOMContentLoaded", () => {
 		.catch((error) => console.error("Fetching error:", error));
 
 	// 즐겨찾기 상태 요청
-	fetch(`/cafes/${cafeId}/bookmark`, {
+	fetch(`/users/me/cafe-bookmarks/${cafeId}`, {
 		method: "GET",
 		headers: {
 			"Content-Type": "application/json",
@@ -178,7 +178,7 @@ function toggleBookmark(cafeId) {
 	const isBookmarked = favoriteButton.classList.contains("bookmarked");
 
 	// 즐겨찾기 상태 변경 요청
-	fetch(`/cafes/${cafeId}/bookmark`, {
+	fetch(`/users/me/cafe-bookmarks/${cafeId}`, {
 		method: "PUT",
 		headers: {
 			"Content-Type": "application/json",

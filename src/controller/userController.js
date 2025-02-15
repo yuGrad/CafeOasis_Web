@@ -1,4 +1,4 @@
-const cafeService = require("../service/cafeService");
+const userService = require("../service/userService");
 const cafeReviewService = require("../service/cafeReviewService");
 
 const userController = {
@@ -8,6 +8,48 @@ const userController = {
 				error: { message: "잘 못 된 접근입니다." },
 			});
 		res.render("mypage", { login: req.session.login });
+	},
+
+	getCafeBookmarked: (req, res) => {
+		if (!req.session.login)
+			return res.status(403).json({ message: "NOT LOGIN" });
+
+		const cafeId = req.params.cafe_id;
+		const email = req.session?.login.email;
+
+		userService
+			.isCafeBookmarked(cafeId, email)
+			.then((result) => {
+				if (!result) return res.sendStatus(404);
+				res.sendStatus(200);
+			})
+			.catch((error) => {
+				console.error(error);
+				res.status(400).json({
+					message: "INTERNAL SERVER ERROR",
+				});
+			});
+	},
+
+	toggleCafeBookmark: (req, res) => {
+		if (!req.session.login)
+			return res.status(403).json({ message: "NOT LOGIN" });
+
+		const cafeId = req.params.cafe_id;
+		const email = req.session?.login.email;
+		const isBookmarked = req.body.isBookmarked;
+
+		userService
+			.toggleCafeBookmark(cafeId, email, isBookmarked)
+			.then((result) => {
+				res.sendStatus(200);
+			})
+			.catch((error) => {
+				console.error(error);
+				res.status(500).json({
+					message: "INTERNAL SERVER ERROR",
+				});
+			});
 	},
 
 	getMyCafeBookmarks: async (req, res) => {

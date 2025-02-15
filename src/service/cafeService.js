@@ -18,17 +18,6 @@ const cafeService = {
 		return cafes;
 	},
 
-	findCafeBookmark(cafeId, email) {
-		return Cafe.findCafeBookmarkByCafeIdAndEmail(cafeId, email);
-	},
-
-	toggleCafeBookmark(cafeId, email, isBookmarked) {
-		if (!isBookmarked) {
-			return Cafe.pushCafeBookmark(cafeId, email);
-		}
-		return Cafe.removeCafeBookmark(cafeId, email);
-	},
-
 	async findCustomerBookmarks(email) {
 		return await Cafe.findBookmarksByEmail(email);
 	},

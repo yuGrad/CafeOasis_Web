@@ -4,6 +4,10 @@ const userController = require("../controller/userController");
 
 router.get("/mypage", userController.getMyPage);
 
+router.get("/me/cafe-bookmarks/:cafe_id", userController.getCafeBookmarked);
+
+router.put("/me/cafe-bookmarks/:cafe_id", userController.toggleCafeBookmark);
+
 router.get("/me/cafe-bookmarks", userController.getMyCafeBookmarks);
 
 router.get("/me/cafe-reviews", userController.getMyCafeReviews);

@@ -23,8 +23,4 @@ router.delete(
 	cafeReviewController.deleteCafeReview
 );
 
-router.get("/:cafe_id/bookmark", cafeController.getCafeBookmarkStatus);
-
-router.put("/:cafe_id/bookmark", cafeController.toggleCafeBookmark);
-
 module.exports = router;
