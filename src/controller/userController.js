@@ -36,7 +36,11 @@ const userController = {
 
 	getMyLikedReviews: async (req, res) => {
 		const email = req.session.login.email;
-		const reviews = await cafeReviewService.findCustomerMyLikedReviews(email);
+		const pageNum = req.query.page_num;
+		const reviews = await cafeReviewService.findCustomerMyLikedReviews(
+			email,
+			Number(pageNum)
+		);
 
 		if (!reviews) res.sendStatus(404);
 		else

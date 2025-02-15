@@ -45,9 +45,13 @@ const cafeReviewService = {
 			throw new Error("Invalid Error");
 		}
 	},
-	async findCustomerMyLikedReviews(email) {
+	async findCustomerMyLikedReviews(email, pageNum) {
 		try {
-			const reviews = await CafeReview.findReviewsByLikedEmail(email);
+			const reviews = await CafeReview.findReviewsByLikedEmail(
+				email,
+				pageNum,
+				5
+			);
 			const cafeIds = reviews.map((r) => r.cafe_id.toString());
 			const cachedCafes = await CafeCache.getCafesByIds(cafeIds);
 

@@ -90,7 +90,7 @@ const CafeReview = {
 		return result;
 	},
 
-	async findReviewsByLikedEmail(email) {
+	async findReviewsByLikedEmail(email, pageNum, pageSize = 5) {
 		const pipeline = [
 			{
 				$match: { "like_users.liked_email": email },
@@ -108,6 +108,16 @@ const CafeReview = {
 					},
 				},
 			},
+			{
+				$addFields: {
+					reviewsCount: { $size: "$reviews" },
+				},
+			},
+			{
+				$sort: { reviewsCount: -1, _id: 1 },
+			},
+			{ $skip: pageNum * pageSize },
+			{ $limit: pageSize },
 			{
 				$project: {
 					cafe_id: "$_id",
