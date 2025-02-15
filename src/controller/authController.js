@@ -81,18 +81,18 @@ const authController = {
 	postVerifySignupVerificationCode: async (req, res) => {
 		const { email, user_code } = req.body;
 
-		if (!email || !user_code)
-			try {
-				const result = await authService.verifyUserCode(email, user_code);
+		if (!email || !user_code) res.sendStatus(400);
+		try {
+			const result = await authService.verifyUserCode(email, user_code);
 
-				if (result) {
-					req.session.isEmailVerified = true;
-					res.sendStatus(200);
-				} else res.sendStatus(401);
-			} catch (err) {
-				console.error(err);
-				res.sendStatus(500);
-			}
+			if (result) {
+				req.session.isEmailVerified = true;
+				res.sendStatus(200);
+			} else res.sendStatus(401);
+		} catch (err) {
+			console.error(err);
+			res.sendStatus(500);
+		}
 	},
 
 	getResetPassword: async (req, res) => {
