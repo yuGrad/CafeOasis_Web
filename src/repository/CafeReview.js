@@ -43,7 +43,7 @@ const CafeReview = {
 	async updateReviewLike(reviewId, email, addedCnt) {
 		const queryJson = {
 			_id: new ObjectId(reviewId),
-			like_users: { $ne: email },
+			"like_users.liked_email": { $ne: email },
 		};
 		const updateJson = {
 			$inc: { likes: +addedCnt },

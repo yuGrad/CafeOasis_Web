@@ -7,6 +7,7 @@ const CafeCache = {
 	},
 
 	async getCafesByIds(ids) {
+		if (ids.length === 0) return null;
 		const results = await RedisClient.mGet(ids);
 		return results.map((result) => {
 			return result ? JSON.parse(result) : null;
