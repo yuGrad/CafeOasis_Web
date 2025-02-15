@@ -28,7 +28,11 @@ const Cafe = {
 
 	async findCafeById(cafe_id) {
 		const queryJson = { _id: new ObjectId(cafe_id) };
-		const cafe = await db.query(this.collection, "findOne", queryJson);
+		const cafe = await db.query(this.collection, "findOne", queryJson, {
+			projection: {
+				bookmark_users: false,
+			},
+		});
 
 		return cafe;
 	},
@@ -95,7 +99,11 @@ const Cafe = {
 			this.collection,
 			"find",
 			{ _id: { $in: cafeIds.map((cafeId) => new ObjectId(cafeId)) } },
-			{ projection: { cafe_name: true } }
+			{
+				projection: {
+					bookmark_users: false,
+				},
+			}
 		);
 	},
 };

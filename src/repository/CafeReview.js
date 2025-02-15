@@ -7,6 +7,9 @@ const CafeReview = {
 		const skip = (pageNum - 1) * pageSize;
 		const pipeline = [
 			{ $match: { cafe_id: new ObjectId(cafe_id) } },
+			{
+				$sort: { _id: -1 },
+			},
 			{ $skip: skip },
 			{ $limit: pageSize },
 			{ $project: { cafe_id: 0, like_users: 0 } },
