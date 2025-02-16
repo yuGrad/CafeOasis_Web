@@ -1,6 +1,10 @@
 const CafeService = require("../service/cafeService");
 
 const cafeController = {
+	getCafeMain: (req, res) => {
+		res.render("cafe-main", { login: req.session.login, cafes: [] });
+	},
+
 	getCafeById: async (req, res) => {
 		const cafe_id = req.params.cafe_id;
 		const cafe = await CafeService.findCafeDetail(cafe_id);
@@ -8,18 +12,17 @@ const cafeController = {
 	},
 
 	getCafesBySearch: async (req, res) => {
-		const target = req.query.target;
+		const { target, page_num } = req.query;
 
-		if (target == undefined || target == null || target == "") {
-			res.render("cafe-main", { login: req.session.login, cafes: [] });
-			return;
-		}
+		if (!target || !page_num || Number.isInteger(page_num))
+			return res.sendStatus(400);
 
 		try {
-			const cafes = await CafeService.searchCafes(target);
-			res.render("cafe-main", { login: req.session.login, cafes: cafes });
+			const cafes = await CafeService.searchCafes(target, Number(page_num));
+			res.status(200).json({ message: "", data: { cafes } });
 		} catch (err) {
-			res.render("error", { error: { message: "잘 못 된 접근입니다." } });
+			console.error(err);
+			res.sendStatus(500);
 		}
 	},
 };

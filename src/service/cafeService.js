@@ -12,9 +12,9 @@ const cafeService = {
 		return cafe;
 	},
 
-	async searchCafes(target) {
+	async searchCafes(target, pageNum) {
 		// TODO: Validate Target Argument
-		const cafes = await Cafe.findCafesByNameOrAddr(target);
+		const cafes = await Cafe.findCafesByNameOrAddr(target, pageNum, 10);
 		return cafes;
 	},
 

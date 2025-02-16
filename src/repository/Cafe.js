@@ -4,24 +4,30 @@ const db = require("../db/mongo_db");
 const Cafe = {
 	collection: "cafes",
 
-	async findCafesByNameOrAddr(target) {
-		const queryJson = {
-			$or: [
-				{ cafe_name: { $regex: target, $options: "i" } },
-				{ address: { $regex: target, $options: "i" } },
-			],
-		};
-		const projection = {
-			cafe_name: true,
-			starring: true,
-			phone_number: true,
-			address: true,
-			business_hours: true,
-			image_link: true,
-		};
-		const cafes = await db.query(this.collection, "find", queryJson, {
-			projection: projection,
-		});
+	async findCafesByNameOrAddr(target, pageNum, pageSize) {
+		const pipeline = [
+			{
+				$match: {
+					$or: [
+						{ cafe_name: { $regex: target, $options: "i" } },
+						{ address: { $regex: target, $options: "i" } },
+					],
+				},
+			},
+			{ $skip: pageNum * pageSize },
+			{ $limit: pageSize },
+			{
+				$project: {
+					cafe_name: true,
+					starring: true,
+					phone_number: true,
+					address: true,
+					business_hours: true,
+					image_link: true,
+				},
+			},
+		];
+		const cafes = await db.query(this.collection, "aggregate", pipeline);
 
 		return cafes;
 	},

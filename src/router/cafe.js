@@ -4,11 +4,12 @@ const cafeController = require("../controller/cafeController");
 const cafeReviewController = require("../controller/cafeReviewController");
 
 // cafe controller
+router.get("", cafeController.getCafeMain);
+
+router.get("/search", cafeController.getCafesBySearch);
+
 router.get("/:cafe_id", cafeController.getCafeById);
 
-router.get("", cafeController.getCafesBySearch);
-
-// cafe review controller
 router.get("/reviews/:cafe_id", cafeReviewController.getCafeReviewsByCafeId);
 
 router.patch(
