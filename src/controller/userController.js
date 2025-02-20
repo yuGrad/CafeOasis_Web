@@ -1,4 +1,5 @@
 const userService = require("../service/userService");
+const cafeService = require("../service/cafeService");
 const cafeReviewService = require("../service/cafeReviewService");
 
 const userController = {
