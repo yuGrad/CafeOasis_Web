@@ -1,64 +1,101 @@
 const cafeContainer = document.getElementById("cafe-container");
+let currentPage = 0;
+let isLoading = false;
+let hasMore = true;
 
-function searchCafes() {
-	cafeContainer.innerHTML = "";
-	const target = document.getElementById("search-target").value;
+function searchCafes(pageNum = 0) {
+	if (pageNum === 0) {
+		cafeContainer.innerHTML = "";
+		hasMore = true;
+	}
 
-	fetch(`/cafes/search?target=${target}&page_num=0`, {
-		method: "GET",
-		headers: {
-			"Content-Type": "application/json",
-		},
-	})
+	// (검색어 input 요소가 있을 경우 값을 가져옵니다)
+	const targetElement = document.getElementById("search-target");
+	const target = targetElement ? targetElement.value : "";
+
+	isLoading = true;
+
+	fetch(
+		`/cafes/search?target=${encodeURIComponent(target)}&page_num=${pageNum}`,
+		{
+			method: "GET",
+			headers: {
+				"Content-Type": "application/json",
+			},
+		}
+	)
 		.then((response) => {
 			if (!response.ok) throw new Error(`Server error(${response.status})`);
-
 			return response.json();
 		})
 		.then((res) => {
 			const cafes = res.data.cafes;
+
+			// 만약 불러온 데이터가 없으면 더 이상 로드할 데이터가 없음 처리
+			if (cafes.length === 0) {
+				if (pageNum === 0) {
+					cafeContainer.innerHTML =
+						"<p class='text-gray-600'>검색 결과가 없습니다.</p>";
+				}
+				hasMore = false;
+				return;
+			}
+
 			cafes.forEach((cafe) => {
 				cafeContainer.innerHTML += `
-				<div class="bg-white p-4 rounded-lg shadow mb-6">
-					<div
-						class="flex flex-col md:flex-row items-center md:items-start space-x-0 md:space-x-4"
-					>
+					<div class="bg-white p-4 rounded-lg shadow mb-6">
+						<div class="flex flex-col md:flex-row items-center md:items-start space-x-0 md:space-x-4">
 						<!-- 이미지 -->
 						<div class="md:w-1/4">
 							<img
-								src="${cafe.image_link}"
-								alt="Cafe Image"
-								class="rounded-lg mb-4 md:mb-0"
+							src="${cafe.image_link}"
+							alt="Cafe Image"
+							class="rounded-lg mb-4 md:mb-0"
 							/>
 						</div>
 						<!-- 일반 정보 -->
 						<div class="flex-1 md:w-2/4 text-center md:text-left space-y-4">
-							<a href="/cafes/${cafe._id}"
-								><h2 class="text-xl font-bold font-sans text-gray-800">
+							<a href="/cafes/${cafe._id}">
+							<h2 class="text-xl font-bold font-sans text-gray-800">
 								${cafe.cafe_name}
-								</h2></a
-							>
+							</h2>
+							</a>
 							<p class="font-sans text-gray-600">
-								<strong>네이버 평점:</strong> ${cafe.starring ? cafe.starring : 0}
+							<strong>네이버 평점:</strong> ${cafe.starring ? cafe.starring : 0}
 							</p>
 							<p class="font-sans text-gray-600">
-								<strong>전화번호:</strong> ${
-									cafe.phone_number ? cafe.phone_number : "제공하지 않음"
-								}
+							<strong>전화번호:</strong> ${
+								cafe.phone_number ? cafe.phone_number : "제공하지 않음"
+							}
 							</p>
 							<p class="font-sans text-gray-600">
-								<strong>주소:</strong> ${cafe.address}
+							<strong>주소:</strong> ${cafe.address}
 							</p>
 							<p class="font-sans text-gray-600">
-								<strong>영업 시간:</strong> ${
-									cafe.business_hours ? cafe.business_hours : "제공하지 않음"
-								}
+							<strong>영업 시간:</strong> ${
+								cafe.business_hours ? cafe.business_hours : "제공하지 않음"
+							}
 							</p>
 						</div>
+						</div>
 					</div>
-				</div>
-				`;
+        		`;
 			});
 		})
-		.catch((error) => console.error("Fetching error:", error));
+		.catch((error) => console.error("Fetching error:", error))
+		.finally(() => {
+			isLoading = false;
+		});
 }
+
+cafeContainer.addEventListener("scroll", () => {
+	if (
+		hasMore &&
+		!isLoading &&
+		cafeContainer.scrollTop + cafeContainer.clientHeight >=
+			cafeContainer.scrollHeight - 200
+	) {
+		currentPage++;
+		searchCafes(currentPage);
+	}
+});
