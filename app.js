@@ -37,7 +37,7 @@ app.use("/auth", authRouter);
 app.use("/users", userRouter);
 app.use("/cafes", cafeRouter);
 app.use("/", (req, res) => {
-	res.render("main");
+	res.render("index");
 });
 
 app.listen(PORT, () => {
