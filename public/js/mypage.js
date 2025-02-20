@@ -1,8 +1,14 @@
 const mainContent = document.getElementById("mainContent");
 const sectionTitle = document.getElementById("sectionTitle");
-const sectionContent = document.getElementById("sectionContent");
+const sectionContentElement = document.getElementById("sectionContent");
 
-document.addEventListener("DOMContentLoaded", () => {});
+function searchCafes() {
+	const targetElement = document.getElementById("search-target");
+	const target = targetElement.value || null;
+	if (!target) return;
+
+	window.location.href = `/cafes?target=${encodeURIComponent(target)}`;
+}
 
 function loadSection(section) {
 	mainContent.style.display = "block";
@@ -20,7 +26,7 @@ function loadSection(section) {
 function loadBookmarks() {
 	isLikedReviewSection = false;
 	sectionTitle.textContent = "북마크한 카페";
-	sectionContent.innerHTML =
+	sectionContentElement.innerHTML =
 		"<p class='text-gray-600'>북마크한 카페 데이터를 불러오는 중...</p>";
 	fetch("/users/me/cafe-bookmarks")
 		.then((response) => {
@@ -32,12 +38,12 @@ function loadBookmarks() {
 		.then(({ data }) => {
 			// 데이터가 비어 있는 경우
 			if (data.bookmarks.length === 0) {
-				sectionContent.innerHTML =
+				sectionContentElement.innerHTML =
 					"<p class='text-gray-600'>카페 북마크가 없습니다.</p>";
 				return;
 			}
 			// 데이터가 있는 경우 렌더링
-			sectionContent.innerHTML = data.bookmarks
+			sectionContentElement.innerHTML = data.bookmarks
 				.map(
 					(cafe) => `
 								<div class="flex justify-between border-b py-2">
@@ -55,7 +61,7 @@ function loadBookmarks() {
 		})
 		.catch((error) => {
 			console.error(error);
-			sectionContent.innerHTML =
+			sectionContentElement.innerHTML =
 				"<p class='text-red-500'>데이터를 불러오는 중 오류가 발생했습니다.</p>";
 		});
 }
@@ -64,7 +70,7 @@ function loadBookmarks() {
 function loadReviews() {
 	isLikedReviewSection = false;
 	sectionTitle.textContent = "내가 작성한 리뷰";
-	sectionContent.innerHTML =
+	sectionContentElement.innerHTML =
 		"<p class='text-gray-600'>내가 작성한 리뷰 데이터를 불러오는 중...</p>";
 	fetch("/users/me/cafe-reviews")
 		.then((response) => {
@@ -75,11 +81,11 @@ function loadReviews() {
 		})
 		.then(({ data }) => {
 			if (data.reviews.length === 0) {
-				sectionContent.innerHTML =
+				sectionContentElement.innerHTML =
 					"<p class='text-gray-600'>내가 작성한 리뷰가 없습니다.</p>";
 				return;
 			}
-			sectionContent.innerHTML = data.reviews
+			sectionContentElement.innerHTML = data.reviews
 				.map(
 					(review) => `
 									<div class="flex justify-between border-b py-2">
@@ -99,7 +105,7 @@ function loadReviews() {
 		})
 		.catch((error) => {
 			console.error(error);
-			sectionContent.innerHTML =
+			sectionContentElement.innerHTML =
 				"<p class='text-red-500'>데이터를 불러오는 중 오류가 발생했습니다.</p>";
 		});
 }
@@ -184,7 +190,6 @@ function loadLikedReviews(pageNum = 0) {
 		});
 }
 
-const sectionContentElement = document.getElementById("sectionContent");
 sectionContentElement.addEventListener("scroll", () => {
 	if (
 		isLikedReviewSection &&

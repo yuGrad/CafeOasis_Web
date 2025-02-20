@@ -1,7 +1,11 @@
 const cafeContainer = document.getElementById("cafe-container");
+const targetElement = document.getElementById("search-target");
+const params = new URLSearchParams(window.location.search);
+
 let currentPage = 0;
 let isLoading = false;
 let hasMore = true;
+let target;
 
 function searchCafes(pageNum = 0) {
 	if (pageNum === 0) {
@@ -10,8 +14,9 @@ function searchCafes(pageNum = 0) {
 	}
 
 	// (검색어 input 요소가 있을 경우 값을 가져옵니다)
-	const targetElement = document.getElementById("search-target");
-	const target = targetElement ? targetElement.value : "";
+	targetElement.value = targetElement.value || params.get("target");
+	const target = targetElement.value || null;
+	if (!target) return;
 
 	isLoading = true;
 
@@ -30,6 +35,12 @@ function searchCafes(pageNum = 0) {
 		})
 		.then((res) => {
 			const cafes = res.data.cafes;
+
+			window.history.pushState(
+				{},
+				"",
+				`/cafes?target=${encodeURIComponent(target)}`
+			);
 
 			// 만약 불러온 데이터가 없으면 더 이상 로드할 데이터가 없음 처리
 			if (cafes.length === 0) {
@@ -88,6 +99,7 @@ function searchCafes(pageNum = 0) {
 		});
 }
 
+searchCafes(0);
 cafeContainer.addEventListener("scroll", () => {
 	if (
 		hasMore &&

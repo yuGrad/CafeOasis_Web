@@ -2,6 +2,14 @@ const container = document.getElementById("reviewsContainer");
 const cafeId = document.getElementById("cafe_id").value;
 const favoriteButton = document.getElementById("bookmarkButton");
 
+function searchCafes() {
+	const targetElement = document.getElementById("search-target");
+	const target = targetElement.value || null;
+	if (!target) return;
+
+	window.location.href = `/cafes?target=${encodeURIComponent(target)}`;
+}
+
 document.addEventListener("DOMContentLoaded", () => {
 	fetch(`/cafes/reviews/${cafeId}?pageNum=1`)
 		.then((response) => {
