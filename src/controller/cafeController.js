@@ -8,6 +8,8 @@ const cafeController = {
 	getCafeById: async (req, res) => {
 		const cafe_id = req.params.cafe_id;
 		const cafe = await CafeService.findCafeDetail(cafe_id);
+
+		if (!cafe) return res.sendStatus(404);
 		res.render("cafe-detail", { login: req.session.login, cafe: cafe });
 	},
 

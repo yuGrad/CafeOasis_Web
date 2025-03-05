@@ -36,8 +36,12 @@ app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(specs));
 app.use("/auth", authRouter);
 app.use("/users", userRouter);
 app.use("/cafes", cafeRouter);
-app.use("/", (req, res) => {
+app.get("/", (req, res) => {
 	res.render("index");
+});
+
+app.use((req, res, next) => {
+	res.status(404).json({ message: "NOT EXISTS URL" });
 });
 
 app.listen(PORT, () => {
