@@ -12,14 +12,16 @@
 	<body class="bg-gray-100 flex flex-col min-h-screen">
 		<%- include('cafe-header.ejs') %>
 
-		<main class="flex-grow max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
-			<div class="flex justify-center space-x-4 p-4">
-				<!-- Sidebar Section -->
-				<section class="bg-white shadow-lg rounded-lg p-6">
-					<h2 class="text-2xl font-semibold text-blue-700 mb-4">
+		<!-- main 영역의 위아래 패딩을 줄임 -->
+		<main class="flex-grow max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
+			<!-- 컨테이너: 세로 배치, 가운데 정렬, 섹션 간 간격을 줄임 -->
+			<div class="flex flex-col items-center space-y-2 p-2">
+				<!-- My Information 섹션: 패딩과 마진을 줄여 헤더에 더 가깝게 -->
+				<section class="bg-white shadow-lg rounded-lg p-4 w-full max-w-xl">
+					<h2 class="text-2xl font-semibold text-blue-700 mb-2">
 						My Information
 					</h2>
-					<ul class="space-y-4">
+					<ul class="space-y-2">
 						<li>
 							<span class="text-gray-600 text-sm">Email</span>
 							<p class="text-gray-900 bg-blue-50 p-2 rounded">
@@ -47,15 +49,15 @@
 					</ul>
 
 					<!-- Navigation Buttons -->
-					<div class="mt-8">
+					<div class="mt-4 space-y-2">
 						<button
-							class="w-full bg-blue-500 text-white font-semibold py-2 px-4 rounded hover:bg-blue-700 mb-4"
+							class="w-full bg-blue-500 text-white font-semibold py-2 px-4 rounded hover:bg-blue-700"
 							onclick="loadSection('bookmarks')"
 						>
 							북마크한 카페
 						</button>
 						<button
-							class="w-full bg-blue-500 text-white font-semibold py-2 px-4 rounded hover:bg-blue-700 mb-4"
+							class="w-full bg-blue-500 text-white font-semibold py-2 px-4 rounded hover:bg-blue-700"
 							onclick="loadSection('reviews')"
 						>
 							내가 작성한 리뷰
@@ -69,20 +71,20 @@
 					</div>
 				</section>
 
-				<!-- Main Content Section -->
+				<!-- Main Content Section: 버튼으로 추가되는 컨텐츠 영역 -->
 				<section
 					id="mainContent"
-					class="col-span-2 bg-white shadow-lg rounded-lg p-6"
+					class="bg-white shadow-lg rounded-lg p-4 w-full max-w-xl"
 					style="display: none"
 				>
 					<h2
-						class="text-2xl font-semibold text-yellow-500 mb-4"
+						class="text-2xl font-semibold text-yellow-500 mb-2"
 						id="sectionTitle"
 					></h2>
 					<div
 						id="sectionContent"
 						class="overflow-y-auto"
-						style="max-height: 500px; width: 400px"
+						style="max-height: 500px"
 					></div>
 				</section>
 			</div>

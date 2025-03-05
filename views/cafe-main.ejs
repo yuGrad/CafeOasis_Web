@@ -10,15 +10,13 @@
 		/>
 	</head>
 	<body class="bg-gray-100 flex flex-col min-h-screen">
-		<%-include ('cafe-header.ejs') %>
+		<%- include('cafe-header.ejs') %>
 
-		<main
-			id="cafe-container"
-			class="flex-grow container mx-auto p-4 max-w-5xl overflow-y-auto"
-			style="max-height: 90vh"
-		></main>
+		<main id="cafe-container" class="flex-grow container mx-auto p-4 max-w-5xl">
+			<!-- 검색 결과 등 동적 컨텐츠가 여기에 표시됩니다. -->
+		</main>
 
-		<%-include ('cafe-footer.ejs')%>
+		<%- include('cafe-footer.ejs') %>
 		<script src="/js/cafe-main.js"></script>
 	</body>
 </html>

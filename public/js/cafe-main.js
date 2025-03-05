@@ -57,11 +57,11 @@ function searchCafes(pageNum = 0) {
 					<div class="bg-white p-4 rounded-lg shadow mb-6">
 						<div class="flex flex-col md:flex-row items-center md:items-start space-x-0 md:space-x-4">
 						<!-- 이미지 -->
-						<div class="md:w-1/4">
+						<div class="md:w-1/5">
 							<img
-							src="${cafe.image_link}"
-							alt="Cafe Image"
-							class="rounded-lg mb-4 md:mb-0"
+								src="${cafe.image_link}"
+								alt="Cafe Image"
+								class="rounded-lg mb-4 md:mb-0 h-40 object-cover"
 							/>
 						</div>
 						<!-- 일반 정보 -->
