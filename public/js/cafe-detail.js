@@ -11,7 +11,7 @@ function searchCafes() {
 }
 
 document.addEventListener("DOMContentLoaded", () => {
-	fetch(`/cafes/reviews/${cafeId}?pageNum=1`)
+	fetch(`/cafes/reviews/${cafeId}?page_num=0`)
 		.then((response) => {
 			if (!response.ok) throw new Error(`Servier error(${response.status})`);
 
@@ -165,10 +165,11 @@ function removeReview(idx) {
 
 function updatePagination(direction) {
 	const currentPageNum = document.getElementById("currentPage");
-	const nextPageNum = Number(currentPageNum.textContent) + Number(direction);
+	const nextPageNum =
+		Number(currentPageNum.textContent) + Number(direction) - 1;
 
 	if (nextPageNum > 0) {
-		fetch(`/cafes/reviews/${cafeId}?pageNum=${nextPageNum}`)
+		fetch(`/cafes/reviews/${cafeId}?page_num=${nextPageNum}`)
 			.then((response) => {
 				if (!response.ok) throw new Error(`Server error(${response.status})`);
 

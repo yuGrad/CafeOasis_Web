@@ -3,9 +3,8 @@ const cafeReviewService = require("../service/cafeReviewService");
 const cafeReviewController = {
 	getCafeReviewsByCafeId: async (req, res) => {
 		const cafe_id = req.params.cafe_id;
-		const pageNum = req.query.pageNum;
+		const pageNum = req.query.page_num;
 
-		if (pageNum <= 0) return res.sendStatus(400);
 		const reviews = await cafeReviewService.findReviewsByCafeId(
 			cafe_id,
 			pageNum

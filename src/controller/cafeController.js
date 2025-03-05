@@ -14,8 +14,7 @@ const cafeController = {
 	getCafesBySearch: async (req, res) => {
 		const { target, page_num } = req.query;
 
-		if (!target || !page_num || Number.isInteger(page_num))
-			return res.sendStatus(400);
+		if (!target) return res.sendStatus(400);
 
 		try {
 			const cafes = await CafeService.searchCafes(target, Number(page_num));

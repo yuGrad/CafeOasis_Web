@@ -4,7 +4,7 @@ const db = require("../db/mongo_db");
 const CafeReview = {
 	collection: "cafe_reviews",
 	async findCafeReviewsByCafeId(cafe_id, pageNum, pageSize = 20) {
-		const skip = (pageNum - 1) * pageSize;
+		const skip = pageNum * pageSize;
 		const pipeline = [
 			{ $match: { cafe_id: new ObjectId(cafe_id) } },
 			{

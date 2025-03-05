@@ -1,17 +1,26 @@
 const express = require("express");
 const router = express.Router();
 const authMiddleware = require("../middleware/authMiddleware");
+const paramValidationMiddleware = require("../middleware/paramValidationMiddleware");
 const cafeController = require("../controller/cafeController");
 const cafeReviewController = require("../controller/cafeReviewController");
 
 // cafe controller
 router.get("", cafeController.getCafeMain);
 
-router.get("/search", cafeController.getCafesBySearch);
+router.get(
+	"/search",
+	paramValidationMiddleware.pageNum,
+	cafeController.getCafesBySearch
+);
 
 router.get("/:cafe_id", cafeController.getCafeById);
 
-router.get("/reviews/:cafe_id", cafeReviewController.getCafeReviewsByCafeId);
+router.get(
+	"/reviews/:cafe_id",
+	paramValidationMiddleware.pageNum,
+	cafeReviewController.getCafeReviewsByCafeId
+);
 
 router.patch(
 	"/reviews/:review_id/likes",
