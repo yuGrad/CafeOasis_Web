@@ -1,5 +1,6 @@
 const express = require("express");
 const router = express.Router();
+const authMiddleware = require("../middleware/authMiddleware");
 const cafeController = require("../controller/cafeController");
 const cafeReviewController = require("../controller/cafeReviewController");
 
@@ -14,13 +15,19 @@ router.get("/reviews/:cafe_id", cafeReviewController.getCafeReviewsByCafeId);
 
 router.patch(
 	"/reviews/:review_id/likes",
+	authMiddleware.authSession,
 	cafeReviewController.patchCafeReviewLikeCnt
 );
 
-router.post("/reviews/:cafe_id", cafeReviewController.postCafeReview);
+router.post(
+	"/reviews/:cafe_id",
+	authMiddleware.authSession,
+	cafeReviewController.postCafeReview
+);
 
 router.delete(
 	"/:cafe_id/reviews/:review_id",
+	authMiddleware.authSession,
 	cafeReviewController.deleteCafeReview
 );
 

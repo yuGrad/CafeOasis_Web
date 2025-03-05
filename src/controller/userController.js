@@ -4,17 +4,10 @@ const cafeReviewService = require("../service/cafeReviewService");
 
 const userController = {
 	getMyPage: (req, res) => {
-		if (!req.session.login)
-			return res.render("error", {
-				error: { message: "잘 못 된 접근입니다." },
-			});
 		res.render("mypage", { login: req.session.login });
 	},
 
 	getCafeBookmarked: (req, res) => {
-		if (!req.session.login)
-			return res.status(403).json({ message: "NOT LOGIN" });
-
 		const cafeId = req.params.cafe_id;
 		const email = req.session?.login.email;
 
@@ -33,9 +26,6 @@ const userController = {
 	},
 
 	toggleCafeBookmark: (req, res) => {
-		if (!req.session.login)
-			return res.status(403).json({ message: "NOT LOGIN" });
-
 		const cafeId = req.params.cafe_id;
 		const email = req.session?.login.email;
 		const isBookmarked = req.body.isBookmarked;

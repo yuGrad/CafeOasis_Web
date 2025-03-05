@@ -18,8 +18,6 @@ const cafeReviewController = {
 	patchCafeReviewLikeCnt: async (req, res) => {
 		const review_id = req.params.review_id;
 
-		if (!req.session.login)
-			return res.status(403).json({ message: "NOT LOGIN" });
 		try {
 			const result = await cafeReviewService.addLikeToReview(
 				review_id,
@@ -36,8 +34,6 @@ const cafeReviewController = {
 	postCafeReview: async (req, res) => {
 		const { cafe_id, content, starring } = req.body;
 
-		if (!req.session.login)
-			return res.status(403).json({ message: "NOT LOGIN" });
 		try {
 			await cafeReviewService.registerCafeReview(
 				cafe_id,
@@ -53,9 +49,6 @@ const cafeReviewController = {
 	},
 
 	deleteCafeReview: async (req, res) => {
-		if (!req.session.login)
-			return res.status(403).json({ message: "NOT LOGIN" });
-
 		try {
 			const email = req.session.login.email;
 			const { cafe_id, review_id } = req.params;
