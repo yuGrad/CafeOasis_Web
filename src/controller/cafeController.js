@@ -26,6 +26,27 @@ const cafeController = {
 			res.sendStatus(500);
 		}
 	},
+
+	getCafesByNear: async (req, res) => {
+		let { lat, lng, radius } = req.query;
+		[lat, lng, radius] = [lat, lng, radius].map(Number);
+
+		if (
+			Number.isNaN(lat) ||
+			Number.isNaN(lng) ||
+			Number.isNaN(radius) ||
+			radius < 1 ||
+			radius > 5
+		)
+			return res.sendStatus(400);
+		try {
+			const nearbyCafes = await CafeService.findNearbyCafes(lat, lng, radius);
+			res.status(200).json({ message: "", data: { cafes: nearbyCafes } });
+		} catch (err) {
+			console.error(err);
+			res.sendStatus(500);
+		}
+	},
 };
 
 module.exports = cafeController;

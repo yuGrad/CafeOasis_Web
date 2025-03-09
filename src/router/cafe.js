@@ -14,6 +14,8 @@ router.get(
 	cafeController.getCafesBySearch
 );
 
+router.get("/nearby", cafeController.getCafesByNear);
+
 router.get("/:cafe_id", cafeController.getCafeById);
 
 router.get(

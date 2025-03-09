@@ -112,6 +112,30 @@ const Cafe = {
 			}
 		);
 	},
+
+	async findNearbyByCoordinates(lat, lng, radius) {
+		const radiusInMeters = radius * 1000;
+		const pipeline = [
+			{
+				$geoNear: {
+					near: { type: "Point", coordinates: [lng, lat] },
+					distanceField: "distance",
+					maxDistance: radiusInMeters,
+					spherical: true,
+				},
+			},
+			{
+				$project: {
+					cafe_id: true,
+					cafe_name: true,
+					coordinates: "$location.coordinates",
+					address: true,
+				},
+			},
+		];
+
+		return await db.query(this.collection, "aggregate", pipeline);
+	},
 };
 
 module.exports = Cafe;

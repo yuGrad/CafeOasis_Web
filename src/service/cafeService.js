@@ -21,6 +21,10 @@ const cafeService = {
 	async findCustomerBookmarks(email) {
 		return await Cafe.findBookmarksByEmail(email);
 	},
+
+	async findNearbyCafes(lat, lng, radius) {
+		return await Cafe.findNearbyByCoordinates(lat, lng, radius);
+	},
 };
 
 module.exports = cafeService;

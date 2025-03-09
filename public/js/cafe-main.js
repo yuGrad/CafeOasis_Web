@@ -8,15 +8,15 @@ let hasMore = true;
 let target;
 
 function searchCafes(pageNum = 0) {
-	if (pageNum === 0) {
-		cafeContainer.innerHTML = "";
-		hasMore = true;
-	}
-
 	// (검색어 input 요소가 있을 경우 값을 가져옵니다)
 	targetElement.value = targetElement.value || params.get("target");
 	const target = targetElement.value || null;
 	if (!target) return;
+
+	if (pageNum === 0) {
+		cafeContainer.innerHTML = "";
+		hasMore = true;
+	}
 
 	isLoading = true;
 
