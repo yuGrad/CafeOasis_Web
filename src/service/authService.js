@@ -85,7 +85,7 @@ const authService = {
 
 	// 이메일 인증 코드 전송
 	requestSignupVerification(email) {
-		const verificationCode = tokenService.generateRandomToken(8);
+		const verificationCode = generateRandomToken(8);
 
 		emailService.sendVerificationCode(email, verificationCode).then((res) => {
 			if (!res) {
