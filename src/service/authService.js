@@ -6,12 +6,13 @@ dotenv.config();
 const HOST_ADDR = process.env.HOST_ADDR;
 
 const tokenService = require("../service/tokenService");
+const emailService = require("../service/emailService");
 
 const Customer = require("../repository/Customer");
 const Employee = require("../repository/Employee");
 const RandomToken = require("../repository/RandomToken");
 
-const { sendEmail } = require("../utils/emailUtil");
+const { generateRandomToken } = require("../utils/tokenUtil");
 
 const dynamicPool = new DynamicPool(8);
 
@@ -82,20 +83,31 @@ const authService = {
 		}
 	},
 
-	sendVerificationCodeByEmail(email) {
+	// 이메일 인증 코드 전송
+	requestSignupVerification(email) {
 		const verificationCode = tokenService.generateRandomToken(8);
-		const to = email;
-		const subject = "Welcome to Oasis! - Email Code";
-		const html = `<h2>Hello ${to}</h2>
-					welcome to our service!
-					</br>
-					email code: ${verificationCode}`;
 
-		sendEmail(to, subject, "test", html).then((res) => {
+		emailService.sendVerificationCode(email, verificationCode).then((res) => {
 			if (!res) {
 				// TODO: res에 따른 예외처리
 			}
-			RandomToken.create(to, "signup", verificationCode, false);
+			RandomToken.create(email, "signup", verificationCode, false);
+		});
+	},
+
+	// 비밀번호 재설정 링크 전송
+	requestPasswordReset(email, name) {
+		Customer.getCustomerByEmail(email).then((user) => {
+			if (!user || user.name !== name) return;
+			const randomToken = generateRandomToken(20);
+			const resetLink = `http://${HOST_ADDR}/auth/password?token=${randomToken}&email=${email}`;
+
+			emailService.sendPasswordResetLink(email, resetLink).then((res) => {
+				if (!res) {
+					// TODO: res에 따른 예외처리
+				}
+				RandomToken.create(email, "passwd-reset", randomToken, false);
+			});
 		});
 	},
 
@@ -112,29 +124,6 @@ const authService = {
 			console.error(err);
 			return false;
 		}
-	},
-
-	sendPasswordResetLinkByEmail(email, name) {
-		Customer.getCustomerByEmail(email).then((user) => {
-			if (!user || user.name !== name) return;
-
-			const randomToken = tokenService.generateRandomToken(20);
-			const to = email;
-			const subject = "Welcome to Oasis! - Password Rest Url";
-			const html = `<h2>Hello ${to}</h2>
-					Password Reset Url
-					</br>
-					link: 
-					http://${HOST_ADDR}/auth/password?token=${randomToken}&email=${to}`;
-
-			sendEmail(to, subject, "test", html).then((res) => {
-				if (!res) {
-					// TODO: res에 따른 예외처리
-				}
-				RandomToken.create(to, "passwd-reset", randomToken, false);
-			});
-		});
-		// throw new Error("The names don't match");
 	},
 
 	async verifyPasswordResetToken(email, passwordToken) {

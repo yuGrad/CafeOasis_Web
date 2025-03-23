@@ -1,15 +1,6 @@
-const crypto = require("crypto");
-
 const RandomToken = require("../repository/RandomToken");
 
 const tokenService = {
-	generateRandomToken(tokenSize) {
-		const bytes = crypto.randomBytes(tokenSize);
-		const randomToken = bytes.toString("base64").slice(0, tokenSize); // 숫자로 변환 후 문자열 슬라이싱
-
-		return randomToken;
-	},
-
 	async isVerifiedEmail(email, type) {
 		const token = await RandomToken.findByEmail(email);
 

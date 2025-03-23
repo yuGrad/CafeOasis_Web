@@ -93,7 +93,7 @@ const authController = {
 
 		try {
 			if (!email) return res.sendStatus(400);
-			authService.sendVerificationCodeByEmail(email);
+			authService.requestSignupVerification(email);
 			res.sendStatus(200);
 		} catch (err) {
 			console.error(err);
@@ -134,7 +134,7 @@ const authController = {
 		const { email, name } = req.body;
 
 		try {
-			authService.sendPasswordResetLinkByEmail(email, name);
+			authService.requestPasswordReset(email, name);
 			res.sendStatus(200);
 		} catch (err) {
 			console.error(err);
