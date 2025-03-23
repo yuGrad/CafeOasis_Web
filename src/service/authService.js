@@ -5,13 +5,13 @@ const dotenv = require("dotenv");
 dotenv.config();
 const HOST_ADDR = process.env.HOST_ADDR;
 
+const tokenService = require("../service/tokenService");
+
 const Customer = require("../repository/Customer");
 const Employee = require("../repository/Employee");
-const VerificationCode = require("../repository/VerificationCode");
 const RandomToken = require("../repository/RandomToken");
 
 const { sendEmail } = require("../utils/emailUtil");
-const { generateRandomToken } = require("../utils/tokenUtil");
 
 const dynamicPool = new DynamicPool(8);
 
@@ -58,20 +58,12 @@ const authService = {
 		return false;
 	},
 
-	async signup(userType, userData) {
-		const {
-			email,
-			password,
-			name,
-			phone_no_1,
-			phone_no_2,
-			phone_no_3,
-			nickname,
-			age,
-			sex,
-		} = userData;
-		const phone_no = phone_no_1 + phone_no_2 + phone_no_3;
+	async signup(email, password, name, phone_no, nickname, age, sex, userType) {
+		if (!(await tokenService.isVerifiedEmail(email, "signup")))
+			throw new Error("Email not verified");
+
 		const hashed_password = await hashPasswordInWorker(password, this.salt);
+
 		try {
 			if (userType === "employee")
 				await Employee.insertEmployee(email, hashed_password, name, phone_no);
@@ -91,44 +83,30 @@ const authService = {
 	},
 
 	sendVerificationCodeByEmail(email) {
-		const verificationCode = generateRandomToken(8);
+		const verificationCode = tokenService.generateRandomToken(8);
 		const to = email;
 		const subject = "Welcome to Oasis! - Email Code";
 		const html = `<h2>Hello ${to}</h2>
-                    welcome to our service!
-                    </br>
-                    email code: ${verificationCode}`;
+					welcome to our service!
+					</br>
+					email code: ${verificationCode}`;
 
-		return sendEmail(to, subject, "test", html).then((res) => {
-			VerificationCode.insertVerificationCode(
-				to,
-				verificationCode,
-				"00:30:00",
-				(err) => {
-					if (err) console.error(err);
-				}
-			);
-			return res;
+		sendEmail(to, subject, "test", html).then((res) => {
+			if (!res) {
+				// TODO: res에 따른 예외처리
+			}
+			RandomToken.create(to, "signup", verificationCode, false);
 		});
 	},
 
 	async verifyUserCode(email, userCode) {
 		if (userCode.length != 8) return false;
+
 		try {
-			const row = await VerificationCode.getLatestByEmail(email);
-			const now = new Date();
+			const token = await RandomToken.findByEmail(email);
+			if (!token || token.code != userCode) return false;
 
-			if (
-				!row ||
-				row.verification_code != userCode ||
-				new Date(row.expiration_time) <
-					new Date(now.getTime() - now.getTimezoneOffset() * 60000) // 현재 시간보다 인증 만료시간이 더 커야함, UTC -> Asia/Seoul 시간대로 변경
-			)
-				return false;
-
-			VerificationCode.updateAsVerified(row.id, (err) => {
-				if (err) console.error(err);
-			});
+			RandomToken.create(email, "signup", token.code, true);
 			return true;
 		} catch (err) {
 			console.error(err);
@@ -137,50 +115,35 @@ const authService = {
 	},
 
 	sendPasswordResetLinkByEmail(email, name) {
-		return Customer.getCustomerByEmail(email).then((user) => {
-			if (user.name === name) {
-				const randomToken = generateRandomToken(20);
-				const to = email;
-				const subject = "Welcome to Oasis! - Password Rest Url";
-				const html = `<h2>Hello ${to}</h2>
-                Password Reset Url
-                </br>
-                link: 
-                http://${HOST_ADDR}/auth/password?token=${randomToken}&email=${to}`;
+		Customer.getCustomerByEmail(email).then((user) => {
+			if (!user || user.name !== name) return;
 
-				return sendEmail(to, subject, "test", html).then((res) => {
-					RandomToken.insertRandomToken(
-						to,
-						"password",
-						randomToken,
-						"03:00:00",
-						(err) => {
-							if (err) console.error(err);
-						}
-					);
-					return res;
-				});
-			}
-			throw new Error("The names don't match");
+			const randomToken = tokenService.generateRandomToken(20);
+			const to = email;
+			const subject = "Welcome to Oasis! - Password Rest Url";
+			const html = `<h2>Hello ${to}</h2>
+					Password Reset Url
+					</br>
+					link: 
+					http://${HOST_ADDR}/auth/password?token=${randomToken}&email=${to}`;
+
+			sendEmail(to, subject, "test", html).then((res) => {
+				if (!res) {
+					// TODO: res에 따른 예외처리
+				}
+				RandomToken.create(to, "passwd-reset", randomToken, false);
+			});
 		});
+		// throw new Error("The names don't match");
 	},
 
 	async verifyPasswordResetToken(email, passwordToken) {
 		if (passwordToken.length != 20) return false;
 		try {
-			const row = await RandomToken.getLatestByEmail(email);
-			const now = new Date();
+			const token = await RandomToken.findByEmail(email);
+			if (!token || token.code != passwordToken) return false;
 
-			if (
-				!row ||
-				row.token != passwordToken ||
-				new Date(row.expiration_time) <
-					new Date(now.getTime() - now.getTimezoneOffset() * 60000)
-			)
-				return false;
-			RandomToken.updateAsVerified(row.id, (err) => {
-				if (err) console.error(err);
-			});
+			RandomToken.create(email, "passwd-reset", token.code, true);
 			return true;
 		} catch (err) {
 			console.error(err);
@@ -189,6 +152,8 @@ const authService = {
 	},
 
 	async changePassword(userType, email, password) {
+		if (!(await tokenService.isVerifiedEmail(email, "passwd-reset")))
+			throw new Error("Email not verified");
 		const hashed_password = await hashPasswordInWorker(password, this.salt);
 
 		// Todo: password 정책 설정

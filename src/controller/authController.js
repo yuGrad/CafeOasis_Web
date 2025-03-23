@@ -46,21 +46,44 @@ const authController = {
 	},
 
 	postSignup: async (req, res) => {
-		const isEmailVerified = req.session.isEmailVerified;
-		const user_type = req.body.user_type;
+		const {
+			email,
+			password,
+			name,
+			phone_no_1,
+			phone_no_2,
+			phone_no_3,
+			nickname,
+			age,
+			sex,
+			userType,
+		} = req.body;
 
-		if (!isEmailVerified)
-			return res.render("signup/sign-up", {
-				errorMessage: "인증되지 않은 이메일입니다.",
-			});
-
+		// TODO: 회원가입 요청 검증
 		try {
-			await authService.signup(user_type, req.body);
+			await authService.signup(
+				email,
+				password,
+				name,
+				phone_no_1 + phone_no_2 + phone_no_3,
+				nickname,
+				age,
+				sex,
+				userType
+			);
 			res.redirect("/cafes");
 		} catch (err) {
-			console.error(err);
+			let errorMessage;
+			if (err.message === "Email not verified")
+				errorMessage = "이메일 인증이 완료되지 않았습니다.";
+			else if (err.message === "Email already exists")
+				errorMessage = "중복된 이메일입니다.";
+			else {
+				errorMessage = "회원가입 중 오류가 발생했습니다.";
+				console.error(err);
+			}
 			res.render("signup/sign-up", {
-				errorMessage: "중복된 이메일입니다.",
+				errorMessage: errorMessage,
 			});
 		}
 	},
@@ -68,14 +91,14 @@ const authController = {
 	postSendSignupVerificationEmail: (req, res) => {
 		const email = req.body.email;
 
-		if (!email) return res.sendStatus(400);
-		authService
-			.sendVerificationCodeByEmail(email)
-			.then(() => res.sendStatus(200))
-			.catch((err) => {
-				console.error(err);
-				return res.sendStatus(500);
-			});
+		try {
+			if (!email) return res.sendStatus(400);
+			authService.sendVerificationCodeByEmail(email);
+			res.sendStatus(200);
+		} catch (err) {
+			console.error(err);
+			return res.sendStatus(500);
+		}
 	},
 
 	postVerifySignupVerificationCode: async (req, res) => {
@@ -85,10 +108,8 @@ const authController = {
 		try {
 			const result = await authService.verifyUserCode(email, user_code);
 
-			if (result) {
-				req.session.isEmailVerified = true;
-				res.sendStatus(200);
-			} else res.sendStatus(401);
+			if (result) res.sendStatus(200);
+			else res.sendStatus(401);
 		} catch (err) {
 			console.error(err);
 			res.sendStatus(500);
@@ -96,6 +117,7 @@ const authController = {
 	},
 
 	getResetPassword: async (req, res) => {
+		// TODO: 해당 컨트롤러가 패스워드 링크 검증하는 메소드로 변경
 		const email = req.query.email;
 		const token = req.query.token;
 
@@ -105,36 +127,34 @@ const authController = {
 			return res.render("error", {
 				error: { message: "잘 못 된 접근입니다." },
 			});
-		req.session.isEmailVerified = email; // email로 session 값을 저장하면 토큰이 달라져도 상관 X ?
 		res.render("reset-password", { isReset: true, email: email });
 	},
 
-	postSendPasswordResetLink: async (req, res) => {
+	postSendPasswordResetLink: (req, res) => {
 		const { email, name } = req.body;
 
-		authService
-			.sendPasswordResetLinkByEmail(email, name)
-			.then(() => res.sendStatus(200))
-			.catch((err) => {
-				if (err.message === "The names don't match") return res.sendStatus(401);
-				console.error(err);
-				return res.sendStatus(500);
-			});
+		try {
+			authService.sendPasswordResetLinkByEmail(email, name);
+			res.sendStatus(200);
+		} catch (err) {
+			console.error(err);
+			return res.sendStatus(500);
+		}
 	},
 
 	postResetNewPassowrd: async (req, res) => {
 		const { email, password } = req.body;
-		const isEmailVerified = req.session.isEmailVerified;
-
-		if (isEmailVerified != email)
-			return res.status(401).json({ message: "SESSION EXPIRED" });
 
 		try {
 			await authService.changePassword("customer", email, password);
 			res.sendStatus(200);
 		} catch (err) {
-			console.err(err);
-			res.status(500).json({ message: "INTERNAL SERVER ERROR" });
+			if (err.message === "Email not verified")
+				res.status(401).json({ message: "이메일 인증이 완료되지 않았습니다." });
+			else {
+				console.error(err);
+				res.status(500).json({ message: "INTERNAL SERVER ERROR" });
+			}
 		}
 	},
 };

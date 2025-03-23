@@ -1,34 +1,21 @@
-const db = require("../db/mysql_db");
+const { RedisClient } = require("../db/redis_db");
 
 const RandomToken = {
-	insertRandomToken(email, type, token, expiration, callback) {
-		const sql =
-			"insert into RandomToken(email, type, token, expiration) values(?, ?, ?, ?)";
-		const params = [email, type, token, expiration];
-
-		db.asynQuery(sql, params, callback);
+	async create(email, type, token, verified, ttl = 600) {
+		await RedisClient.set(
+			email,
+			JSON.stringify({ type: type, code: token, verified: verified }),
+			{ EX: ttl }
+		);
 	},
 
-	async getLatestByEmail(email) {
-		const sql =
-			"SELECT \
-        id, token, (expiration + created_at) expiration_time \
-      FROM RandomToken \
-      WHERE \
-        email = ? and verified = FALSE\
-      ORDER BY created_at DESC \
-      LIMIT 1";
-		const params = [email];
-		const [token] = await db.query(sql, params);
-
-		return token;
+	async findByEmail(email) {
+		const result = await RedisClient.get(email);
+		return result ? JSON.parse(result) : null;
 	},
 
-	updateAsVerified(id, callback) {
-		const sql = "update RandomToken set verified = TRUE where id = ?";
-		const params = [id];
-
-		db.asynQuery(sql, params, callback);
+	async deleteByEmail(email) {
+		await RedisClient.del(email);
 	},
 };
 
